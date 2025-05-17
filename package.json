@@ -1,0 +1,10 @@
+{
+  "name": "agent-doc-system",
+  "version": "1.0.0",
+  "description": "Agent-oriented documentation system",
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "remark-frontmatter": "^5.0.0",
+    "remark-lint-frontmatter-schema": "^3.15.4"
+  }
+} 

@@ -1,0 +1,29 @@
+title: Agent Documentation Schema
+version: 1.0
+properties:
+  metadata:
+    type: object
+    required: 
+      - schema
+      - version
+      - status
+    properties:
+      schema: 
+        type: string
+        format: uri
+      version:
+        type: string
+        pattern: ^\d+\.\d+\.\d+$
+      status:
+        type: string
+        enum:
+          - Active
+          - Draft
+          - Deprecated
+      priority:
+        type: string
+  content:
+    type: object
+    required:
+      - sections
+      - changelog 

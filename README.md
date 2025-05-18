@@ -1,5 +1,7 @@
 # Agent Documentation System
 
+## New to this project? Start with [Agent Onboarding](docs/agent_onboarding.md)!
+
 A self-contained documentation system with machine-actionable metadata for projects.
 
 ## How to Use

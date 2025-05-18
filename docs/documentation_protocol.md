@@ -1,6 +1,7 @@
 # Documentation Protocol v1.0 {#protocol}
 
 ## Machine-Actionable Metadata
+
 ```yaml
 schema: "https://schema.org/TechnicalDocument"
 id: "doc-protocol-001"
@@ -15,6 +16,7 @@ capabilities:
 ```
 
 ## Document Structure {#structure}
+
 Every document must include:
 
 1. **Metadata Header**: Machine-readable YAML front matter
@@ -23,6 +25,7 @@ Every document must include:
 4. **Code Examples**: With language identifiers
 
 ## Validation Rules {#validation}
+
 ```python
 def validate_doc_structure(doc):
     required_sections = ['Metadata', 'Content', 'Changelog']
@@ -30,4 +33,5 @@ def validate_doc_structure(doc):
 ```
 
 ## Changelog {#changelog}
+
 - **1.0.0** (2023-06-01): Initial protocol definition 

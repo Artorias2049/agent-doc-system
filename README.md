@@ -5,6 +5,7 @@ A self-contained documentation system with machine-actionable metadata for proje
 ## How to Use
 
 1. **Install dependencies**:
+
    ```bash
    # Install node dependencies
    npm install -g remark-cli
@@ -15,16 +16,19 @@ A self-contained documentation system with machine-actionable metadata for proje
    ```
 
 2. **Generate an example document**:
+
    ```bash
    ./agent_doc_system/scripts/generate_example_doc.py "Example Document" "This is an example document for testing" "Your Name"
    ```
 
 3. **Validate documentation**:
+
    ```bash
    ./agent_doc_system/scripts/validate_docs.py
    ```
 
 4. **Run full validation**:
+
    ```bash
    ./agent_doc_system/scripts/doc_validation.sh
    ```
@@ -63,6 +67,7 @@ Cursor will automatically recognize the documentation protocol when you:
 ## VSCode Integration
 
 The setup includes VSCode configuration that provides:
+
 - Tasks for validating documentation and generating new documents
 - Recommended extensions for working with Markdown and YAML
 - Schema validation for documentation files
@@ -75,9 +80,11 @@ To use this system in another project:
 
 1. Copy the entire `agent_doc_system/` folder to your new project
 2. Run the setup script to create Cursor integration files:
+
    ```bash
    ./agent_doc_system/scripts/setup_cursor.sh
    ```
+
 3. Start creating and validating documentation
 
 ## Agent Communication System
@@ -98,6 +105,7 @@ The project includes a directory-based agent communication system that enables d
 ### Usage
 
 1. **Sending Messages**
+
 ```python
 from scripts.agent_communication import AgentCommunication
 
@@ -119,7 +127,8 @@ message_id = agent_comm.send_message(
 )
 ```
 
-2. **Receiving Messages**
+1. **Receiving Messages**
+
 ```python
 # Get pending messages
 pending_messages = agent_comm.get_pending_messages()
@@ -132,7 +141,8 @@ agent_comm.update_message_status(
 )
 ```
 
-3. **Validating Messages**
+1. **Validating Messages**
+
 ```bash
 python scripts/validate_agent_messages.py agent_messages.json
 ```

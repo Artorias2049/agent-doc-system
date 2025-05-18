@@ -1,6 +1,7 @@
 # Git Workflow Protocol {#git-workflow}
 
 ## Machine-Actionable Metadata
+
 ```yaml
 schema: "https://schema.org/TechnicalDocument"
 id: "git-workflow-001"
@@ -17,10 +18,12 @@ capabilities:
 ## Branch Strategy
 
 ### Main Branches
+
 - `main`: Production-ready code
 - `develop`: Integration branch for features
 
 ### Supporting Branches
+
 - `feature/*`: New features
 - `release/*`: Release preparation
 - `hotfix/*`: Urgent production fixes
@@ -29,7 +32,9 @@ capabilities:
 ## Workflow Rules
 
 ### Feature Development
+
 1. Create feature branch from `develop`
+
    ```bash
    git checkout develop
    git pull
@@ -37,18 +42,22 @@ capabilities:
    ```
 
 2. Develop and commit changes
+
    ```bash
    git add .
    git commit -m "feat: your feature description"
    ```
 
 3. Push and create pull request to `develop`
+
    ```bash
    git push origin feature/your-feature-name
    ```
 
 ### Release Process
+
 1. Create release branch from `develop`
+
    ```bash
    git checkout develop
    git checkout -b release/v1.0.0
@@ -58,7 +67,9 @@ capabilities:
 3. Merge to `main` and `develop`
 
 ### Hotfix Process
+
 1. Create hotfix branch from `main`
+
    ```bash
    git checkout main
    git checkout -b hotfix/urgent-fix
@@ -68,7 +79,8 @@ capabilities:
 3. Merge to `main` and `develop`
 
 ## Commit Message Format
-```
+
+```text
 <type>(<scope>): <description>
 
 [optional body]
@@ -77,6 +89,7 @@ capabilities:
 ```
 
 Types:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -86,6 +99,7 @@ Types:
 - `chore`: Maintenance tasks
 
 ## Pull Request Process
+
 1. Create pull request to `develop`
 2. Ensure CI passes
 3. Get code review
@@ -93,4 +107,5 @@ Types:
 5. Merge to `develop`
 
 ## Changelog
+
 - **1.0.0** (2024-03-20): Initial git workflow protocol definition 

@@ -1,6 +1,7 @@
 # Example Document {#document}
 
 ## Machine-Actionable Metadata
+
 ```yaml
 schema: "https://schema.org/TechnicalDocument"
 id: "doc-example-001"

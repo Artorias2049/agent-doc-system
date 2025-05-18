@@ -1,0 +1,72 @@
+{
+  "messages": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "timestamp": "2024-05-17T10:00:00Z",
+      "sender": "e2e-test-agent",
+      "type": "test_request",
+      "content": {
+        "test_type": "e2e",
+        "test_file": "test_full_pipeline.py",
+        "parameters": {
+          "environment": "local",
+          "verbose": true
+        }
+      },
+      "status": "pending"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "timestamp": "2024-05-17T10:01:00Z",
+      "sender": "test-runner",
+      "type": "test_result",
+      "content": {
+        "test_id": "550e8400-e29b-41d4-a716-446655440000",
+        "status": "passed",
+        "logs": [
+          "Test started",
+          "All assertions passed",
+          "Test completed successfully"
+        ],
+        "artifacts": {
+          "path": "/tmp/test-results",
+          "type": "test-report"
+        }
+      },
+      "status": "processed"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "timestamp": "2024-05-17T10:02:00Z",
+      "sender": "documentation-agent",
+      "type": "status_update",
+      "content": {
+        "agent_id": "doc-agent-001",
+        "state": "processing",
+        "progress": 75
+      },
+      "status": "pending"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440003",
+      "timestamp": "2024-05-17T10:03:00Z",
+      "sender": "context-manager",
+      "type": "context_update",
+      "content": {
+        "context_id": "test-context-001",
+        "type": "add",
+        "data": {
+          "test_environment": "local",
+          "test_results": {
+            "passed": 10,
+            "failed": 0,
+            "skipped": 2
+          }
+        }
+      },
+      "status": "processed"
+    }
+  ],
+  "last_updated": "2024-05-17T10:03:00Z",
+  "version": "1.0.0"
+} 

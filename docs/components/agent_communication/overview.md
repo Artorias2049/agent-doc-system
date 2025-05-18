@@ -1,26 +1,44 @@
-# Agent Communication System
+# Agent Communication Component
 
 ## Machine-Actionable Metadata
 ```yaml
 schema: "https://schema.org/TechnicalDocument"
+id: "agent-communication"
 version: "1.0.0"
+last_updated: "2024-03-21"
 status: "Active"
+author: "System"
 ```
 
 ## Overview
 
-The Agent Communication System provides a standardized way for agents to communicate with each other, track message history, and manage communication protocols. It is designed to be simple, reliable, and maintainable.
+The Agent Communication Component provides a standardized way for agents to communicate with each other, track message history, and manage communication protocols.
 
-## Features
+## Core Features
 
-- Message-based communication between agents
-- Persistent message history
-- Automatic message cleanup
-- Status tracking for messages
-- Simple configuration
+1. **Message Protocol**
+   - JSON-based message format
+   - Unique message IDs
+   - Timestamp tracking
+   - Status management
+   - Type-based routing
 
-## Directory Structure
+2. **Message Types**
+   - `request`: Action requests
+   - `response`: Request responses
+   - `notification`: Information messages
+   - `error`: Error reports
+   - `status_update`: Status changes
 
+3. **System Features**
+   - Message history persistence
+   - Automatic cleanup
+   - Status tracking
+   - Simple configuration
+
+## Implementation
+
+### Directory Structure
 ```
 agent_communication/
 ├── core/
@@ -31,12 +49,7 @@ agent_communication/
 └── README.md
 ```
 
-## Implementation Details
-
-### Message Protocol
-
-The system uses a JSON-based message protocol with the following structure:
-
+### Message Format
 ```json
 {
     "id": "unique_message_id",
@@ -49,21 +62,11 @@ The system uses a JSON-based message protocol with the following structure:
 }
 ```
 
-### Message Types
-
-The system supports the following message types:
-- request: For requesting actions from other agents
-- response: For responding to requests
-- notification: For sending informational messages
-- error: For reporting errors
-- status_update: For updating status information
-
 ### Usage Example
-
 ```python
 from agent_communication.core.protocol import AgentProtocol
 
-# Initialize the protocol for an agent
+# Initialize the protocol
 agent = AgentProtocol(agent_id="my_agent", root_dir="/path/to/root")
 
 # Send a message
@@ -78,15 +81,11 @@ pending = agent.get_pending_messages()
 
 # Update message status
 agent.update_message_status(message_id, "completed", {"result": "success"})
-
-# Cleanup old messages
-agent.cleanup_old_messages(days=7)
 ```
 
 ## Configuration
 
-The system can be configured through `config/settings.py`:
-
+Key settings in `config/settings.py`:
 - Message retention period (default: 7 days)
 - Maximum message size (default: 1MB)
 - Supported message types
@@ -94,25 +93,32 @@ The system can be configured through `config/settings.py`:
 
 ## Best Practices
 
-1. Always use proper message types as defined in settings
-2. Implement proper error handling for message processing
-3. Regularly clean up old messages
-4. Monitor message sizes to prevent storage issues
-5. Use appropriate status updates for message tracking
+1. Use proper message types
+2. Implement error handling
+3. Regular cleanup
+4. Monitor message sizes
+5. Update message status
 
 ## Troubleshooting
 
 Common issues and solutions:
 
 1. **Message Not Received**
-   - Check if target agent is active
+   - Check target agent status
    - Verify message format
    - Check message status
 
 2. **Storage Issues**
-   - Implement regular cleanup
-   - Monitor message sizes
-   - Adjust retention period if needed
+   - Implement cleanup
+   - Monitor sizes
+   - Adjust retention
+
+## Integration
+
+The Agent Communication Component integrates with:
+- Documentation Protocol
+- Validation System
+- Monitoring System
 
 ## Future Improvements
 
@@ -125,4 +131,4 @@ Planned enhancements:
 
 ## Changelog
 
-- **1.0.0** (2024-03-21): Initial release of the Agent Communication System 
+- **1.0.0** (2024-03-21): Initial release as a component 

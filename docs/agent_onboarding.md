@@ -3,7 +3,7 @@
 ## Machine-Actionable Metadata
 ```yaml
 schema: "https://schema.org/TechnicalDocument"
-version: "1.0.0"
+version: "1.1.0"
 status: "Active"
 ```
 
@@ -17,15 +17,15 @@ This document serves as the single source of truth for understanding the agent-d
 - **Purpose:** Defines how all documentation should be structured and validated.
 - **Key Files:**
   - [Documentation Protocol](documentation_protocol.md)
-  - [Example Document](example.md)
+  - [Document Protocol Schema](../schemas/document_protocol.yml)
 
-### 2. Agent Communication Protocol
+### 2. Agent Communication
 - **Purpose:** Standardizes message formats and agent interactions.
 - **Key Files:**
-  - [Agent Communication](agent_communication.md)
+  - [Agent Communication Component](components/agent_communication/overview.md)
   - [Agent Communication Schema](../schemas/agent_communication.yml)
 
-### 3. Validation Scripts
+### 3. Validation System
 - **Purpose:** Automated scripts to check documentation, schemas, and agent messages for compliance.
 - **Key Files:**
   - [Documentation Validation](../scripts/doc_validation.sh)
@@ -35,26 +35,57 @@ This document serves as the single source of truth for understanding the agent-d
 - **Purpose:** YAML files that define the structure for documentation and agent messages.
 - **Key Files:**
   - [Document Protocol Schema](../schemas/document_protocol.yml)
-  - [Feedback Framework Schema](../schemas/feedback_framework.yml)
+  - [Agent Communication Schema](../schemas/agent_communication.yml)
+
+### 5. Documentation Templates
+- **Purpose:** Standardized templates for creating new documentation.
+- **Location:** `docs/templates/`
+- **Available Templates:**
+  - Project Templates (`docs/templates/projects/`):
+    - `overview.md`: Project overview documentation
+    - `setup.md`: Project setup guide
+  - Component Templates (`docs/templates/components/`):
+    - `overview.md`: Component overview documentation
+    - `api.md`: API documentation
+
+### 6. Core Components
+- **Purpose:** Reusable system components with standardized documentation.
+- **Location:** `docs/components/`
+- **Available Components:**
+  - [Agent Communication](components/agent_communication/overview.md)
+  - [Feedback System](components/feedback/overview.md)
+  - [Git Workflow](components/git/overview.md)
 
 ## Required Practices
+
+### Documentation Structure
+1. **Location Requirements:**
+   - Core documentation: `docs/`
+   - Project documentation: `docs/projects/<project_name>/`
+   - Component documentation: `docs/components/<component_name>/`
+   - Templates: `docs/templates/`
+
+2. **Required Sections:**
+   - Title
+   - Machine-Actionable Metadata
+   - Overview
+   - Main Content
+   - Changelog
 
 ### Metadata
 Every documentation file must include a `## Machine-Actionable Metadata` section with a YAML code block containing at least:
 - `schema`
 - `version`
 - `status`
+- `id`
+- `last_updated`
+- `author`
 
-### Changelog
-Every documentation file must have a `## Changelog` section.
-
-### Consistent Structure
-Follow the section order:
-1. Title
-2. Metadata
-3. Overview
-4. Main Content
-5. Changelog
+### Creating New Documentation
+1. Choose the appropriate template from `docs/templates/`
+2. Copy the template to the correct location
+3. Update the metadata and content
+4. Run validation before committing
 
 ### Validation
 Run `./scripts/doc_validation.sh` before merging or releasing to ensure compliance.
@@ -72,42 +103,65 @@ Message types include:
 
 ## Best Practices
 
-- Keep documentation and schemas up to date with code changes.
-- Use clear, concise language and provide examples.
-- Regularly review and improve documentation and communication protocols.
-- Use the feedback framework to suggest improvements or report issues.
+1. **Documentation:**
+   - Use templates for new documentation
+   - Keep documentation up to date
+   - Follow the required structure
+   - Include examples and diagrams
+
+2. **Code:**
+   - Update documentation with code changes
+   - Use consistent formatting
+   - Include examples
+   - Add changelog entries
+
+3. **Review:**
+   - Regular documentation reviews
+   - Validate before committing
+   - Use the feedback framework
 
 ## Validation & Troubleshooting
 
 Use the validation script to check for:
-- Proper metadata and changelog sections in docs.
-- Valid agent message files.
-- Valid YAML schemas.
-- Markdown formatting issues (if `remark-cli` is installed).
+- Proper metadata and changelog sections
+- Valid agent message files
+- Valid YAML schemas
+- Markdown formatting issues
+- Template compliance
 
-If validation fails, check the error messages for missing or misformatted sections.
+If validation fails, check the error messages for:
+- Missing or misformatted sections
+- Invalid metadata
+- Template non-compliance
+- Schema violations
 
 ## Where to Find Things
 
 - **Documentation:** `docs/`
+- **Project Docs:** `docs/projects/`
+- **Component Docs:** `docs/components/`
+- **Templates:** `docs/templates/`
 - **Schemas:** `schemas/`
 - **Validation Scripts:** `scripts/`
 - **Agent Communication Code:** `agent_communication/`
 
 ## Getting Started
 
-1. Read the main documentation files in `docs/`.
-2. Review the schemas in `schemas/` to understand required formats.
-3. Use the provided Python classes and scripts for agent communication and validation.
-4. Run the validation script before submitting changes.
+1. Read the main documentation files in `docs/`
+2. Review the templates in `docs/templates/`
+3. Review the schemas in `schemas/`
+4. Use the provided Python classes and scripts
+5. Run the validation script before submitting changes
 
 ## Quickstart Checklist
 
 - [ ] Read the onboarding doc
+- [ ] Review the templates
 - [ ] Review the schemas
 - [ ] Run the validation script
 - [ ] Follow the commit/PR guidelines
 
 ## Changelog
 
+- **1.1.0** (2024-03-21): Added template system and updated documentation structure
 - **1.0.0** (2024-03-21): Initial release of the Agent Onboarding Guide 

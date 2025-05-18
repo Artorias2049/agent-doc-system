@@ -16,6 +16,16 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# Parse command line arguments
+SELF_VALIDATE=false
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --self_validate) SELF_VALIDATE=true ;;
+        *) echo "Unknown parameter: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 # Print section header
 print_section() {
     echo -e "\n${BLUE}=== $1 ===${NC}"
@@ -67,20 +77,76 @@ if missing:
 }
 print_success "All dependencies are installed"
 
+# Validate documentation structure
+print_section "Documentation Structure Validation"
+structure_valid=true
+
+if [ "$SELF_VALIDATE" = true ]; then
+    # Check all required directories
+    for dir in "docs/projects" "docs/components" "docs/templates/projects" "docs/templates/components"; do
+        if [ ! -d "$PARENT_DIR/$dir" ]; then
+            echo "❌ Missing required directory: $dir"
+            structure_valid=false
+        fi
+    done
+
+    # Check template files
+    for template in "docs/templates/projects/overview.md" "docs/templates/projects/setup.md" \
+                    "docs/templates/components/overview.md" "docs/templates/components/api.md"; do
+        if [ ! -f "$PARENT_DIR/$template" ]; then
+            echo "❌ Missing required template: $template"
+            structure_valid=false
+        fi
+    done
+else
+    # Only check projects directory
+    if [ ! -d "$PARENT_DIR/docs/projects" ]; then
+        echo "❌ Missing required directory: docs/projects"
+        structure_valid=false
+    else
+        # Check if projects directory is empty
+        if [ -z "$(ls -A "$PARENT_DIR/docs/projects")" ]; then
+            print_info "No project documentation found in docs/projects/"
+            print_info "Create project documentation using the templates in docs/templates/projects/"
+        fi
+    fi
+fi
+
+if [ "$structure_valid" = true ]; then
+    print_success "Documentation structure is valid"
+else
+    echo "❌ Documentation structure validation failed"
+    exit 1
+fi
+
 # Run Python-based validation
 print_section "Schema Validation"
 doc_count=0
-while IFS= read -r line; do
-    if [[ $line == ✅* ]]; then
-        # Extract the path and convert to relative
-        path=$(echo "$line" | sed 's/✅ //' | sed 's/: Document is valid//')
-        rel_path=$(get_relative_path "$path")
-        echo "  ✅ $rel_path: Document is valid"
-        ((doc_count++))
-    else
-        echo "  $line"
-    fi
-done < <(python3 "$SCRIPT_DIR/validate_docs.py")
+
+if [ "$SELF_VALIDATE" = true ]; then
+    # Validate all documentation
+    while IFS= read -r line; do
+        if [[ $line == ✅* ]]; then
+            path=$(echo "$line" | sed 's/✅ //' | sed 's/: Document is valid//')
+            rel_path=$(get_relative_path "$path")
+            echo "  ✅ $rel_path: Document is valid"
+            ((doc_count++))
+        else
+            echo "  $line"
+        fi
+    done < <(python3 "$SCRIPT_DIR/validate_docs.py")
+else
+    # Only validate project documentation
+    while IFS= read -r line; do
+        if [[ $line == ✅* ]] && [[ $line == *"/docs/projects/"* ]]; then
+            path=$(echo "$line" | sed 's/✅ //' | sed 's/: Document is valid//')
+            rel_path=$(get_relative_path "$path")
+            echo "  ✅ $rel_path: Document is valid"
+            ((doc_count++))
+        fi
+    done < <(python3 "$SCRIPT_DIR/validate_docs.py")
+fi
+
 print_summary "Validated $doc_count documentation files"
 
 # Validate agent communication messages
@@ -106,17 +172,25 @@ if command -v remark &> /dev/null; then
     print_section "Markdown Validation"
     # Create a temporary file for remark output
     temp_file=$(mktemp)
-    remark "$PARENT_DIR/docs" --frail > "$temp_file" 2>&1 || {
-        echo "❌ Remark validation failed"
-        rm "$temp_file"
-        exit 1
-    }
+    
+    if [ "$SELF_VALIDATE" = true ]; then
+        remark "$PARENT_DIR/docs" --frail > "$temp_file" 2>&1 || {
+            echo "❌ Remark validation failed"
+            rm "$temp_file"
+            exit 1
+        }
+    else
+        remark "$PARENT_DIR/docs/projects" --frail > "$temp_file" 2>&1 || {
+            echo "❌ Remark validation failed"
+            rm "$temp_file"
+            exit 1
+        }
+    fi
     
     # Process the output with proper indentation
     markdown_count=0
     while IFS= read -r line; do
         if [[ $line == *"no issues found" ]]; then
-            # Convert to relative path and indent
             path=$(echo "$line" | sed 's/: no issues found//')
             rel_path=$(get_relative_path "$path")
             echo "  $rel_path: no issues found"

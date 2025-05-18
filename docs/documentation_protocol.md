@@ -3,7 +3,7 @@
 ## Machine-Actionable Metadata
 ```yaml
 schema: "https://schema.org/TechnicalDocument"
-version: "1.0.0"
+version: "1.1.0"
 status: "Active"
 ```
 
@@ -20,6 +20,56 @@ This document outlines the documentation protocol for the agent-doc-system proje
 3. Overview
 4. Main Content
 5. Changelog
+
+### Documentation Location
+
+All project-specific documentation must be stored in the following locations:
+
+1. **Core Documentation**: `docs/` directory
+   - System-wide documentation
+   - Protocols and standards
+   - General guidelines
+
+2. **Project-Specific Documentation**: `docs/projects/<project_name>/`
+   - Project-specific guides
+   - Implementation details
+   - Project workflows
+   - Project-specific protocols
+
+3. **Component Documentation**: `docs/components/<component_name>/`
+   - Component-specific documentation
+   - API references
+   - Technical specifications
+
+4. **Documentation Templates**: `docs/templates/`
+   - Project templates: `docs/templates/projects/`
+     - `overview.md`: Project overview template
+     - `setup.md`: Project setup guide template
+   - Component templates: `docs/templates/components/`
+     - `overview.md`: Component overview template
+     - `api.md`: API documentation template
+
+Each project and component must maintain its own documentation directory with the following structure:
+```
+docs/
+├── projects/
+│   └── <project_name>/
+│       ├── overview.md
+│       ├── setup.md
+│       └── workflows/
+├── components/
+│   └── <component_name>/
+│       ├── overview.md
+│       ├── api.md
+│       └── examples/
+└── templates/
+    ├── projects/
+    │   ├── overview.md
+    │   └── setup.md
+    └── components/
+        ├── overview.md
+        └── api.md
+```
 
 ### Metadata Format
 
@@ -105,4 +155,5 @@ Planned enhancements:
 
 ## Changelog
 
+- **1.1.0** (2024-03-21): Updated structure and removed outdated references
 - **1.0.0** (2024-03-21): Initial release of the Documentation Protocol 

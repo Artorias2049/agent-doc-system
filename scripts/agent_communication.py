@@ -3,6 +3,7 @@
 import json
 import os
 import uuid
+import argparse
 from datetime import datetime
 from typing import Dict, List, Optional, Union
 import logging
@@ -10,14 +11,25 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Hardcoded paths for consistency across all agents
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MESSAGE_FILE = os.path.join(PROJECT_ROOT, "agent_communication", "history", "agent_messages.json")
+
 class AgentCommunication:
-    def __init__(self, project_dir: str):
-        self.project_dir = project_dir
-        self.message_file = os.path.join(project_dir, "agent_messages.json")
+    def __init__(self, read_file: Optional[str] = None):
+        """
+        Initialize AgentCommunication.
+        Args:
+            read_file: Optional path to read messages from. If not provided, uses the default message file.
+        """
+        self.message_file = read_file if read_file else MESSAGE_FILE
         self._initialize_message_file()
 
     def _initialize_message_file(self):
         """Initialize the message file if it doesn't exist."""
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(os.path.abspath(self.message_file)), exist_ok=True)
+        
         if not os.path.exists(self.message_file):
             initial_structure = {
                 "messages": [],
@@ -25,6 +37,7 @@ class AgentCommunication:
                 "version": "1.0.0"
             }
             self._write_message_file(initial_structure)
+            logger.info(f"Initialized message file at: {os.path.abspath(self.message_file)}")
 
     def _read_message_file(self) -> Dict:
         """Read the message file."""
@@ -99,30 +112,56 @@ class AgentCommunication:
         logger.info(f"Cleaned up messages older than {days} days")
 
 def main():
-    """Example usage of the AgentCommunication class."""
-    # Example project directory
-    project_dir = os.getcwd()
-    agent_comm = AgentCommunication(project_dir)
-
-    # Example: Send a test request
-    test_request = {
-        "test_type": "e2e",
-        "test_file": "test_full_pipeline.py",
-        "parameters": {
-            "environment": "local",
-            "verbose": True
-        }
-    }
+    """Interactive usage of the AgentCommunication class."""
+    parser = argparse.ArgumentParser(description='Agent Communication System')
+    parser.add_argument('--action', choices=['send', 'read', 'cleanup'], required=True,
+                      help='Action to perform: send, read, or cleanup messages')
+    parser.add_argument('--type', help='Message type (required for send action)')
+    parser.add_argument('--sender', help='Sender name (required for send action)')
+    parser.add_argument('--content', help='Message content as JSON string (required for send action)')
+    parser.add_argument('--days', type=int, default=7, help='Days threshold for cleanup (default: 7)')
+    parser.add_argument('--read-file', help='Path to read messages from (only for read action)')
     
-    message_id = agent_comm.send_message(
-        message_type="test_request",
-        content=test_request,
-        sender="e2e-test-agent"
-    )
+    args = parser.parse_args()
     
-    # Example: Get pending messages
-    pending_messages = agent_comm.get_pending_messages()
-    print(f"Pending messages: {len(pending_messages)}")
+    # Initialize agent communication
+    agent_comm = AgentCommunication(read_file=args.read_file if args.action == 'read' else None)
+    
+    if args.action == 'send':
+        if not all([args.type, args.sender, args.content]):
+            parser.error("--type, --sender, and --content are required for send action")
+        
+        try:
+            content = json.loads(args.content)
+        except json.JSONDecodeError:
+            parser.error("--content must be a valid JSON string")
+        
+        message_id = agent_comm.send_message(
+            message_type=args.type,
+            content=content,
+            sender=args.sender
+        )
+        print(f"Message sent successfully with ID: {message_id}")
+        print(f"Message file location: {os.path.abspath(MESSAGE_FILE)}")
+        
+    elif args.action == 'read':
+        pending_messages = agent_comm.get_pending_messages()
+        if not pending_messages:
+            print("No pending messages found.")
+        else:
+            print(f"\nFound {len(pending_messages)} pending messages in {os.path.abspath(agent_comm.message_file)}:")
+            for msg in pending_messages:
+                print("\n" + "="*50)
+                print(f"Message ID: {msg['id']}")
+                print(f"Type: {msg['type']}")
+                print(f"Sender: {msg['sender']}")
+                print(f"Timestamp: {msg['timestamp']}")
+                print(f"Content: {json.dumps(msg['content'], indent=2)}")
+                print("="*50)
+                
+    elif args.action == 'cleanup':
+        agent_comm.cleanup_old_messages(days=args.days)
+        print(f"Cleaned up messages older than {args.days} days from {os.path.abspath(MESSAGE_FILE)}")
 
 if __name__ == "__main__":
     main() 

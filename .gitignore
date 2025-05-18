@@ -126,3 +126,7 @@ coverage/
 
 # MacOS
 .DS_Store
+
+# Always include the docs/projects directory and its contents
+!docs/projects/
+!docs/projects/**

@@ -1,4 +1,4 @@
-title: Agent Documentation Schema
+title: Agent Feedback Framework Schema
 version: 1.0
 properties:
   metadata:
@@ -39,17 +39,36 @@ properties:
   content:
     type: object
     required:
-      - sections
+      - observation
+      - analysis
+      - recommendation
+      - questions
       - changelog
-      - feedback
     properties:
-      sections:
-        type: array
-        items:
-          type: object
-          required:
-            - title
-            - content
+      observation:
+        type: object
+        required:
+          - what
+          - when
+          - context
+      analysis:
+        type: object
+        required:
+          - impact
+          - root_cause
+          - patterns
+      recommendation:
+        type: object
+        required:
+          - suggestions
+          - steps
+          - outcomes
+      questions:
+        type: object
+        required:
+          - clarifications
+          - preferences
+          - priorities
       changelog:
         type: array
         items:
@@ -58,18 +77,21 @@ properties:
             - version
             - date
             - changes
-      feedback:
+  validation:
+    type: object
+    required:
+      - status
+      - checks
+    properties:
+      status:
         type: object
         required:
-          - framework
-          - status
-        properties:
-          framework:
-            type: string
-            format: uri
-            description: "Reference to feedback framework schema"
-          status:
-            type: object
-            required:
-              - validation
-              - implementation 
+          - format
+          - elements
+          - metadata
+          - changelog
+          - guidelines
+      checks:
+        type: array
+        items:
+          type: string 

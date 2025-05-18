@@ -78,4 +78,71 @@ To use this system in another project:
    ```bash
    ./agent_doc_system/scripts/setup_cursor.sh
    ```
-3. Start creating and validating documentation 
+3. Start creating and validating documentation
+
+## Agent Communication System
+
+The project includes a directory-based agent communication system that enables different agents to communicate and share information across project directories. This system is implemented through JSON-based message files that follow a strict schema defined in `schemas/agent_communication.yml`.
+
+### Key Components
+
+1. **Message Files**
+   - Each project directory contains an `agent_messages.json` file
+   - Messages are stored in a structured format with unique IDs and timestamps
+   - Supports various message types: test requests, test results, status updates, and context updates
+
+2. **Communication Scripts**
+   - `scripts/agent_communication.py`: Main implementation for sending and receiving messages
+   - `scripts/validate_agent_messages.py`: Validates message files against the schema
+
+### Usage
+
+1. **Sending Messages**
+```python
+from scripts.agent_communication import AgentCommunication
+
+# Initialize communication for a project directory
+agent_comm = AgentCommunication("/path/to/project")
+
+# Send a test request
+message_id = agent_comm.send_message(
+    message_type="test_request",
+    content={
+        "test_type": "e2e",
+        "test_file": "test_full_pipeline.py",
+        "parameters": {
+            "environment": "local",
+            "verbose": True
+        }
+    },
+    sender="e2e-test-agent"
+)
+```
+
+2. **Receiving Messages**
+```python
+# Get pending messages
+pending_messages = agent_comm.get_pending_messages()
+
+# Update message status
+agent_comm.update_message_status(
+    message_id="message-id",
+    status="processed",
+    response={"result": "success"}
+)
+```
+
+3. **Validating Messages**
+```bash
+python scripts/validate_agent_messages.py agent_messages.json
+```
+
+### Best Practices
+
+1. Always validate message files before processing
+2. Clean up old messages periodically
+3. Handle message failures gracefully
+4. Maintain message order and integrity
+5. Include detailed error information in failed messages
+
+For detailed schema information and message type specifications, see `schemas/agent_communication.yml`. 

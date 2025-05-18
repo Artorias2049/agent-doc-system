@@ -24,6 +24,37 @@ This document serves as the single source of truth for understanding the agent-d
 - **Key Files:**
   - [Agent Communication Component](components/agent_communication/overview.md)
   - [Agent Communication Schema](../schemas/agent_communication.yml)
+- **Core Operations:**
+  - Send messages: `python scripts/agent_communication.py --action send --type <type> --sender <sender> --content <json_content>`
+  - Read messages: `python scripts/agent_communication.py --action read [--read-file <path>]`
+  - Cleanup messages: `python scripts/agent_communication.py --action cleanup [--days <days>]`
+- **Message Storage:**
+  - Messages are stored in `agent_communication/history/agent_messages.json`
+  - Location is consistent across all agents (relative to project root)
+  - Directory structure is created automatically if it doesn't exist
+  - Each message includes:
+    - ID (UUID)
+    - Timestamp (ISO format)
+    - Sender
+    - Type
+    - Content (JSON)
+    - Status (pending/processed)
+  - Messages are automatically cleaned up after specified days (default: 7)
+- **File Structure:**
+  ```
+  project_root/
+  ├── agent_communication/
+  │   └── history/
+  │       └── agent_messages.json
+  └── scripts/
+      └── agent_communication.py
+  ```
+- **Message Types:**
+  - `request`: Initial message requesting an action
+  - `response`: Response to a request
+  - `notification`: System or status notifications
+  - `error`: Error messages
+  - `status_update`: Progress or status updates
 
 ### 3. Validation System
 - **Purpose:** Automated scripts to check documentation, schemas, and agent messages for compliance.
@@ -92,14 +123,36 @@ Run `./scripts/doc_validation.sh` before merging or releasing to ensure complian
 
 ## Communication Protocol
 
-All agent messages must follow the JSON schema defined in `schemas/agent_communication.yml`. Use the provided Python classes (e.g., `AgentProtocol`) for sending, receiving, and tracking messages.
+All agent messages must follow the JSON schema defined in `schemas/agent_communication.yml`. Use the provided Python script (`agent_communication.py`) for sending, receiving, and tracking messages.
 
-Message types include:
-- `request`
-- `response`
-- `notification`
-- `error`
-- `status_update`
+Example usage:
+```bash
+# Send a message (always goes to agent_communication/history/agent_messages.json)
+python scripts/agent_communication.py --action send --type "request" --sender "agent1" --content '{"action": "process", "data": {"id": 123}}'
+
+# Read messages from default location
+python scripts/agent_communication.py --action read
+
+# Read messages from a specific file (useful for reading archived messages)
+python scripts/agent_communication.py --action read --read-file "/path/to/other/messages.json"
+
+# Cleanup old messages (default: 7 days)
+python scripts/agent_communication.py --action cleanup --days 14
+```
+
+Message Format:
+```json
+{
+  "id": "uuid-string",
+  "timestamp": "2024-03-21T12:00:00Z",
+  "sender": "agent-name",
+  "type": "request|response|notification|error|status_update",
+  "content": {
+    // Message-specific content
+  },
+  "status": "pending|processed"
+}
+```
 
 ## Best Practices
 

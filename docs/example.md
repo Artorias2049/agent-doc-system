@@ -1,19 +1,15 @@
-# Example Document {#document}
+# Example Document
 
 ## Machine-Actionable Metadata
-
 ```yaml
 schema: "https://schema.org/TechnicalDocument"
-id: "doc-example-001"
 version: "1.0.0"
-last_updated: "2023-06-01T00:00:00Z"
 status: "Active"
-author: "System"
 ```
 
-## Overview {#overview}
+## Overview
 
-This is an example document showing how to use the Agent Documentation System.
+This is an example document that demonstrates the proper format and structure for documentation in the agent-doc-system project.
 
 ## Content {#content}
 
@@ -35,6 +31,6 @@ def example_function():
 3. Use proper section headers with anchor tags
 4. Run validation using the provided scripts
 
-## Changelog {#changelog}
+## Changelog
 
-- **1.0.0** (2023-06-01): Initial example document 
+- **1.0.0** (2024-03-21): Initial release of the Example Document 

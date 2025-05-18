@@ -1,19 +1,15 @@
-# Git Workflow Protocol {#git-workflow}
+# Git Workflow Guide
 
 ## Machine-Actionable Metadata
-
 ```yaml
 schema: "https://schema.org/TechnicalDocument"
-id: "git-workflow-001"
 version: "1.0.0"
-last_updated: "2024-03-20T00:00:00Z"
 status: "Active"
-priority: "P0"
-owner: "Documentation Team"
-capabilities:
-  - "document_analysis:v1"
-  - "change_tracking:v1"
 ```
+
+## Overview
+
+This document outlines the Git workflow for the agent-doc-system project. It provides guidelines for branch management, commit messages, and code review processes.
 
 ## Branch Strategy
 
@@ -25,87 +21,80 @@ capabilities:
 ### Supporting Branches
 
 - `feature/*`: New features
-- `release/*`: Release preparation
+- `bugfix/*`: Bug fixes
 - `hotfix/*`: Urgent production fixes
-- `support/*`: Long-term support
+- `release/*`: Release preparation
 
-## Workflow Rules
-
-### Feature Development
+## Workflow Steps
 
 1. Create feature branch from `develop`
+2. Develop and test locally
+3. Push changes and create PR
+4. Code review and approval
+5. Merge to `develop`
+6. Deploy to staging
+7. Merge to `main` for production
 
-   ```bash
-   git checkout develop
-   git pull
-   git checkout -b feature/your-feature-name
-   ```
+## Commit Messages
 
-2. Develop and commit changes
-
-   ```bash
-   git add .
-   git commit -m "feat: your feature description"
-   ```
-
-3. Push and create pull request to `develop`
-
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-### Release Process
-
-1. Create release branch from `develop`
-
-   ```bash
-   git checkout develop
-   git checkout -b release/v1.0.0
-   ```
-
-2. Make release-specific changes
-3. Merge to `main` and `develop`
-
-### Hotfix Process
-
-1. Create hotfix branch from `main`
-
-   ```bash
-   git checkout main
-   git checkout -b hotfix/urgent-fix
-   ```
-
-2. Fix and commit changes
-3. Merge to `main` and `develop`
-
-## Commit Message Format
-
-```text
-<type>(<scope>): <description>
-
-[optional body]
-
-[optional footer]
-```
+Format: `type(scope): description`
 
 Types:
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation
+- style: Formatting
+- refactor: Code restructuring
+- test: Testing
+- chore: Maintenance
 
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style changes
-- `refactor`: Code refactoring
-- `test`: Adding tests
-- `chore`: Maintenance tasks
+## Code Review Guidelines
 
-## Pull Request Process
+1. Review for functionality
+2. Check code style
+3. Verify tests
+4. Ensure documentation
+5. Validate against requirements
 
-1. Create pull request to `develop`
-2. Ensure CI passes
-3. Get code review
-4. Address feedback
-5. Merge to `develop`
+## Deployment Process
+
+1. Merge to `develop`
+2. Run automated tests
+3. Deploy to staging
+4. Verify functionality
+5. Merge to `main`
+6. Deploy to production
+
+## Best Practices
+
+1. Keep branches up to date
+2. Write clear commit messages
+3. Review code thoroughly
+4. Test before merging
+5. Document changes
+
+## Troubleshooting
+
+Common issues and solutions:
+
+1. **Merge Conflicts**
+   - Update local branch
+   - Resolve conflicts
+   - Test changes
+
+2. **Failed Deployments**
+   - Check logs
+   - Verify configuration
+   - Rollback if needed
+
+## Future Improvements
+
+Planned enhancements:
+- Automated testing
+- CI/CD pipeline
+- Branch protection
+- Deployment automation
 
 ## Changelog
 
-- **1.0.0** (2024-03-20): Initial git workflow protocol definition 
+- **1.0.0** (2024-03-21): Initial release of the Git Workflow Guide 

@@ -75,9 +75,9 @@ class AgentProtocol:
                     errors.append("Invalid UUID format for id field")
                 if field == "timestamp" and not self._validate_timestamp(message[field]):
                     errors.append("Invalid timestamp format")
-                if field == "type" and message[field] not in field_schema["enum"]:
+                if field == "type" and message[field] not in ["test_request", "test_result", "status_update", "context_update"]:
                     errors.append(f"Invalid message type: {message['type']}")
-                if field == "status" and message[field] not in field_schema["enum"]:
+                if field == "status" and message[field] not in ["pending", "processed", "failed"]:
                     errors.append(f"Invalid status: {message['status']}")
         return errors
 

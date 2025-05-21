@@ -1,10 +1,13 @@
 #!/bin/bash
-# agent_doc_system/framework/scripts/framework_protection.sh
+# agent-doc-system/framework/scripts/framework_protection.sh
 
 # Get the directory where this script is located
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-# Get the parent directory (agent_doc_system)
-PARENT_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
+# Get the project root directory (where the script was called from)
+PROJECT_ROOT="$(pwd)"
+# Get the framework directory
+FRAMEWORK_DIR="$PROJECT_ROOT/agent-doc-system/framework"
+PROJECT_DOCS_DIR="$PROJECT_ROOT/agent-doc-system/project_docs"
 
 # Set error handling
 set -e
@@ -40,13 +43,13 @@ print_info() {
 # Get relative path
 get_relative_path() {
     local path="$1"
-    echo "${path#$PARENT_DIR/}"
+    echo "${path#$PROJECT_ROOT/}"
 }
 
 print_section "Framework Protection"
 
 # Check if framework directory exists
-if [ ! -d "$PARENT_DIR/framework" ]; then
+if [ ! -d "$FRAMEWORK_DIR" ]; then
     print_error "Framework directory not found"
     exit 1
 fi
@@ -55,47 +58,34 @@ fi
 print_section "Project Structure Validation"
 structure_valid=true
 
-# Check if projects directory exists
-if [ ! -d "$PARENT_DIR/projects" ]; then
-    print_info "Creating projects directory..."
-    mkdir -p "$PARENT_DIR/projects"
+# Check if project_docs directory exists
+if [ ! -d "$PROJECT_DOCS_DIR" ]; then
+    print_info "Creating project_docs directory..."
+    mkdir -p "$PROJECT_DOCS_DIR"
 fi
 
-# Validate each project's structure
-for project_dir in "$PARENT_DIR/projects"/*/; do
-    if [ -d "$project_dir" ]; then
-        project_name=$(basename "$project_dir")
-        print_info "Checking project: $project_name"
+# Validate project documentation structure
+print_info "Checking project documentation structure..."
+
+# Check for required project files
+for file in "project_onboarding.md"; do
+    if [ ! -f "$PROJECT_DOCS_DIR/$file" ]; then
+        print_error "Missing required file in project_docs: $file"
+        structure_valid=false
+    fi
+done
+
+# Check each component's structure
+for component_dir in "$FRAMEWORK_DIR/components"/*/; do
+    if [ -d "$component_dir" ]; then
+        component_name=$(basename "$component_dir")
+        print_info "  Checking component: $component_name"
         
-        # Check for required project files
-        for file in "README.md" "requirements.txt" "setup.py"; do
-            if [ ! -f "$project_dir$file" ]; then
-                print_error "Missing required file in $project_name: $file"
+        # Check for required component files
+        for file in "overview.md"; do
+            if [ ! -f "$component_dir$file" ]; then
+                print_error "Missing required file in $component_name: $file"
                 structure_valid=false
-            fi
-        done
-
-        # Check each component's structure
-        for component_dir in "$project_dir"*/; do
-            if [ -d "$component_dir" ]; then
-                component_name=$(basename "$component_dir")
-                print_info "  Checking component: $component_name"
-                
-                # Check for required component files
-                for file in "README.md" "requirements.txt"; do
-                    if [ ! -f "$component_dir$file" ]; then
-                        print_error "Missing required file in $component_name: $file"
-                        structure_valid=false
-                    fi
-                done
-
-                # Check for required component directories
-                for dir in "docs" "src" "tests" "config"; do
-                    if [ ! -d "$component_dir$dir" ]; then
-                        print_error "Missing required directory in $component_name: $dir"
-                        structure_valid=false
-                    fi
-                done
             fi
         done
     fi
@@ -121,16 +111,29 @@ allowed_files=(
     "package.json"
     
     # Framework docs
-    "docs/agent_onboarding.md"
     "docs/documentation_protocol.md"
+    "docs/agent_onboarding.md"
+    "docs/templates/*.md"
     
     # Framework scripts
     "scripts/framework_protection.sh"
-    "scripts/doc_validation.sh"
+    "scripts/validate.sh"
+    "scripts/setup_cursor.sh"
     
     # Framework schemas
     "schemas/document_protocol.yml"
     "schemas/agent_communication.yml"
+    
+    # Framework validators
+    "validators/validator.py"
+    "validators/validate_docs.py"
+    "validators/validate_schema.py"
+    "validators/framework_protection.py"
+    
+    # Framework components
+    "components/feedback/overview.md"
+    "components/agent_communication/overview.md"
+    "components/git/overview.md"
 )
 
 # Check for unauthorized files
@@ -140,7 +143,7 @@ while IFS= read -r file; do
         print_error "Unauthorized file in framework directory: $relative_path"
         framework_violations=true
     fi
-done < <(find "$PARENT_DIR/framework" -type f)
+done < <(find "$FRAMEWORK_DIR" -type f)
 
 if [ "$framework_violations" = false ]; then
     print_success "No unauthorized files in framework directory"

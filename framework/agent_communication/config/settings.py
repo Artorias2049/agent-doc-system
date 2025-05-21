@@ -10,18 +10,16 @@ BASE_DIR = Path(__file__).parent.parent.parent
 MESSAGE_RETENTION_DAYS = 7
 MAX_MESSAGE_SIZE = 1024 * 1024  # 1MB
 SUPPORTED_MESSAGE_TYPES = [
-    "request",
-    "response",
-    "notification",
-    "error",
-    "status_update"
+    "test_request",
+    "test_result",
+    "status_update",
+    "context_update"
 ]
 
 # Message status options
 MESSAGE_STATUS = {
     "PENDING": "pending",
-    "IN_PROGRESS": "in_progress",
-    "COMPLETED": "completed",
+    "PROCESSED": "processed",
     "FAILED": "failed"
 }
 

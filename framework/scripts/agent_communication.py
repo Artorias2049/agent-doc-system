@@ -59,13 +59,17 @@ class AgentCommunication:
         except Exception as e:
             logger.error(f"Error writing to message file: {e}")
 
-    def send_message(self, message_type: str, content: Dict, sender: str) -> str:
+    def send_message(self, message_type: str, content: Dict, sender: str, target: str = None) -> str:
         """Send a new message."""
+        if message_type not in ["test_request", "test_result", "status_update", "context_update"]:
+            raise ValueError(f"Invalid message type: {message_type}. Must be one of: test_request, test_result, status_update, context_update")
+            
         message_id = str(uuid.uuid4())
         message = {
             "id": message_id,
             "timestamp": datetime.utcnow().isoformat(),
             "sender": sender,
+            "target": target,
             "type": message_type,
             "content": content,
             "status": "pending"
@@ -79,10 +83,13 @@ class AgentCommunication:
         logger.info(f"Message sent with ID: {message_id}")
         return message_id
 
-    def get_pending_messages(self) -> List[Dict]:
-        """Get all pending messages."""
+    def get_pending_messages(self, target: str = None) -> List[Dict]:
+        """Get all pending messages, optionally filtered by target."""
         data = self._read_message_file()
-        return [msg for msg in data["messages"] if msg["status"] == "pending"]
+        messages = [msg for msg in data["messages"] if msg["status"] == "pending"]
+        if target:
+            messages = [msg for msg in messages if msg["target"] == target]
+        return messages
 
     def update_message_status(self, message_id: str, status: str, response: Optional[Dict] = None):
         """Update message status and add response if provided."""
@@ -118,6 +125,7 @@ def main():
                       help='Action to perform: send, read, or cleanup messages')
     parser.add_argument('--type', help='Message type (required for send action)')
     parser.add_argument('--sender', help='Sender name (required for send action)')
+    parser.add_argument('--target', help='Target agent name (optional for send action)')
     parser.add_argument('--content', help='Message content as JSON string (required for send action)')
     parser.add_argument('--days', type=int, default=7, help='Days threshold for cleanup (default: 7)')
     parser.add_argument('--read-file', help='Path to read messages from (only for read action)')
@@ -139,13 +147,14 @@ def main():
         message_id = agent_comm.send_message(
             message_type=args.type,
             content=content,
-            sender=args.sender
+            sender=args.sender,
+            target=args.target
         )
         print(f"Message sent successfully with ID: {message_id}")
         print(f"Message file location: {os.path.abspath(MESSAGE_FILE)}")
         
     elif args.action == 'read':
-        pending_messages = agent_comm.get_pending_messages()
+        pending_messages = agent_comm.get_pending_messages(target=args.target)
         if not pending_messages:
             print("No pending messages found.")
         else:
@@ -155,6 +164,8 @@ def main():
                 print(f"Message ID: {msg['id']}")
                 print(f"Type: {msg['type']}")
                 print(f"Sender: {msg['sender']}")
+                if msg.get('target'):
+                    print(f"Target: {msg['target']}")
                 print(f"Timestamp: {msg['timestamp']}")
                 print(f"Content: {json.dumps(msg['content'], indent=2)}")
                 print("="*50)

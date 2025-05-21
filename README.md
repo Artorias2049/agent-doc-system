@@ -1,8 +1,23 @@
 # Agent Documentation System
 
-## New to this project? Start with [Agent Onboarding](docs/agent_onboarding.md)!
+## New to this project? Start with [Agent Onboarding](framework/docs/agent_onboarding.md)!
 
 A self-contained documentation system with machine-actionable metadata for projects.
+
+## Directory Structure
+
+```
+agent-doc-system/
+├── framework/                    # Protected framework files
+│   ├── docs/                    # Core documentation
+│   ├── schemas/                 # Schema definitions
+│   ├── scripts/                 # System scripts
+│   └── agent_communication/     # Communication system
+├── projects/                    # Project space
+│   └── {project_name}/         # Individual projects
+│       └── {component_name}/   # Project components
+└── README.md
+```
 
 ## How to Use
 
@@ -20,19 +35,19 @@ A self-contained documentation system with machine-actionable metadata for proje
 2. **Generate an example document**:
 
    ```bash
-   ./agent_doc_system/scripts/generate_example_doc.py "Example Document" "This is an example document for testing" "Your Name"
+   ./framework/scripts/generate_example_doc.py "Example Document" "This is an example document for testing" "Your Name"
    ```
 
 3. **Validate documentation**:
 
    ```bash
-   ./agent_doc_system/scripts/validate_docs.py
+   ./framework/scripts/validate_docs.py
    ```
 
 4. **Run full validation**:
 
    ```bash
-   ./agent_doc_system/scripts/doc_validation.sh
+   ./framework/scripts/doc_validation.sh
    ```
 
 ## Setup Cursor Integration
@@ -41,10 +56,10 @@ To set up the Cursor integration files in your project:
 
 ```bash
 # From your project root
-./agent_doc_system/scripts/setup_cursor.sh
+./framework/scripts/setup_cursor.sh
 
 # OR specify a different target directory
-./agent_doc_system/scripts/setup_cursor.sh /path/to/project
+./framework/scripts/setup_cursor.sh /path/to/project
 ```
 
 This will create all necessary `.cursor` files for the documentation system to work with Cursor, including:
@@ -60,7 +75,7 @@ The script also sets up VSCode configuration for better editor integration.
 
 Cursor will automatically recognize the documentation protocol when you:
 
-1. Create documentation in the `agent_doc_system/docs/` directory
+1. Create documentation in the `framework/docs/` directory
 2. Follow the documentation protocol with proper YAML metadata
 3. Use section headers with anchor tags {#section-name}
 4. Include language identifiers in code blocks
@@ -80,18 +95,18 @@ The setup includes VSCode configuration that provides:
 
 To use this system in another project:
 
-1. Copy the entire `agent_doc_system/` folder to your new project
+1. Copy the entire `framework/` folder to your new project
 2. Run the setup script to create Cursor integration files:
 
    ```bash
-   ./agent_doc_system/scripts/setup_cursor.sh
+   ./framework/scripts/setup_cursor.sh
    ```
 
 3. Start creating and validating documentation
 
 ## Agent Communication System
 
-The project includes a directory-based agent communication system that enables different agents to communicate and share information across project directories. This system is implemented through JSON-based message files that follow a strict schema defined in `schemas/agent_communication.yml`.
+The project includes a directory-based agent communication system that enables different agents to communicate and share information across project directories. This system is implemented through JSON-based message files that follow a strict schema defined in `framework/schemas/agent_communication.yml`.
 
 ### Key Components
 
@@ -101,15 +116,15 @@ The project includes a directory-based agent communication system that enables d
    - Supports various message types: test requests, test results, status updates, and context updates
 
 2. **Communication Scripts**
-   - `scripts/agent_communication.py`: Main implementation for sending and receiving messages
-   - `scripts/validate_agent_messages.py`: Validates message files against the schema
+   - `framework/scripts/agent_communication.py`: Main implementation for sending and receiving messages
+   - `framework/scripts/validate_agent_messages.py`: Validates message files against the schema
 
 ### Usage
 
 1. **Sending Messages**
 
 ```python
-from scripts.agent_communication import AgentCommunication
+from framework.scripts.agent_communication import AgentCommunication
 
 # Initialize communication for a project directory
 agent_comm = AgentCommunication("/path/to/project")
@@ -129,7 +144,7 @@ message_id = agent_comm.send_message(
 )
 ```
 
-1. **Receiving Messages**
+2. **Receiving Messages**
 
 ```python
 # Get pending messages
@@ -143,10 +158,10 @@ agent_comm.update_message_status(
 )
 ```
 
-1. **Validating Messages**
+3. **Validating Messages**
 
 ```bash
-python scripts/validate_agent_messages.py agent_messages.json
+python framework/scripts/validate_agent_messages.py agent_messages.json
 ```
 
 ### Best Practices
@@ -157,4 +172,22 @@ python scripts/validate_agent_messages.py agent_messages.json
 4. Maintain message order and integrity
 5. Include detailed error information in failed messages
 
-For detailed schema information and message type specifications, see `schemas/agent_communication.yml`. 
+For detailed schema information and message type specifications, see `framework/schemas/agent_communication.yml`.
+
+Example usage:
+```bash
+# Send a message (always goes to framework/agent_communication/history/agent_messages.json)
+python framework/scripts/agent_communication.py --action send --type "test_request" --sender "agent1" --target "agent2" --content '{"action": "process", "data": {"id": 123}}'
+
+# Read messages from default location
+python framework/scripts/agent_communication.py --action read
+
+# Read messages for a specific target
+python framework/scripts/agent_communication.py --action read --target "agent2"
+
+# Read messages from a specific file (useful for reading archived messages)
+python framework/scripts/agent_communication.py --action read --read-file "/path/to/other/messages.json"
+
+# Cleanup old messages (default: 7 days)
+python framework/scripts/agent_communication.py --action cleanup --days 14
+``` 

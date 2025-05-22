@@ -126,14 +126,11 @@ allowed_files=(
     
     # Framework validators
     "validators/validator.py"
-    "validators/validate_docs.py"
-    "validators/validate_schema.py"
-    "validators/framework_protection.py"
     
     # Framework components
-    "components/feedback/overview.md"
-    "components/agent_communication/overview.md"
-    "components/git/overview.md"
+    "docs/components/feedback/overview.md"
+    "docs/components/agent_communication/overview.md"
+    "docs/components/git/overview.md"
 )
 
 # Check for unauthorized files

@@ -103,6 +103,7 @@ venv.bak/
 .idea/
 .vscode/
 .cursorignore
+.cursor/
 *.swp
 *.swo
 

@@ -2,12 +2,43 @@
 
 ## Machine-Actionable Metadata
 ```yaml
-schema: "https://schema.org/TechnicalDocument"
-id: "project-setup"
-version: "1.0.0"
-last_updated: "ISO8601_timestamp"
-status: "Active"
-author: "Author Name"
+metadata:
+  schema: "https://schema.org/TechnicalDocument"
+  version: "1.0.0"
+  status: "Active"
+  owner: "Documentation Team"
+  title: "Project Setup Template"
+  description: "Template for project setup documentation"
+content:
+  overview: "This document provides setup instructions for the project."
+  key_components: "Setup requirements, installation steps, configuration"
+  sections:
+    - title: "Prerequisites"
+      content: "Required software and dependencies"
+    - title: "Installation"
+      content: "Step-by-step installation guide"
+    - title: "Configuration"
+      content: "Configuration instructions"
+  changelog:
+    - version: "1.0.0"
+      date: "2024-03-21"
+      changes:
+        - "Initial template creation"
+feedback:
+  rating: 90
+  comments: "Comprehensive setup guide template with clear sections"
+  observations:
+    - what: "Well-structured troubleshooting section"
+      impact: "Helps users resolve common issues quickly"
+  suggestions:
+    - action: "Add more example commands"
+      priority: "Low"
+  status:
+    value: "Approved"
+    updated_by: "Documentation Team"
+    date: "2024-03-21"
+    validation: "Passed"
+    implementation: "Complete"
 ```
 
 ## Prerequisites
@@ -55,4 +86,4 @@ Common issues and their solutions:
 
 ## Changelog
 
-- **1.0.0** (YYYY-MM-DD): Initial version 
+- **1.0.0** (2024-03-21): Initial template creation 

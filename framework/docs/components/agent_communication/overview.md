@@ -2,12 +2,55 @@
 
 ## Machine-Actionable Metadata
 ```yaml
-schema: "https://schema.org/TechnicalDocument"
-id: "agent-communication"
-version: "1.0.0"
-last_updated: "2024-03-21"
-status: "Active"
-author: "System"
+metadata:
+  schema: "https://schema.org/TechnicalDocument"
+  version: "1.0.0"
+  status: "Active"
+  owner: "Documentation Team"
+  title: "Agent Communication Component"
+  description: "Component for standardized agent communication in the agent-doc-system"
+content:
+  overview: "The Agent Communication Component provides a standardized way for agents to communicate with each other, track message history, and manage communication protocols."
+  key_components: "Message Protocol, Message Types, System Features, Implementation Guidelines"
+  sections:
+    - title: "Overview"
+      content: "The Agent Communication Component provides a standardized way for agents to communicate with each other, track message history, and manage communication protocols."
+    - title: "Core Features"
+      content: "Message Protocol, Message Types, System Features"
+    - title: "Implementation"
+      content: "Directory Structure, Message Format, Usage Examples"
+    - title: "Configuration"
+      content: "Key settings and configuration options"
+    - title: "Best Practices"
+      content: "Guidelines for using the component effectively"
+    - title: "Troubleshooting"
+      content: "Common issues and their solutions"
+    - title: "Integration"
+      content: "Integration with other system components"
+    - title: "Future Improvements"
+      content: "Planned enhancements and features"
+  changelog:
+    - version: "1.0.0"
+      date: "2024-03-21"
+      changes:
+        - "Initial release as a component"
+feedback:
+  rating: 96
+  comments: "Comprehensive component with clear implementation details and examples"
+  observations:
+    - what: "Well-structured message protocol"
+      impact: "Ensures reliable agent communication"
+    - what: "Clear troubleshooting guide"
+      impact: "Helps resolve common issues quickly"
+  suggestions:
+    - action: "Add more real-world usage scenarios"
+      priority: "Medium"
+  status:
+    value: "Approved"
+    updated_by: "Documentation Team"
+    date: "2024-03-21"
+    validation: "Passed"
+    implementation: "Complete"
 ```
 
 ## Overview

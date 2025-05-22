@@ -38,7 +38,7 @@ class Validator:
                 return False, "No valid metadata found"
 
             errors = []
-            schema = self.schema_data['document']['document_schema']
+            schema = self.schema_data['document']  # Access the root level schema
 
             # Validate metadata section
             if 'metadata' not in metadata:
@@ -46,8 +46,8 @@ class Validator:
             else:
                 metadata_errors = self._validate_section(
                     metadata['metadata'],
-                    schema['properties']['metadata'],
-                    schema['properties']['metadata']['required']
+                    schema['document_schema']['properties']['metadata'],
+                    schema['document_schema']['properties']['metadata']['required']
                 )
                 errors.extend(metadata_errors)
 
@@ -57,8 +57,8 @@ class Validator:
             else:
                 content_errors = self._validate_section(
                     metadata['content'],
-                    schema['properties']['content'],
-                    schema['properties']['content']['required']
+                    schema['document_schema']['properties']['content'],
+                    schema['document_schema']['properties']['content']['required']
                 )
                 errors.extend(content_errors)
 
@@ -68,8 +68,8 @@ class Validator:
             else:
                 feedback_errors = self._validate_section(
                     metadata['feedback'],
-                    schema['properties']['feedback'],
-                    schema['properties']['feedback']['required']
+                    schema['document_schema']['properties']['feedback'],
+                    schema['document_schema']['properties']['feedback']['required']
                 )
                 errors.extend(feedback_errors)
 
@@ -172,6 +172,47 @@ class Validator:
         except Exception as e:
             return False, str(e)
 
+    def validate_message_file(self, file_path):
+        """Validate a message file against the file schema and cleanup policy."""
+        try:
+            with open(file_path) as f:
+                file_data = json.load(f)
+            
+            errors = []
+            schema = self.schema_data['agent']['file_schema']
+
+            # Validate file schema
+            file_errors = self._validate_section(
+                file_data,
+                schema,
+                schema['required']
+            )
+            errors.extend(file_errors)
+
+            # Validate each message in the file
+            if 'messages' in file_data:
+                for i, message in enumerate(file_data['messages']):
+                    success, msg = self.validate_message(message)
+                    if not success:
+                        errors.append(f"Message {i}: {msg}")
+
+            # Validate cleanup policy
+            if 'messages' in file_data:
+                current_time = datetime.now()
+                for message in file_data['messages']:
+                    if 'timestamp' in message:
+                        try:
+                            msg_time = datetime.fromisoformat(message['timestamp'].replace('Z', '+00:00'))
+                            age_days = (current_time - msg_time).days
+                            if age_days > 7 and message['status'] == 'processed':
+                                errors.append(f"Message {message['id']} is older than 7 days and should be cleaned up")
+                        except ValueError:
+                            errors.append(f"Invalid timestamp format in message {message['id']}")
+
+            return len(errors) == 0, "Message file is valid" if not errors else f"Validation errors: {', '.join(errors)}"
+        except Exception as e:
+            return False, str(e)
+
     def _validate_type(self, value: Any, expected_type: str) -> bool:
         """Validate value against expected type."""
         type_map = {
@@ -236,6 +277,8 @@ def main():
             success, msg = validator.validate_message(message)
         except json.JSONDecodeError:
             success, msg = False, "Invalid JSON"
+    elif valid_type == 'message_file':
+        success, msg = validator.validate_message_file(path)
     else:
         print(f"Unknown validation type: {valid_type}")
         sys.exit(1)
@@ -246,4 +289,4 @@ def main():
     print(f"✅ {path}: {msg}")
 
 if __name__ == '__main__':
-    main() 
+    main()

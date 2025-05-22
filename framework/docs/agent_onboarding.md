@@ -1,15 +1,63 @@
-# Agent Onboarding Guide
+# Agent Onboarding Guide [THE PROTOCOL]
 
 ## Machine-Actionable Metadata
 ```yaml
-schema: "https://schema.org/TechnicalDocument"
-version: "1.1.0"
-status: "Active"
+metadata:
+  schema: "https://schema.org/TechnicalDocument"
+  version: "1.0.0"
+  status: "Active"
+  owner: "Documentation Team"
+  title: "Agent Onboarding Guide [THE PROTOCOL]"
+  description: "THE PROTOCOL: Comprehensive guide for understanding the agent-doc-system and agent communication protocols"
+content:
+  overview: "This document serves as THE PROTOCOL - the single source of truth for understanding the agent-doc-system and agent communication protocols."
+  key_components: "Documentation Protocol, Agent Communication, Validation System, Schemas, Documentation Templates, Core Components"
+  sections:
+    - title: "Overview"
+      content: "This document serves as THE PROTOCOL - the single source of truth for understanding the agent-doc-system and agent communication protocols."
+    - title: "Key Components"
+      content: "Documentation Protocol, Agent Communication, Validation System, Schemas, Documentation Templates, Core Components"
+    - title: "Required Practices"
+      content: "Documentation Structure, Metadata, Creating New Documentation, Validation"
+    - title: "Communication Protocol"
+      content: "All agent messages must follow the JSON schema defined in framework/schemas/agent_communication.yml."
+    - title: "Best Practices"
+      content: "Documentation, Code, Review"
+    - title: "Validation & Troubleshooting"
+      content: "Use the validation script to check for proper metadata, valid agent message files, valid YAML schemas, markdown formatting issues, and template compliance."
+    - title: "Where to Find Things"
+      content: "Framework Documentation, Project Docs, Component Docs, Templates, Schemas, Validation Scripts, Agent Communication Code"
+    - title: "Getting Started"
+      content: "Read the main documentation files, review the templates, review the schemas, use the provided Python classes and scripts, run the validation script before submitting changes."
+    - title: "Quickstart Checklist"
+      content: "Read the onboarding doc, review the templates, review the schemas, run the validation script, follow the commit/PR guidelines."
+    - title: "Changelog"
+      content: "1.0.0 (2024-03-21): Initial release of THE PROTOCOL"
+  changelog:
+    - version: "1.0.0"
+      date: "2024-03-21"
+      changes:
+        - "Initial release of THE PROTOCOL"
+feedback:
+  rating: 5
+  comments: "Very helpful and well-structured guide."
+  observations:
+    - what: "Clear and comprehensive documentation."
+      impact: "Improved readability and usability."
+  suggestions:
+    - action: "Consider adding more examples."
+      priority: "Medium"
+  status:
+    value: "Approved"
+    updated_by: "Reviewer"
+    date: "2024-03-21"
+    validation: "Passed"
+    implementation: "Complete"
 ```
 
 ## Overview
 
-This document serves as the single source of truth for understanding the agent-doc-system. It provides a comprehensive overview of the system's architecture, protocols, validation requirements, and best practices.
+This document serves as THE PROTOCOL - the single source of truth for understanding the agent-doc-system and agent communication protocols. It provides a comprehensive overview of the system's architecture, protocols, validation requirements, and best practices.
 
 ## Key Components
 
@@ -19,10 +67,10 @@ This document serves as the single source of truth for understanding the agent-d
   - [Documentation Protocol](documentation_protocol.md)
   - [Document Protocol Schema](../schemas/document_protocol.yml)
 
-### 2. Agent Communication
+### 2. Agent Communication [PROTOCOL]
 - **Purpose:** Standardizes message formats and agent interactions.
 - **Key Files:**
-  - [Agent Communication Component](components/agent_communication/overview.md)
+  - [Agent Communication Component](../components/agent_communication/overview.md)
   - [Agent Communication Schema](../schemas/agent_communication.yml)
 - **Core Operations:**
   - Send messages: `python framework/scripts/agent_communication.py --action send --type <type> --sender <sender> --content <json_content>`
@@ -38,26 +86,61 @@ This document serves as the single source of truth for understanding the agent-d
     - Sender
     - Type
     - Content (JSON)
-    - Status (pending/processed)
+    - Status (pending/processed/failed)
   - Messages are automatically cleaned up after specified days (default: 7)
 - **File Structure:**
   ```
   project_root/
-  ├── framework/
-  │   ├── agent_communication/
-  │   │   └── history/
-  │   │       └── agent_messages.json
-  │   └── scripts/
-  │       └── agent_communication.py
-  └── projects/
-      └── {project_name}/
-          └── {component_name}/
+  └── agent-doc-system/
+      ├── framework/
+      │   ├── agent_communication/
+      │   │   ├── core/
+      │   │   ├── config/
+      │   │   ├── history/
+      │   │   └── README.md
+      │   ├── components/
+      │   │   ├── feedback/
+      │   │   ├── agent_communication/
+      │   │   └── git/
+      │   ├── docs/
+      │   │   ├── documentation_protocol.md
+      │   │   ├── agent_onboarding.md
+      │   │   └── templates/
+      │   ├── scripts/
+      │   ├── schemas/
+      │   └── validators/
+      └── project_docs/
   ```
 - **Message Types:**
-  - `test_request`: Request for test execution
-  - `test_result`: Results of test execution
-  - `status_update`: Progress or status updates
-  - `context_update`: Updates to agent context
+  - `test_request`:
+    - Required fields:
+      - test_type: unit/integration/e2e/performance
+      - test_file: Path to test file
+      - parameters: Test parameters including environment and verbose flag
+  - `test_result`:
+    - Required fields:
+      - test_id: UUID of the test request
+      - status: passed/failed/error
+      - logs: Array of test execution logs
+      - artifacts: Test artifacts with path and type
+  - `status_update`:
+    - Required fields:
+      - agent_id: Agent identifier
+      - state: idle/busy/error/offline
+      - progress: Progress percentage (0-100)
+  - `context_update`:
+    - Required fields:
+      - context_id: UUID of the context
+      - type: add/update/remove
+      - data: Context-specific data
+- **Message Validation:**
+  - All messages must validate against agent_communication.yml schema
+  - Message types must include all required fields
+  - Field formats must match schema specifications:
+    - UUIDs must follow pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    - Timestamps must be ISO-8601 format
+    - Sender IDs must match pattern: ^[a-zA-Z0-9_-]+$
+    - File paths must match pattern: ^[a-zA-Z0-9/._-]+$
 
 ### 3. Validation System
 - **Purpose:** Automated scripts to check documentation, schemas, and agent messages for compliance.
@@ -107,13 +190,11 @@ This document serves as the single source of truth for understanding the agent-d
    - Changelog
 
 ### Metadata
-Every documentation file must include a `## Machine-Actionable Metadata` section with a YAML code block containing at least:
+Every documentation file must include a `## Machine-Actionable Metadata` section with a YAML code block containing:
 - `schema`
 - `version`
 - `status`
-- `id`
-- `last_updated`
-- `author`
+- `owner`
 
 ### Creating New Documentation
 1. Choose the appropriate template from `framework/docs/templates/`
@@ -124,14 +205,21 @@ Every documentation file must include a `## Machine-Actionable Metadata` section
 ### Validation
 Run `./framework/scripts/doc_validation.sh` before merging or releasing to ensure compliance.
 
-## Communication Protocol
+## Communication Protocol [PROTOCOL]
 
 All agent messages must follow the JSON schema defined in `framework/schemas/agent_communication.yml`. Use the provided Python script (`agent_communication.py`) for sending, receiving, and tracking messages.
 
 Example usage:
 ```bash
-# Send a message (always goes to framework/agent_communication/history/agent_messages.json)
-python framework/scripts/agent_communication.py --action send --type "request" --sender "agent1" --content '{"action": "process", "data": {"id": 123}}'
+# Send a test request message
+python framework/scripts/agent_communication.py --action send --type "test_request" --sender "agent1" --content '{
+  "test_type": "unit",
+  "test_file": "tests/unit/test_example.py",
+  "parameters": {
+    "environment": "development",
+    "verbose": true
+  }
+}'
 
 # Read messages from default location
 python framework/scripts/agent_communication.py --action read
@@ -149,11 +237,22 @@ Message Format:
   "id": "uuid-string",
   "timestamp": "2024-03-21T12:00:00Z",
   "sender": "agent-name",
-  "type": "request|response|notification|error|status_update",
+  "type": "test_request|test_result|status_update|context_update",
   "content": {
-    // Message-specific content
+    // Message-specific content based on type
   },
-  "status": "pending|processed"
+  "status": "pending|processed|failed"
+}
+```
+
+Message File Format:
+```json
+{
+  "messages": [
+    // Array of messages following the message format above
+  ],
+  "last_updated": "2024-03-21T12:00:00Z",
+  "version": "1.0.0"
 }
 ```
 
@@ -193,19 +292,19 @@ If validation fails, check the error messages for:
 
 ## Where to Find Things
 
-- **Framework Documentation:** `framework/docs/`
-- **Project Docs:** `projects/{project_name}/docs/`
-- **Component Docs:** `projects/{project_name}/{component_name}/docs/`
-- **Templates:** `framework/docs/templates/`
-- **Schemas:** `framework/schemas/`
-- **Validation Scripts:** `framework/scripts/`
-- **Agent Communication Code:** `framework/agent_communication/`
+- **Framework Documentation:** `agent-doc-system/framework/docs/`
+- **Project Docs:** `agent-doc-system/projects/{project_name}/`
+- **Component Docs:** `agent-doc-system/framework/components/{component_name}/`
+- **Templates:** `agent-doc-system/framework/docs/templates/`
+- **Schemas:** `agent-doc-system/framework/schemas/`
+- **Validation Scripts:** `agent-doc-system/framework/scripts/`
+- **Agent Communication Code:** `agent-doc-system/framework/agent_communication/`
 
 ## Getting Started
 
-1. Read the main documentation files in `framework/docs/`
-2. Review the templates in `framework/docs/templates/`
-3. Review the schemas in `framework/schemas/`
+1. Read the main documentation files in `agent-doc-system/framework/docs/`
+2. Review the templates in `agent-doc-system/framework/docs/templates/`
+3. Review the schemas in `agent-doc-system/framework/schemas/`
 4. Use the provided Python classes and scripts
 5. Run the validation script before submitting changes
 
@@ -219,5 +318,4 @@ If validation fails, check the error messages for:
 
 ## Changelog
 
-- **1.1.0** (2024-03-21): Added template system and updated documentation structure
-- **1.0.0** (2024-03-21): Initial release of the Agent Onboarding Guide 
+- **1.0.0** (2024-03-21): Initial release of THE PROTOCOL 

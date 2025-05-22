@@ -1,75 +1,147 @@
-title: Agent Documentation Schema
-version: 1.0
-properties:
-  metadata:
-    type: object
-    required: 
-      - schema
-      - version
-      - status
-      - priority
-      - owner
-      - capabilities
-    properties:
-      schema: 
-        type: string
-        format: uri
-      version:
-        type: string
-        pattern: ^\d+\.\d+\.\d+$
-      status:
-        type: string
-        enum:
-          - Active
-          - Draft
-          - Deprecated
-      priority:
-        type: string
-        enum:
-          - P0
-          - P1
-          - P2
-      owner:
-        type: string
-      capabilities:
-        type: array
-        items:
+schema: "https://schema.org/TechnicalDocument"
+id: "doc-protocol-schema-001"
+version: "1.0.0"
+
+status: "Active"
+priority: "P0"
+owner: "Documentation Team"
+
+document_schema:
+  type: object
+  required:
+    - metadata
+    - content
+    - feedback
+  properties:
+    metadata:
+      type: object
+      required:
+        - schema
+        - version
+        - status
+        - owner
+        - title
+        - description
+      properties:
+        schema:
           type: string
-          pattern: ^[a-z_]+:v\d+$
-  content:
-    type: object
-    required:
-      - sections
-      - changelog
-      - feedback
-    properties:
-      sections:
-        type: array
-        items:
-          type: object
-          required:
-            - title
-            - content
-      changelog:
-        type: array
-        items:
-          type: object
-          required:
-            - version
-            - date
-            - changes
-      feedback:
-        type: object
-        required:
-          - framework
-          - status
-        properties:
-          framework:
-            type: string
-            format: uri
-            description: "Reference to feedback framework schema"
-          status:
+          format: uri
+          description: "Schema identifier following schema.org format"
+        version:
+          type: string
+          pattern: '^\d+\.\d+\.\d+$'
+          description: "Semantic version of the document"
+        status:
+          type: string
+          enum: [Active, Deprecated, Draft]
+          description: "Current status of the document"
+        owner:
+          type: string
+          description: "Owner or team responsible for the document"
+        title:
+          type: string
+        description:
+          type: string
+    content:
+      type: object
+      required:
+        - overview
+        - key_components
+        - sections
+        - changelog
+      properties:
+        overview:
+          type: string
+        key_components:
+          type: string
+        sections:
+          type: array
+          items:
             type: object
             required:
-              - validation
-              - implementation 
+              - title
+              - content
+            properties:
+              title:
+                type: string
+                description: "Section title"
+              content:
+                type: string
+                description: "Section content in markdown format"
+        changelog:
+          type: array
+          items:
+            type: object
+            required:
+              - version
+              - date
+              - changes
+            properties:
+              version:
+                type: string
+                pattern: ^\d+\.\d+\.\d+$
+                description: "Version number"
+              date:
+                type: string
+                format: date
+                description: "Date of change"
+              changes:
+                type: array
+                items:
+                  type: string
+                description: "List of changes in this version"
+    feedback:
+      type: object
+      required:
+        - rating
+        - comments
+        - observations
+        - suggestions
+        - status
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 100
+        comments:
+          type: string
+        observations:
+          type: array
+          items:
+            type: object
+            required:
+              - what
+            properties:
+              what:
+                type: string
+              impact:
+                type: string
+        suggestions:
+          type: array
+          items:
+            type: object
+            required:
+              - action
+            properties:
+              action:
+                type: string
+              priority:
+                type: string
+        status:
+          type: object
+          required:
+            - value
+            - updated_by
+            - date
+          properties:
+            value:
+              type: string
+            updated_by:
+              type: string
+            date:
+              type: string
+              format: date
+            validation:
+              type: string
+            implementation:
+              type: string 

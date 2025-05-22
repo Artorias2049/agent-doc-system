@@ -1,5 +1,14 @@
 # Agent Communication System
 
+## Machine-Actionable Metadata
+```yaml
+schema: "https://schema.org/TechnicalDocument"
+version: "1.0.0"
+last_updated: "2024-03-21T00:00:00Z"
+status: "Active"
+owner: "Documentation Team"
+```
+
 A simple and efficient system for inter-agent communication within the agent-doc-system.
 
 ## Features
@@ -69,4 +78,8 @@ Settings can be modified in `config/settings.py`:
 - Message retention period
 - Maximum message size
 - Supported message types
-- Logging configuration 
+- Logging configuration
+
+## Changelog
+
+- **1.0.0** (2024-03-21): Initial release of the Agent Communication System 

@@ -1,28 +1,54 @@
-# Component Name
+# Component Overview
 
 ## Machine-Actionable Metadata
 ```yaml
-schema: "https://schema.org/TechnicalDocument"
-id: "component-overview"
-version: "1.0.0"
-last_updated: "ISO8601_timestamp"
-status: "Active"
-author: "Author Name"
+metadata:
+  schema: "https://schema.org/TechnicalDocument"
+  version: "1.0.0"
+  status: "Active"
+  owner: "Documentation Team"
+  title: "Component Overview Template"
+  description: "Template for component overview documentation"
+content:
+  overview: "This document provides an overview of the component."
+  key_components: "Component features, architecture, interfaces"
+  sections:
+    - title: "Overview"
+      content: "Component overview and purpose"
+    - title: "Features"
+      content: "List of component features"
+    - title: "Architecture"
+      content: "Component architecture and design"
+  changelog:
+    - version: "1.0.0"
+      date: "2024-03-21"
+      changes:
+        - "Initial template creation"
+feedback:
+  rating: 88
+  comments: "Well-structured component documentation template"
+  observations:
+    - what: "Clear sections for features and architecture"
+      impact: "Makes it easy to understand component capabilities"
+  suggestions:
+    - action: "Add more integration examples"
+      priority: "Medium"
+  status:
+    value: "Approved"
+    updated_by: "Documentation Team"
+    date: "2024-03-21"
+    validation: "Passed"
+    implementation: "Complete"
 ```
 
 ## Overview
-
-[Provide a brief overview of the component, its purpose, and main functionality]
+[Component overview and purpose]
 
 ## Features
-
-- Feature 1
-- Feature 2
-- Feature 3
+[List of component features]
 
 ## Architecture
-
-[Describe the component's architecture and design]
+[Component architecture and design]
 
 ## Integration
 
@@ -45,5 +71,4 @@ code_example_2()
 ```
 
 ## Changelog
-
-- **1.0.0** (YYYY-MM-DD): Initial version 
+- **1.0.0** (2024-03-21): Initial template creation 

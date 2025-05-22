@@ -1,5 +1,14 @@
 # Agent Documentation System
 
+## Machine-Actionable Metadata
+```yaml
+schema: "https://schema.org/TechnicalDocument"
+version: "1.0.0"
+last_updated: "2024-03-21T00:00:00Z"
+status: "Active"
+owner: "Documentation Team"
+```
+
 ## New to this project? Start with [Agent Onboarding](framework/docs/agent_onboarding.md)!
 
 A self-contained documentation system with machine-actionable metadata for projects.
@@ -190,4 +199,8 @@ python framework/scripts/agent_communication.py --action read --read-file "/path
 
 # Cleanup old messages (default: 7 days)
 python framework/scripts/agent_communication.py --action cleanup --days 14
-``` 
+```
+
+## Changelog
+
+- **1.0.0** (2024-03-21): Initial release of the Agent Documentation System 

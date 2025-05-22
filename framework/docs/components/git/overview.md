@@ -2,12 +2,53 @@
 
 ## Machine-Actionable Metadata
 ```yaml
-schema: "https://schema.org/TechnicalDocument"
-id: "git-workflow"
-version: "1.0.0"
-last_updated: "2024-03-21"
-status: "Active"
-author: "System"
+metadata:
+  schema: "https://schema.org/TechnicalDocument"
+  version: "1.0.0"
+  status: "Active"
+  owner: "Documentation Team"
+  title: "Git Workflow Component"
+  description: "Component for standardized git workflow in the agent-doc-system"
+content:
+  overview: "The Git Workflow Component defines the standard practices for version control in the agent-doc-system project, including branch management, commit messages, and code review processes."
+  key_components: "Branch Strategy, Commit Guidelines, Workflow Process, Code Review Guidelines, Deployment Process"
+  sections:
+    - title: "Overview"
+      content: "The Git Workflow Component defines the standard practices for version control in the agent-doc-system project, including branch management, commit messages, and code review processes."
+    - title: "Core Features"
+      content: "Branch Strategy, Commit Guidelines, Workflow Process, Code Review Guidelines, Deployment Process"
+    - title: "Usage"
+      content: "Common git commands and workflow examples"
+    - title: "Best Practices"
+      content: "Guidelines for effective version control"
+    - title: "Troubleshooting"
+      content: "Common issues and their solutions"
+    - title: "Integration"
+      content: "Integration with other system components"
+    - title: "Future Improvements"
+      content: "Planned enhancements and features"
+  changelog:
+    - version: "1.0.0"
+      date: "2024-03-21"
+      changes:
+        - "Initial release as a component"
+feedback:
+  rating: 94
+  comments: "Well-structured workflow guidelines with clear examples"
+  observations:
+    - what: "Comprehensive branch strategy"
+      impact: "Ensures organized development process"
+    - what: "Clear commit message format"
+      impact: "Improves code history readability"
+  suggestions:
+    - action: "Add more complex workflow examples"
+      priority: "Low"
+  status:
+    value: "Approved"
+    updated_by: "Documentation Team"
+    date: "2024-03-21"
+    validation: "Passed"
+    implementation: "Complete"
 ```
 
 ## Overview

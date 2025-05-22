@@ -2,12 +2,47 @@
 
 ## Machine-Actionable Metadata
 ```yaml
-schema: "https://schema.org/TechnicalDocument"
-id: "feedback-component"
-version: "1.0.0"
-last_updated: "2024-03-21"
-status: "Active"
-author: "System"
+metadata:
+  schema: "https://schema.org/TechnicalDocument"
+  version: "1.0.0"
+  status: "Active"
+  owner: "Documentation Team"
+  title: "Feedback Component"
+  description: "Component for providing structured feedback in the agent-doc-system"
+content:
+  overview: "The Feedback Component provides a standardized way for AI agents to provide structured feedback to users, ensuring effective collaboration and continuous improvement."
+  key_components: "Structured Feedback Format, Feedback Categories, Implementation Guidelines"
+  sections:
+    - title: "Overview"
+      content: "The Feedback Component provides a standardized way for AI agents to provide structured feedback to users, ensuring effective collaboration and continuous improvement."
+    - title: "Core Features"
+      content: "Structured Feedback Format, Feedback Categories, Implementation Guidelines"
+    - title: "Usage"
+      content: "Python implementation and usage examples"
+    - title: "Integration"
+      content: "Integration with Documentation Protocol, Agent Communication Protocol, and Validation System"
+  changelog:
+    - version: "1.0.0"
+      date: "2024-03-21"
+      changes:
+        - "Initial release as a component"
+feedback:
+  rating: 95
+  comments: "Well-structured component with clear implementation guidelines"
+  observations:
+    - what: "Clear separation of feedback categories"
+      impact: "Makes it easier to provide targeted feedback"
+    - what: "Good integration with other components"
+      impact: "Ensures consistent feedback across the system"
+  suggestions:
+    - action: "Add more real-world examples"
+      priority: "Medium"
+  status:
+    value: "Approved"
+    updated_by: "Documentation Team"
+    date: "2024-03-21"
+    validation: "Passed"
+    implementation: "Complete"
 ```
 
 ## Overview

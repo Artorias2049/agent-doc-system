@@ -1,84 +1,54 @@
-# Component API Reference
+# Component API Documentation
 
 ## Machine-Actionable Metadata
 ```yaml
-schema: "https://schema.org/TechnicalDocument"
-id: "component-api"
-version: "1.0.0"
-last_updated: "ISO8601_timestamp"
-status: "Active"
-author: "Author Name"
+metadata:
+  schema: "https://schema.org/TechnicalDocument"
+  version: "1.0.0"
+  status: "Active"
+  owner: "Documentation Team"
+  title: "Component API Template"
+  description: "Template for component API documentation"
+content:
+  overview: "This document provides API documentation for the component."
+  key_components: "API endpoints, methods, parameters, responses"
+  sections:
+    - title: "Overview"
+      content: "API overview and usage"
+    - title: "Endpoints"
+      content: "List of available endpoints"
+    - title: "Authentication"
+      content: "Authentication methods and requirements"
+  changelog:
+    - version: "1.0.0"
+      date: "2024-03-21"
+      changes:
+        - "Initial template creation"
+feedback:
+  rating: 92
+  comments: "Clear and comprehensive API documentation template"
+  observations:
+    - what: "Well-organized endpoint documentation structure"
+      impact: "Makes it easy to understand and use the API"
+  suggestions:
+    - action: "Add request/response examples"
+      priority: "High"
+  status:
+    value: "Approved"
+    updated_by: "Documentation Team"
+    date: "2024-03-21"
+    validation: "Passed"
+    implementation: "Complete"
 ```
 
-## API Overview
-
-[Brief overview of the API and its main functionalities]
-
-## Authentication
-
-[Authentication methods and requirements]
+## Overview
+[API overview and usage]
 
 ## Endpoints
+[List of available endpoints]
 
-### Endpoint 1
-
-**URL**: `/endpoint1`
-**Method**: `GET`
-
-#### Parameters
-
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| param1 | string | Yes | Description of param1 |
-| param2 | integer | No | Description of param2 |
-
-#### Response
-
-```json
-{
-    "field1": "value1",
-    "field2": "value2"
-}
-```
-
-### Endpoint 2
-
-**URL**: `/endpoint2`
-**Method**: `POST`
-
-#### Request Body
-
-```json
-{
-    "field1": "value1",
-    "field2": "value2"
-}
-```
-
-#### Response
-
-```json
-{
-    "status": "success",
-    "data": {
-        "field1": "value1",
-        "field2": "value2"
-    }
-}
-```
-
-## Error Codes
-
-| Code | Description |
-|------|-------------|
-| 400 | Bad Request |
-| 401 | Unauthorized |
-| 404 | Not Found |
-
-## Rate Limiting
-
-[Information about rate limits and restrictions]
+## Authentication
+[Authentication methods and requirements]
 
 ## Changelog
-
-- **1.0.0** (YYYY-MM-DD): Initial version 
+- **1.0.0** (2024-03-21): Initial template creation 

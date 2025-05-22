@@ -2,6 +2,7 @@
 
 import json
 import os
+import argparse
 from datetime import datetime, UTC
 from typing import Dict, Optional, List
 import logging
@@ -9,7 +10,11 @@ from pathlib import Path
 import yaml
 import uuid
 
-logging.basicConfig(level=logging.INFO)
+# Configure logging with a cleaner format
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(message)s'  # Only show the message, not the timestamp and level
+)
 logger = logging.getLogger(__name__)
 
 class AgentProtocol:
@@ -148,4 +153,63 @@ class AgentProtocol:
         ]
         data["last_updated"] = current_time.isoformat()
         self._write_messages(data)
-        logger.info(f"Cleaned up messages older than {days} days") 
+        logger.info(f"Cleaned up messages older than {days} days")
+
+def main():
+    """Interactive usage of the AgentProtocol class."""
+    parser = argparse.ArgumentParser(description='Agent Communication System')
+    parser.add_argument('--action', choices=['send', 'read', 'cleanup'], required=True,
+                      help='Action to perform: send, read, or cleanup messages')
+    parser.add_argument('--agent-id', required=True, help='Agent ID')
+    parser.add_argument('--root-dir', default=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                      help='Root directory of the project')
+    parser.add_argument('--type', help='Message type (required for send action)')
+    parser.add_argument('--target', help='Target agent name (required for send action)')
+    parser.add_argument('--content', help='Message content as JSON string (required for send action)')
+    parser.add_argument('--days', type=int, default=7, help='Days threshold for cleanup (default: 7)')
+    
+    args = parser.parse_args()
+    
+    # Initialize agent protocol
+    agent_protocol = AgentProtocol(agent_id=args.agent_id, root_dir=args.root_dir)
+    
+    if args.action == 'send':
+        if not all([args.type, args.target, args.content]):
+            parser.error("--type, --target, and --content are required for send action")
+        
+        try:
+            content = json.loads(args.content)
+        except json.JSONDecodeError:
+            parser.error("--content must be a valid JSON string")
+        
+        message_id = agent_protocol.send_message(
+            target_agent=args.target,
+            message_type=args.type,
+            content=content
+        )
+        print(f"Message sent successfully with ID: {message_id}")
+        print(f"Message file location: {os.path.abspath(agent_protocol.message_file)}")
+        
+    elif args.action == 'read':
+        pending_messages = agent_protocol.get_pending_messages()
+        if not pending_messages:
+            print("No pending messages found.")
+        else:
+            print(f"\nFound {len(pending_messages)} pending messages in {os.path.abspath(agent_protocol.message_file)}:")
+            for msg in pending_messages:
+                print("\n" + "="*50)
+                print(f"Message ID: {msg['id']}")
+                print(f"Type: {msg['type']}")
+                print(f"Sender: {msg['sender']}")
+                if msg.get('target'):
+                    print(f"Target: {msg['target']}")
+                print(f"Timestamp: {msg['timestamp']}")
+                print(f"Content: {json.dumps(msg['content'], indent=2)}")
+                print("="*50)
+                
+    elif args.action == 'cleanup':
+        agent_protocol.cleanup_old_messages(days=args.days)
+        print(f"Cleaned up messages older than {args.days} days from {os.path.abspath(agent_protocol.message_file)}")
+
+if __name__ == "__main__":
+    main() 

@@ -229,7 +229,7 @@ class Validator:
     def _validate_format(self, value: str, format_type: str) -> bool:
         """Validate value against expected format."""
         if format_type == 'uri':
-            return value.startswith('https://schema.org/')
+            return value.startswith('https://localhost:8000/')
         elif format_type == 'date-time':
             try:
                 datetime.fromisoformat(value.replace('Z', '+00:00'))

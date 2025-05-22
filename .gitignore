@@ -102,6 +102,7 @@ venv.bak/
 # IDE specific files
 .idea/
 .vscode/
+.cursorignore
 *.swp
 *.swo
 

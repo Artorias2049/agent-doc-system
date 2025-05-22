@@ -1,24 +1,35 @@
 schema: "https://schema.org/TechnicalDocument"
 id: "agent-comm-schema-001"
 version: "1.0.0"
-last_updated: "2024-05-17T00:00:00Z"
+last_updated: "2024-03-21T00:00:00Z"
 status: "Active"
 priority: "P0"
 owner: "Documentation Team"
 
 message_schema:
-  required_fields:
+  type: object
+  required:
+    - id
+    - timestamp
+    - sender
+    - type
+    - content
+    - status
+  properties:
     id:
       type: string
       description: "Unique identifier for the message"
       format: uuid
+      pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
     timestamp:
       type: string
       description: "ISO-8601 timestamp of message creation"
       format: date-time
+      pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
     sender:
       type: string
       description: "Identifier of the sending agent"
+      pattern: "^[a-zA-Z0-9_-]+$"
     type:
       type: string
       description: "Type of message"
@@ -30,6 +41,7 @@ message_schema:
     content:
       type: object
       description: "Message-specific content"
+      additionalProperties: true
     status:
       type: string
       description: "Current status of the message"
@@ -40,13 +52,24 @@ message_schema:
 
 message_types:
   test_request:
-    required_fields:
+    type: object
+    required:
+      - test_type
+      - test_file
+      - parameters
+    properties:
       test_type:
         type: string
         description: "Type of test to execute"
+        enum:
+          - unit
+          - integration
+          - e2e
+          - performance
       test_file:
         type: string
         description: "Path to test file"
+        pattern: "^[a-zA-Z0-9/._-]+$"
       parameters:
         type: object
         description: "Test parameters"
@@ -54,15 +77,26 @@ message_types:
           environment:
             type: string
             description: "Test environment"
+            enum:
+              - development
+              - staging
+              - production
           verbose:
             type: boolean
             description: "Verbose output flag"
 
   test_result:
-    required_fields:
+    type: object
+    required:
+      - test_id
+      - status
+      - logs
+      - artifacts
+    properties:
       test_id:
         type: string
         description: "ID of the test request"
+        format: uuid
       status:
         type: string
         description: "Test execution status"
@@ -82,18 +116,35 @@ message_types:
           path:
             type: string
             description: "Path to artifact"
+            pattern: "^[a-zA-Z0-9/._-]+$"
           type:
             type: string
             description: "Type of artifact"
+            enum:
+              - log
+              - report
+              - coverage
+              - screenshot
 
   status_update:
-    required_fields:
+    type: object
+    required:
+      - agent_id
+      - state
+      - progress
+    properties:
       agent_id:
         type: string
         description: "Identifier of the agent"
+        pattern: "^[a-zA-Z0-9_-]+$"
       state:
         type: string
         description: "Current state of the agent"
+        enum:
+          - idle
+          - busy
+          - error
+          - offline
       progress:
         type: number
         description: "Progress percentage"
@@ -101,10 +152,16 @@ message_types:
         maximum: 100
 
   context_update:
-    required_fields:
+    type: object
+    required:
+      - context_id
+      - type
+      - data
+    properties:
       context_id:
         type: string
         description: "Identifier of the context"
+        format: uuid
       type:
         type: string
         description: "Type of context update"
@@ -115,9 +172,15 @@ message_types:
       data:
         type: object
         description: "Context data"
+        additionalProperties: true
 
 file_schema:
-  required_fields:
+  type: object
+  required:
+    - messages
+    - last_updated
+    - version
+  properties:
     messages:
       type: array
       description: "Array of messages"
@@ -127,6 +190,8 @@ file_schema:
       type: string
       description: "Last update timestamp"
       format: date-time
+      pattern: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
     version:
       type: string
-      description: "Schema version" 
+      description: "Schema version"
+      pattern: ^\d+\.\d+\.\d+$ 

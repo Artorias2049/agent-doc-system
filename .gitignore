@@ -104,6 +104,7 @@ venv.bak/
 .vscode/
 .cursorignore
 .cursor/
+.claude/chat_history/
 *.swp
 *.swo
 

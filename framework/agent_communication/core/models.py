@@ -4,12 +4,12 @@ Pydantic models for agent communication with type safety and validation.
 Replaces JSON schema validation with faster, more comprehensive Python-native validation.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field, validator, root_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class MessageStatus(str, Enum):
@@ -96,10 +96,11 @@ class TestParameters(BaseModel):
 class TestRequestContent(BaseModel):
     """Content for test_request messages."""
     test_type: TestType
-    test_file: str = Field(..., regex=r"^[a-zA-Z0-9/._-]+$")
+    test_file: str = Field(..., pattern=r"^[a-zA-Z0-9/._-]+$")
     parameters: TestParameters
     
-    @validator('test_file')
+    @field_validator('test_file')
+    @classmethod
     def validate_test_file_extension(cls, v):
         """Ensure test file has appropriate extension."""
         if not v.endswith(('.py', '.js', '.ts', '.java', '.go')):
@@ -109,10 +110,10 @@ class TestRequestContent(BaseModel):
 
 class TestArtifact(BaseModel):
     """Test execution artifact."""
-    path: str = Field(..., regex=r"^[a-zA-Z0-9/._-]+$")
+    path: str = Field(..., pattern=r"^[a-zA-Z0-9/._-]+$")
     type: ArtifactType
     size_bytes: Optional[int] = Field(None, ge=0)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class TestResultContent(BaseModel):
@@ -127,7 +128,7 @@ class TestResultContent(BaseModel):
 
 class StatusUpdateContent(BaseModel):
     """Content for status_update messages."""
-    agent_id: str = Field(..., regex=r"^[a-zA-Z0-9_-]+$")
+    agent_id: str = Field(..., pattern=r"^[a-zA-Z0-9_-]+$")
     state: AgentState
     progress: float = Field(..., ge=0, le=100)
     current_task: Optional[str] = None
@@ -154,16 +155,16 @@ class WorkflowStep(BaseModel):
 
 class WorkflowRequestContent(BaseModel):
     """Content for workflow_request messages."""
-    workflow_name: str = Field(..., regex=r"^[a-zA-Z0-9_-]+$")
+    workflow_name: str = Field(..., pattern=r"^[a-zA-Z0-9_-]+$")
     steps: List[WorkflowStep]
     parameters: Dict[str, Any] = Field(default_factory=dict)
     parallel_execution: bool = False
-    failure_strategy: str = Field("abort", regex=r"^(abort|continue|retry)$")
+    failure_strategy: str = Field("abort", pattern=r"^(abort|continue|retry)$")
 
 
 class ValidationRequestContent(BaseModel):
     """Content for validation_request messages."""
-    validation_type: str = Field(..., regex=r"^(schema|documentation|messages|project)$")
+    validation_type: str = Field(..., pattern=r"^(schema|documentation|messages|project)$")
     target_files: List[str] = Field(..., min_items=1)
     validation_level: ValidationLevel = ValidationLevel.ENHANCED
     auto_fix: bool = False
@@ -172,7 +173,7 @@ class ValidationRequestContent(BaseModel):
 
 class DocumentationUpdateContent(BaseModel):
     """Content for documentation_update messages."""
-    update_type: str = Field(..., regex=r"^(create|update|delete|sync)$")
+    update_type: str = Field(..., pattern=r"^(create|update|delete|sync)$")
     target_documents: List[str] = Field(..., min_items=1)
     template_name: Optional[str] = None
     metadata_updates: Optional[Dict[str, Any]] = None
@@ -184,8 +185,8 @@ class DocumentationUpdateContent(BaseModel):
 class AgentMessage(BaseModel):
     """Main agent message model with comprehensive validation."""
     id: UUID = Field(default_factory=uuid4)
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
-    sender: str = Field(..., regex=r"^[a-zA-Z0-9_-]+$")
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    sender: str = Field(..., pattern=r"^[a-zA-Z0-9_-]+$")
     type: MessageType
     content: Union[
         TestRequestContent,
@@ -199,7 +200,8 @@ class AgentMessage(BaseModel):
     status: MessageStatus = MessageStatus.PENDING
     metadata: Optional[Dict[str, Any]] = Field(default_factory=dict)
     
-    @root_validator
+    @model_validator(mode='before')
+    @classmethod
     def validate_content_type(cls, values):
         """Ensure content matches message type."""
         msg_type = values.get('type')
@@ -232,14 +234,15 @@ class AgentMessage(BaseModel):
 class MessageFile(BaseModel):
     """Message file container model."""
     messages: List[AgentMessage] = Field(default_factory=list)
-    last_updated: datetime = Field(default_factory=datetime.utcnow)
-    version: str = Field("1.1.0", regex=r"^\d+\.\d+\.\d+$")
+    last_updated: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    version: str = Field("1.1.0", pattern=r"^\d+\.\d+\.\d+$")
     metadata: Optional[Dict[str, Any]] = Field(default_factory=dict)
     
-    @validator('messages')
+    @field_validator('messages')
+    @classmethod
     def validate_message_retention(cls, v):
         """Validate message retention policy."""
-        current_time = datetime.utcnow()
+        current_time = datetime.now(timezone.utc)
         old_messages = []
         
         for msg in v:

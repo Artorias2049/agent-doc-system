@@ -1,0 +1,311 @@
+name: Chat Management Workflow
+description: Automated chat session management and export workflows
+version: 1.0.0
+
+workflows:
+  auto_export_on_commit:
+    name: "Auto Export on Git Commit"
+    description: "Automatically export chat session when commits are made"
+    trigger:
+      type: git_hook
+      event: post-commit
+    steps:
+      - name: capture_session_context
+        action: python_script
+        script: .claude/scripts/chat_logger.py
+        args: ["export", "--format", "markdown", "--include-metadata"]
+        timeout: 30
+
+      - name: send_notification
+        action: agent_message
+        depends_on: [capture_session_context]
+        message:
+          type: context_update
+          content:
+            context_id: "{{ workflow.session_id }}"
+            type: add
+            data:
+              event: chat_exported
+              commit_hash: "{{ git.commit_hash }}"
+              export_path: "{{ steps.capture_session_context.output.file_path }}"
+
+  periodic_cleanup:
+    name: "Periodic Chat Cleanup"
+    description: "Clean up old chat sessions periodically"
+    trigger:
+      type: schedule
+      schedule: "0 2 * * 0" # Weekly at 2 AM on Sunday
+    steps:
+      - name: cleanup_old_sessions
+        action: python_script
+        script: .claude/scripts/chat_logger.py
+        args: ["cleanup", "--days", "90"]
+        timeout: 120
+
+      - name: generate_cleanup_report
+        action: python_script
+        depends_on: [cleanup_old_sessions]
+        script: .claude/scripts/chat_logger.py
+        args: ["list", "--format", "json"]
+        timeout: 30
+
+      - name: send_cleanup_notification
+        action: agent_message
+        depends_on: [generate_cleanup_report]
+        message:
+          type: status_update
+          content:
+            agent_id: chat_manager
+            state: idle
+            progress: 100.0
+            current_task: "Completed periodic chat cleanup"
+
+  export_session_batch:
+    name: "Batch Export Sessions"
+    description: "Export multiple chat sessions in different formats"
+    trigger:
+      type: manual
+    parameters:
+      date_range:
+        type: string
+        default: "7d"
+        description: "Date range for export (1d, 1w, 1m)"
+      formats:
+        type: array
+        default: ["markdown", "json"]
+        description: "Export formats"
+      include_metadata:
+        type: boolean
+        default: true
+        description: "Include session metadata"
+    steps:
+      - name: export_markdown
+        action: python_script
+        condition: "{{ 'markdown' in parameters.formats }}"
+        script: .claude/scripts/chat_logger.py
+        args:
+          - "export-batch"
+          - "--format"
+          - "markdown"
+          - "--date-range"
+          - "{{ parameters.date_range }}"
+        timeout: 300
+
+      - name: export_json
+        action: python_script
+        condition: "{{ 'json' in parameters.formats }}"
+        parallel: true
+        script: .claude/scripts/chat_logger.py
+        args:
+          - "export-batch"
+          - "--format"
+          - "json"
+          - "--date-range"
+          - "{{ parameters.date_range }}"
+        timeout: 300
+
+      - name: create_archive
+        action: shell_command
+        depends_on: [export_markdown, export_json]
+        command: |
+          cd .claude/chat_history/exports
+          tar -czf "batch_export_$(date +%Y%m%d_%H%M%S).tar.gz" *.md *.json
+        timeout: 60
+
+      - name: send_completion_notification
+        action: agent_message
+        depends_on: [create_archive]
+        message:
+          type: workflow_request
+          content:
+            workflow_name: batch_export_complete
+            steps: []
+            parameters:
+              archive_path: "{{ steps.create_archive.output.archive_path }}"
+              session_count: "{{ steps.export_markdown.output.session_count + steps.export_json.output.session_count }}"
+
+  session_analytics:
+    name: "Chat Session Analytics"
+    description: "Generate analytics and insights from chat sessions"
+    trigger:
+      type: manual
+    parameters:
+      analysis_period:
+        type: string
+        default: "30d"
+        description: "Period for analysis"
+      include_git_context:
+        type: boolean
+        default: true
+        description: "Include git context in analysis"
+    steps:
+      - name: collect_session_data
+        action: python_script
+        script: .claude/scripts/chat_analytics.py
+        args: ["collect", "--period", "{{ parameters.analysis_period }}"]
+        timeout: 180
+
+      - name: analyze_patterns
+        action: python_script
+        depends_on: [collect_session_data]
+        script: .claude/scripts/chat_analytics.py
+        args:
+          [
+            "analyze",
+            "--input",
+            "{{ steps.collect_session_data.output.data_file }}",
+          ]
+        timeout: 120
+
+      - name: generate_report
+        action: python_script
+        depends_on: [analyze_patterns]
+        script: .claude/scripts/chat_analytics.py
+        args:
+          - "report"
+          - "--analysis"
+          - "{{ steps.analyze_patterns.output.analysis_file }}"
+          - "--format"
+          - "html"
+        timeout: 60
+
+      - name: send_analytics_notification
+        action: agent_message
+        depends_on: [generate_report]
+        message:
+          type: documentation_update
+          content:
+            update_type: create
+            target_documents: ["{{ steps.generate_report.output.report_path }}"]
+            auto_generate: false
+
+  privacy_audit:
+    name: "Privacy Audit of Chat Sessions"
+    description: "Audit chat sessions for privacy compliance and sensitive data"
+    trigger:
+      type: schedule
+      schedule: "0 3 * * 1" # Weekly on Monday at 3 AM
+    steps:
+      - name: scan_for_sensitive_data
+        action: python_script
+        script: .claude/scripts/privacy_scanner.py
+        args: ["scan", "--directory", ".claude/chat_history"]
+        timeout: 300
+
+      - name: apply_sanitization
+        action: python_script
+        depends_on: [scan_for_sensitive_data]
+        condition: "{{ steps.scan_for_sensitive_data.output.issues_found > 0 }}"
+        script: .claude/scripts/privacy_scanner.py
+        args: ["sanitize", "--auto-fix", "--backup"]
+        timeout: 180
+
+      - name: generate_privacy_report
+        action: python_script
+        depends_on: [apply_sanitization]
+        script: .claude/scripts/privacy_scanner.py
+        args: ["report", "--format", "json"]
+        timeout: 60
+
+      - name: send_privacy_alert
+        action: agent_message
+        depends_on: [generate_privacy_report]
+        condition: "{{ steps.scan_for_sensitive_data.output.issues_found > 0 }}"
+        message:
+          type: validation_request
+          content:
+            validation_type: privacy
+            target_files:
+              ["{{ steps.generate_privacy_report.output.report_path }}"]
+            validation_level: strict
+            auto_fix: false
+
+  chat_backup:
+    name: "Chat History Backup"
+    description: "Create encrypted backups of chat history"
+    trigger:
+      type: schedule
+      schedule: "0 1 * * *" # Daily at 1 AM
+    parameters:
+      backup_location:
+        type: string
+        default: ".claude/backups"
+        description: "Backup destination directory"
+      encryption:
+        type: boolean
+        default: true
+        description: "Encrypt backup files"
+      retention_days:
+        type: integer
+        default: 30
+        description: "Days to retain backups"
+    steps:
+      - name: create_backup_archive
+        action: shell_command
+        command: |
+          backup_name="chat_backup_$(date +%Y%m%d_%H%M%S).tar.gz"
+          tar -czf "{{ parameters.backup_location }}/$backup_name" .claude/chat_history/
+          echo "backup_file={{ parameters.backup_location }}/$backup_name" >> $GITHUB_OUTPUT
+        timeout: 300
+
+      - name: encrypt_backup
+        action: shell_command
+        condition: "{{ parameters.encryption }}"
+        depends_on: [create_backup_archive]
+        command: |
+          gpg --symmetric --cipher-algo AES256 "{{ steps.create_backup_archive.output.backup_file }}"
+          rm "{{ steps.create_backup_archive.output.backup_file }}"
+        timeout: 120
+
+      - name: cleanup_old_backups
+        action: shell_command
+        depends_on: [encrypt_backup]
+        command: |
+          find "{{ parameters.backup_location }}" -name "chat_backup_*.tar.gz*" -mtime +{{ parameters.retention_days }} -delete
+        timeout: 60
+
+      - name: send_backup_notification
+        action: agent_message
+        depends_on: [cleanup_old_backups]
+        message:
+          type: status_update
+          content:
+            agent_id: backup_manager
+            state: idle
+            progress: 100.0
+            current_task: "Completed chat history backup"
+
+error_handling:
+  retry_policy:
+    max_retries: 3
+    backoff_factor: 2
+    retry_on:
+      - timeout
+      - script_error
+      - network_error
+
+  notification_on_failure:
+    enabled: true
+    message:
+      type: status_update
+      content:
+        agent_id: workflow_manager
+        state: error
+        progress: 0.0
+        current_task: "Workflow failed: {{ workflow.name }}"
+
+monitoring:
+  metrics:
+    - workflow_execution_time
+    - step_success_rate
+    - error_frequency
+    - session_export_count
+
+  alerts:
+    - condition: "workflow_execution_time > 300"
+      action: send_alert
+      message: "Workflow taking longer than expected"
+
+    - condition: "step_success_rate < 0.8"
+      action: send_alert
+      message: "High failure rate in chat management workflows"

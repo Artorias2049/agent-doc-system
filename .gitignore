@@ -130,6 +130,9 @@ coverage/
 # MacOS
 .DS_Store
 
+# Agent communication history files
+framework/agent_communication/history/
+
 # Always include the docs/projects directory and its contents
 !docs/projects/
 !docs/projects/**

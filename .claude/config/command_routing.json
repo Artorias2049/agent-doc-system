@@ -19,7 +19,7 @@
       },
       "workflow": {
         "script": "framework/agent_communication/core/enhanced_protocol.py",
-        "method": "send",
+        "method": "workflow",
         "description": "Execute agent workflow"
       },
       "audit": {

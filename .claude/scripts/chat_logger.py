@@ -9,7 +9,7 @@ import os
 import re
 import subprocess
 import gzip
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 import uuid
@@ -74,7 +74,7 @@ class ChatLogger:
         """Capture current session context."""
         context = {
             "session_id": str(uuid.uuid4()),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "working_directory": str(Path.cwd()),
             "git_info": self._get_git_info(),
             "environment": self._get_environment_info(),
@@ -133,7 +133,7 @@ class ChatLogger:
     def create_session_log(self, session_context: Dict[str, Any]) -> Path:
         """Create a new session log file."""
         session_id = session_context["session_id"]
-        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         
         filename = f"session_{timestamp}_{session_id[:8]}.md"
         session_file = self.history_dir / "sessions" / filename
@@ -238,7 +238,7 @@ class ChatLogger:
                         try:
                             if cache_file.is_file() and cache_file.stat().st_size > 0:
                                 # Check if recently modified (within last hour)
-                                if datetime.fromtimestamp(cache_file.stat().st_mtime) > datetime.now() - timedelta(hours=1):
+                                if datetime.fromtimestamp(cache_file.stat().st_mtime, tz=timezone.utc) > datetime.now(timezone.utc) - timedelta(hours=1):
                                     content = cache_file.read_text()
                                     if self._looks_like_chat_content(content):
                                         return content
@@ -327,7 +327,7 @@ class ChatLogger:
         content = session_file.read_text()
         
         # Remove patterns that look like secrets
-        patterns = self.config["chat_logging"]["privacy"]["exclude_patterns"]
+        patterns = self.config.get("chat_logging", {}).get("privacy", {}).get("exclude_patterns", [])
         
         for pattern in patterns:
             # Redact lines containing sensitive patterns
@@ -371,7 +371,7 @@ class ChatLogger:
                     "file": session_file,
                     "name": session_file.name,
                     "size": session_file.stat().st_size,
-                    "modified": datetime.fromtimestamp(session_file.stat().st_mtime),
+                    "modified": datetime.fromtimestamp(session_file.stat().st_mtime, tz=timezone.utc),
                     "compressed": session_file.suffix == ".gz"
                 })
                 
@@ -383,7 +383,7 @@ class ChatLogger:
     def cleanup_old_sessions(self, days: Optional[int] = None) -> int:
         """Clean up old chat sessions."""
         days = days or self.config["chat_logging"]["retention"]["max_days"]
-        cutoff_date = datetime.now() - timedelta(days=days)
+        cutoff_date = datetime.now(timezone.utc) - timedelta(days=days)
         
         sessions_cleaned = 0
         session_dir = self.history_dir / "sessions"
@@ -396,7 +396,7 @@ class ChatLogger:
         
         for session_file in session_dir.iterdir():
             if session_file.is_file():
-                file_date = datetime.fromtimestamp(session_file.stat().st_mtime)
+                file_date = datetime.fromtimestamp(session_file.stat().st_mtime, tz=timezone.utc)
                 
                 if file_date < cutoff_date:
                     # Archive instead of delete

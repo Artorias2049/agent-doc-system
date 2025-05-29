@@ -1,0 +1,101 @@
+#!/bin/bash
+
+# Git Post-Commit Hook for Chat Session Export
+# Automatically exports chat sessions when commits are made
+
+PROJECT_ROOT="$(git rev-parse --show-toplevel)"
+CHAT_LOGGER="$PROJECT_ROOT/.claude/scripts/chat_logger.py"
+CONFIG_FILE="$PROJECT_ROOT/.claude/config/chat_logging.json"
+
+# Colors
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+log_info() {
+    echo -e "${BLUE}[git-hook]${NC} $1"
+}
+
+log_success() {
+    echo -e "${GREEN}[git-hook]${NC} $1"
+}
+
+log_warning() {
+    echo -e "${YELLOW}[git-hook]${NC} $1"
+}
+
+# Check if chat logging is enabled and configured for git hooks
+check_git_hook_enabled() {
+    if [ ! -f "$CONFIG_FILE" ]; then
+        return 1
+    fi
+    
+    enabled=$(python3 -c "
+import json
+try:
+    with open('$CONFIG_FILE') as f:
+        config = json.load(f)
+    git_hooks = config.get('integrations', {}).get('git_hooks', False)
+    chat_enabled = config.get('chat_logging', {}).get('enabled', False)
+    print(git_hooks and chat_enabled)
+except:
+    print(False)
+" 2>/dev/null)
+    
+    [ "$enabled" = "True" ]
+}
+
+# Main execution
+if check_git_hook_enabled; then
+    # Get commit information
+    COMMIT_HASH=$(git rev-parse HEAD)
+    COMMIT_MSG=$(git log -1 --pretty=%B)
+    BRANCH=$(git branch --show-current)
+    
+    log_info "📝 Commit detected on branch '$BRANCH'"
+    log_info "💬 Triggering chat session export..."
+    
+    # Export chat session with commit context
+    if [ -f "$CHAT_LOGGER" ] && command -v python3 >/dev/null 2>&1; then
+        # Create a commit-specific export
+        python3 "$CHAT_LOGGER" export 2>/dev/null && {
+            log_success "✅ Chat session exported for commit $COMMIT_HASH"
+            
+            # Send agent message about the commit and export
+            python3 -c "
+import sys
+import os
+sys.path.append('$PROJECT_ROOT/framework/agent_communication/core')
+
+try:
+    from enhanced_protocol import EnhancedAgentProtocol
+    
+    protocol = EnhancedAgentProtocol('git_hook', '$PROJECT_ROOT')
+    protocol.send_message(
+        message_type='context_update',
+        content={
+            'context_id': '$(python3 -c "import uuid; print(uuid.uuid4())")',
+            'type': 'add',
+            'data': {
+                'event': 'git_commit',
+                'commit_hash': '$COMMIT_HASH',
+                'branch': '$BRANCH',
+                'message': '''$COMMIT_MSG''',
+                'chat_exported': True
+            }
+        },
+        metadata={
+            'source': 'git_post_commit_hook',
+            'timestamp': '$(date -u +%Y-%m-%dT%H:%M:%SZ)'
+        }
+    )
+except Exception as e:
+    pass
+" 2>/dev/null || true
+        }
+    fi
+else
+    # Silent exit if git hooks are disabled
+    exit 0
+fi

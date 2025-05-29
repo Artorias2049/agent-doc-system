@@ -1,0 +1,145 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-toml
+      - id: debug-statements
+
+  - repo: https://github.com/psf/black
+    rev: 23.11.0
+    hooks:
+      - id: black
+        args: [--line-length=100]
+        language_version: python3
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: ["--profile", "black", "--line-length=100"]
+
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.1.6
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.7.1
+    hooks:
+      - id: mypy
+        additional_dependencies: [pydantic, types-PyYAML, rich, click]
+        args: [--strict]
+        files: ^framework/agent_communication/core/
+
+  - repo: local
+    hooks:
+      - id: validate-schemas
+        name: Validate YAML Schemas
+        entry: python
+        language: system
+        args:
+          - -c
+          - |
+            import yaml
+            import sys
+            from pathlib import Path
+            
+            schema_dir = Path('framework/schemas')
+            for schema_file in schema_dir.glob('*.yml'):
+                try:
+                    with open(schema_file) as f:
+                        yaml.safe_load(f)
+                    print(f'✅ {schema_file.name} is valid YAML')
+                except Exception as e:
+                    print(f'❌ {schema_file.name} failed validation: {e}')
+                    sys.exit(1)
+        files: ^framework/schemas/.*\.yml$
+        pass_filenames: false
+
+      - id: validate-agent-messages
+        name: Validate Agent Message Files
+        entry: python
+        language: system
+        args:
+          - framework/validators/validator.py
+          - message_file
+        files: ^framework/agent_communication/history/.*\.json$
+
+      - id: validate-documentation
+        name: Validate Documentation
+        entry: bash
+        language: system
+        args:
+          - -c
+          - |
+            if [ -f "framework/scripts/validate.sh" ]; then
+              chmod +x framework/scripts/validate.sh
+              ./framework/scripts/validate.sh --self_validate
+            fi
+        files: ^framework/docs/.*\.md$
+        pass_filenames: false
+
+      - id: check-secrets
+        name: Check for Hardcoded Secrets
+        entry: bash
+        language: system
+        args:
+          - -c
+          - |
+            if grep -r "password\|secret\|key\|token" framework/ --include="*.py" | grep -v "# pragma: allowlist secret"; then
+              echo "❌ Potential hardcoded secrets found"
+              exit 1
+            fi
+        pass_filenames: false
+
+      - id: test-enhanced-protocol
+        name: Test Enhanced Protocol
+        entry: bash
+        language: system
+        args:
+          - -c
+          - |
+            cd framework/agent_communication/core
+            python enhanced_protocol.py --help > /dev/null
+            echo "✅ Enhanced protocol CLI is functional"
+        files: ^framework/agent_communication/core/.*\.py$
+        pass_filenames: false
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: ["bandit[toml]"]
+        exclude: tests/
+
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    rev: v1.3.2
+    hooks:
+      - id: python-safety-dependencies-check
+        files: pyproject.toml
+
+# Configuration for pre-commit
+default_stages: [commit]
+fail_fast: false
+
+# CI configuration
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

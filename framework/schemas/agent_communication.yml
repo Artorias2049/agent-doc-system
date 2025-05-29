@@ -1,7 +1,7 @@
 schema: "https://schema.org/TechnicalDocument"
 id: "agent-comm-schema-001"
-version: "1.0.0"
-last_updated: "2024-03-21T00:00:00Z"
+version: "1.1.0"
+last_updated: "2024-12-29T00:00:00Z"
 status: "Active"
 priority: "P0"
 owner: "Documentation Team"
@@ -38,6 +38,9 @@ message_schema:
         - test_result
         - status_update
         - context_update
+        - workflow_request
+        - validation_request
+        - documentation_update
     content:
       type: object
       description: "Message-specific content"
@@ -173,6 +176,140 @@ message_types:
         type: object
         description: "Context data"
         additionalProperties: true
+
+  workflow_request:
+    type: object
+    required:
+      - workflow_name
+      - steps
+      - parameters
+    properties:
+      workflow_name:
+        type: string
+        description: "Name of the workflow to execute"
+        pattern: "^[a-zA-Z0-9_-]+$"
+      steps:
+        type: array
+        description: "Workflow steps to execute"
+        items:
+          type: object
+          required:
+            - name
+            - action
+          properties:
+            name:
+              type: string
+              description: "Step name"
+            action:
+              type: string
+              description: "Action to perform"
+            parameters:
+              type: object
+              description: "Step parameters"
+              additionalProperties: true
+            timeout_seconds:
+              type: integer
+              description: "Step timeout in seconds"
+              minimum: 1
+              maximum: 3600
+            retry_count:
+              type: integer
+              description: "Number of retries"
+              minimum: 0
+              maximum: 5
+            depends_on:
+              type: array
+              description: "Step dependencies"
+              items:
+                type: string
+      parameters:
+        type: object
+        description: "Workflow parameters"
+        additionalProperties: true
+      parallel_execution:
+        type: boolean
+        description: "Enable parallel step execution"
+        default: false
+      failure_strategy:
+        type: string
+        description: "Strategy when step fails"
+        enum:
+          - abort
+          - continue
+          - retry
+        default: "abort"
+
+  validation_request:
+    type: object
+    required:
+      - validation_type
+      - target_files
+    properties:
+      validation_type:
+        type: string
+        description: "Type of validation to perform"
+        enum:
+          - schema
+          - documentation
+          - messages
+          - project
+      target_files:
+        type: array
+        description: "Files to validate"
+        items:
+          type: string
+          pattern: "^[a-zA-Z0-9/._*-]+$"
+        minItems: 1
+      validation_level:
+        type: string
+        description: "Validation strictness level"
+        enum:
+          - basic
+          - enhanced
+          - strict
+        default: "enhanced"
+      auto_fix:
+        type: boolean
+        description: "Automatically fix issues"
+        default: false
+      generate_report:
+        type: boolean
+        description: "Generate validation report"
+        default: true
+
+  documentation_update:
+    type: object
+    required:
+      - update_type
+      - target_documents
+    properties:
+      update_type:
+        type: string
+        description: "Type of documentation update"
+        enum:
+          - create
+          - update
+          - delete
+          - sync
+      target_documents:
+        type: array
+        description: "Documents to update"
+        items:
+          type: string
+          pattern: "^[a-zA-Z0-9/._-]+$"
+        minItems: 1
+      template_name:
+        type: string
+        description: "Template to use for creation/update"
+        pattern: "^[a-zA-Z0-9_-]+$"
+      metadata_updates:
+        type: object
+        description: "Metadata updates to apply"
+        additionalProperties: true
+      auto_generate:
+        type: boolean
+        description: "Auto-generate content"
+        default: false
 
 file_schema:
   type: object

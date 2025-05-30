@@ -97,8 +97,7 @@ The Agent Communication Component provides a standardized way for agents to comm
 ```
 agent_communication/
 ├── core/
-│   ├── protocol.py        # Original communication protocol
-│   ├── enhanced_protocol.py  # Enhanced protocol with Pydantic
+│   ├── enhanced_protocol.py  # Enhanced protocol with Pydantic models
 │   └── models.py          # Pydantic v2 models for type safety
 ├── history/              # Message history storage
 ├── config/
@@ -121,34 +120,37 @@ agent_communication/
 
 ### Usage Example
 ```python
-# Enhanced Protocol with Pydantic (Recommended)
-from agent_communication.core.enhanced_protocol import EnhancedProtocol
-from agent_communication.core.models import WorkflowRequest, ValidationRequest
+# Enhanced Protocol with Pydantic models
+from agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
 
 # Initialize enhanced protocol
-protocol = EnhancedProtocol()
+protocol = EnhancedAgentProtocol(agent_id="my_agent")
 
 # Send workflow request with type safety
-workflow_msg = WorkflowRequest(
-    workflow_name="validate_and_test",
-    steps=[
-        {"name": "validate", "action": "check", "parameters": {"target": "framework"}},
-        {"name": "test", "action": "run", "depends_on": ["validate"]}
-    ],
-    parallel_execution=False
+message_id = protocol.send_message(
+    message_type="workflow_request",
+    content={
+        "workflow_name": "validate_and_test",
+        "steps": [
+            {"name": "validate", "action": "check", "parameters": {"target": "framework"}},
+            {"name": "test", "action": "run", "depends_on": ["validate"]}
+        ],
+        "parallel_execution": False
+    }
 )
-message_id = protocol.send_message("agent1", workflow_msg)
 
 # Send validation request
-validation_msg = ValidationRequest(
-    validation_type="project",
-    target_files=["framework/**/*.py"],
-    validation_level="strict"
+protocol.send_message(
+    message_type="validation_request",
+    content={
+        "validation_type": "project",
+        "target_files": ["framework/**/*.py"],
+        "validation_level": "strict"
+    }
 )
-protocol.send_message("validator_agent", validation_msg)
 
-# Get messages with type safety
-pending = protocol.get_pending_messages()
+# Get messages with filtering
+messages = protocol.get_messages(status="pending", limit=10)
 ```
 
 ## Configuration

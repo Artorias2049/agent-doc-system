@@ -59,26 +59,14 @@ agent-doc-system/
    npm install remark-frontmatter remark-lint-frontmatter-schema js-yaml
    ```
 
-2. **Generate an example document**:
-
-   ```bash
-   ./framework/scripts/generate_example_doc.py "Example Document" "This is an example document for testing" "Your Name"
-   ```
-
-3. **Validate documentation**:
-
-   ```bash
-   ./framework/scripts/validate_docs.py
-   ```
-
-4. **Run comprehensive validation**:
+2. **Validate documentation**:
 
    ```bash
    # Run enhanced validation with Pydantic models
    python framework/validators/validator.py --target framework --level strict
    
-   # Run full documentation validation
-   ./framework/scripts/doc_validation.sh
+   # Run validation script
+   ./framework/scripts/validate.sh
    
    # Run test suite
    pytest tests/ --cov=framework --cov-report=html
@@ -92,24 +80,23 @@ The system now includes comprehensive Claude Code optimization with:
 - **50% faster validation** through Pydantic v2 models
 - **Type safety** with comprehensive MyPy integration  
 - **Enhanced CLI** with Rich console formatting
-- **Custom slash commands** for streamlined operations
 - **Automated testing** with pytest and 90% coverage requirement
 - **Security compliance** with OWASP checking and automated scanning
 
 ### Usage Examples
 ```bash
 # Send workflow request with validation
-/agent:send workflow_request agent1 {
+python framework/scripts/agent_communication.py --action send --type "workflow_request" --sender "agent1" --content '{
   "workflow_name": "validate_and_test",
   "steps": [{"name": "validate", "action": "check"}],
   "parameters": {"target": "framework"}
-}
+}'
 
 # Execute comprehensive validation
-/agent:validate project --level strict --generate_report
+python framework/validators/validator.py --target project --level strict --generate_report
 
 # Run security audit
-/agent:audit agent_communication --owasp-check
+bandit -r framework/
 
 # Run test-driven development workflow
 pytest tests/ --cov=framework --cov-fail-under=90
@@ -124,59 +111,33 @@ mypy framework/agent_communication/core/ --strict
 - **MyPy** strict type checking
 - **Black & Ruff** for code formatting and linting
 
-## Setup Cursor Integration
+## Editor Integration
 
-To set up the Cursor integration files in your project:
+The system includes configuration for better editor integration with VSCode and other editors. The `.claude/config/` directory contains:
 
-```bash
-# From your project root
-./framework/scripts/setup_cursor.sh
+- Agent communication settings
+- Permission configurations for Claude Code
+- Validation rules for documentation and code
 
-# OR specify a different target directory
-./framework/scripts/setup_cursor.sh /path/to/project
-```
+## Documentation Protocol Integration
 
-This will create all necessary `.cursor` files for the documentation system to work with Cursor, including:
-
-- Documentation protocol rules
-- Validation pipeline configuration
-- Security rules
-- Python expert agent rules for Python development assistance
-
-The script also sets up VSCode configuration for better editor integration.
-
-## Integration with Cursor
-
-Cursor will automatically recognize the documentation protocol when you:
+The system follows a strict documentation protocol:
 
 1. Create documentation in the `framework/docs/` directory
 2. Follow the documentation protocol with proper YAML metadata
-3. Use section headers with anchor tags {#section-name}
+3. Use section headers with descriptive names
 4. Include language identifiers in code blocks
 5. Maintain a changelog section
-
-## VSCode Integration
-
-The setup includes VSCode configuration that provides:
-
-- Tasks for validating documentation and generating new documents
-- Recommended extensions for working with Markdown and YAML
-- Schema validation for documentation files
-- Editor settings optimized for documentation work
-- Cursor integration settings
+6. Run validation before committing changes
 
 ## Moving the System
 
 To use this system in another project:
 
 1. Copy the entire `framework/` folder to your new project
-2. Run the setup script to create Cursor integration files:
-
-   ```bash
-   ./framework/scripts/setup_cursor.sh
-   ```
-
-3. Start creating and validating documentation
+2. Install dependencies with Poetry: `poetry install`
+3. Run validation to ensure everything works: `./framework/scripts/validate.sh`
+4. Start creating and validating documentation
 
 ## Agent Communication System
 
@@ -190,31 +151,27 @@ The project includes a directory-based agent communication system that enables d
    - Supports 7 message types: test requests, test results, status updates, context updates, workflow requests, validation requests, and documentation updates (NEW in v1.1.0)
 
 2. **Communication Scripts**
-   - `framework/scripts/agent_communication.py`: Main implementation for sending and receiving messages
-   - `framework/scripts/validate_agent_messages.py`: Validates message files against the schema
-   - `framework/agent_communication/core/enhanced_protocol.py`: Enhanced protocol with Pydantic models (NEW)
-   - `framework/agent_communication/core/models.py`: Type-safe Pydantic message models (NEW)
+   - `framework/agent_communication/core/enhanced_protocol.py`: Enhanced protocol with Pydantic models
+   - `framework/agent_communication/core/models.py`: Type-safe Pydantic message models
+   - `framework/validators/validator.py`: Validates message files against the schema
 
 ### Usage
 
 1. **Sending Messages**
 
 ```python
-from framework.scripts.agent_communication import AgentCommunication
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
 
 # Initialize communication for a project directory
-agent_comm = AgentCommunication("/path/to/project")
+protocol = EnhancedAgentProtocol()
 
-# Send a test request
-message_id = agent_comm.send_message(
-    message_type="test_request",
-    content={
-        "test_type": "e2e",
-        "test_file": "test_full_pipeline.py",
-        "parameters": {
-            "environment": "local",
-            "verbose": True
-        }
+# Send a test request using Pydantic models
+message = protocol.create_test_request(
+    test_type="e2e",
+    test_file="test_full_pipeline.py",
+    parameters={
+        "environment": "local",
+        "verbose": True
     },
     sender="e2e-test-agent"
 )
@@ -224,20 +181,19 @@ message_id = agent_comm.send_message(
 
 ```python
 # Get pending messages
-pending_messages = agent_comm.get_pending_messages()
+pending_messages = protocol.read_messages()
 
 # Update message status
-agent_comm.update_message_status(
+protocol.update_message_status(
     message_id="message-id",
-    status="processed",
-    response={"result": "success"}
+    status="processed"
 )
 ```
 
 3. **Validating Messages**
 
 ```bash
-python framework/scripts/validate_agent_messages.py agent_messages.json
+python framework/validators/validator.py --target messages
 ```
 
 ### Best Practices
@@ -258,40 +214,34 @@ For detailed schema information and message type specifications, see `framework/
 - **documentation_update**: Automated documentation generation
 
 #### Usage Examples:
-```bash
-# Send workflow request (NEW)
-python framework/scripts/agent_communication.py --action send --type "workflow_request" --sender "agent1" --content '{
-  "workflow_name": "validate_and_test",
-  "steps": [
-    {"name": "validate_schemas", "action": "validate", "parameters": {"target": "schemas/*.yml"}},
-    {"name": "run_tests", "action": "test", "depends_on": ["validate_schemas"]}
-  ],
-  "parallel_execution": false
-}'
+```python
+# Using the enhanced protocol with Pydantic models
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
 
-# Send validation request (NEW)
-python framework/scripts/agent_communication.py --action send --type "validation_request" --sender "agent1" --content '{
-  "validation_type": "project",
-  "target_files": ["framework/**/*.py"],
-  "validation_level": "strict",
-  "generate_report": true
-}'
+protocol = EnhancedAgentProtocol()
 
-# Send documentation update (NEW)
-python framework/scripts/agent_communication.py --action send --type "documentation_update" --sender "agent1" --content '{
-  "update_type": "sync",
-  "target_documents": ["README.md"],
-  "auto_generate": true
-}'
+# Send workflow request
+workflow_msg = protocol.create_workflow_request(
+    workflow_name="validate_and_test",
+    steps=[
+        {"name": "validate_schemas", "action": "validate", "parameters": {"target": "schemas/*.yml"}},
+        {"name": "run_tests", "action": "test", "depends_on": ["validate_schemas"]}
+    ],
+    sender="agent1"
+)
 
-# Traditional message types
-python framework/scripts/agent_communication.py --action send --type "test_request" --sender "agent1" --content '{"test_type": "unit", "test_file": "tests/test_example.py"}'
+# Send validation request
+validation_msg = protocol.create_validation_request(
+    validation_type="project",
+    target_files=["framework/**/*.py"],
+    sender="agent1"
+)
 
-# Read messages from default location
-python framework/scripts/agent_communication.py --action read
+# Read messages
+messages = protocol.read_messages()
 
-# Cleanup old messages (default: 7 days)
-python framework/scripts/agent_communication.py --action cleanup --days 14
+# Cleanup old messages
+protocol.cleanup_old_messages(days=14)
 ```
 
 ## Changelog

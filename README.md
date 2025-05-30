@@ -84,13 +84,18 @@ The system now includes comprehensive Claude Code optimization with:
 - **Security compliance** with OWASP checking and automated scanning
 
 ### Usage Examples
-```bash
-# Send workflow request with validation
-python framework/scripts/agent_communication.py --action send --type "workflow_request" --sender "agent1" --content '{
-  "workflow_name": "validate_and_test",
-  "steps": [{"name": "validate", "action": "check"}],
-  "parameters": {"target": "framework"}
-}'
+```python
+# Use enhanced protocol with Pydantic models
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+
+protocol = EnhancedAgentProtocol()
+
+# Send workflow request
+workflow_msg = protocol.create_workflow_request(
+    workflow_name="validate_and_test",
+    steps=[{"name": "validate", "action": "check"}],
+    sender="agent1"
+)
 
 # Execute comprehensive validation
 python framework/validators/validator.py --target project --level strict --generate_report
@@ -111,13 +116,13 @@ mypy framework/agent_communication/core/ --strict
 - **MyPy** strict type checking
 - **Black & Ruff** for code formatting and linting
 
-## Editor Integration
+## Claude Code Integration
 
-The system includes configuration for better editor integration with VSCode and other editors. The `.claude/config/` directory contains:
+The system includes comprehensive Claude Code optimization configured in `CLAUDE.md`:
 
-- Agent communication settings
-- Permission configurations for Claude Code
-- Validation rules for documentation and code
+- Enhanced agent communication protocol with Pydantic models
+- Type-safe validation and development workflows
+- Automated testing and security scanning
 
 ## Documentation Protocol Integration
 
@@ -241,7 +246,7 @@ validation_msg = protocol.create_validation_request(
 messages = protocol.read_messages()
 
 # Cleanup old messages
-protocol.cleanup_old_messages(days=14)
+protocol.cleanup_old_messages(days=7)
 ```
 
 ## Changelog

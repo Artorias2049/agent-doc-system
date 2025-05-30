@@ -2,8 +2,15 @@
 
 Export current Claude Code chat session to structured storage with metadata and privacy controls.
 
+## 🚀 Quick Execute
+**To actually run this command with clipboard content:**
+```bash
+python3 .claude/scripts/slash_command_handler.py "/chat:export"
+```
+*Make sure to copy your chat content (Cmd+A, Cmd+C) before running this!*
+
 ## Usage
-`/chat:export [options]`
+`/chat:export [options]` *(Documentation only - use above command to execute)*
 
 ## Parameters
 - `--format`: Export format (markdown, json, html)

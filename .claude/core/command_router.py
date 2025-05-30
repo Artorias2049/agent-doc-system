@@ -213,6 +213,9 @@ class CommandRouter:
             if script_path.name == "enhanced_protocol.py":
                 agent_id = "system"  # Default agent ID
                 cmd = [sys.executable, str(script_path), "--agent-id", agent_id, method] + args
+            elif script_path.name == "chat_logger.py" and method == "export":
+                # Chat export attempts clipboard capture automatically
+                cmd = [sys.executable, str(script_path), method] + args
             else:
                 cmd = [sys.executable, str(script_path), method] + args
                 

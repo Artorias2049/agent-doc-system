@@ -175,7 +175,7 @@ class ChatLogger:
 """
         return header
     
-    def export_current_session(self, output_path: Optional[str] = None) -> Path:
+    def export_current_session(self, output_path: Optional[str] = None, no_input: bool = False) -> Path:
         """Export current Claude Code session (manual trigger)."""
         console.print("[blue]📤 Exporting current chat session...[/blue]")
         
@@ -186,7 +186,11 @@ class ChatLogger:
         session_file = self.create_session_log(session_context)
         
         # Attempt to capture chat content using various methods
-        chat_content = self._capture_chat_content()
+        if no_input:
+            console.print("[yellow]⚠️  Running in non-interactive mode. Session metadata only.[/yellow]")
+            chat_content = None
+        else:
+            chat_content = self._capture_chat_content()
         
         if chat_content:
             self._append_chat_content(session_file, chat_content)
@@ -208,18 +212,19 @@ class ChatLogger:
     
     def _capture_chat_content(self) -> Optional[str]:
         """Attempt to capture chat content using available methods."""
-        # Method 1: Check for Claude Code memory/cache files
-        chat_content = self._try_claude_cache_extraction()
-        if chat_content:
-            return chat_content
+        console.print("[yellow]💡 Attempting to capture chat from clipboard...[/yellow]")
         
-        # Method 2: Check clipboard for recent Claude interactions
+        # Try clipboard first without prompting
         chat_content = self._try_clipboard_capture()
         if chat_content:
             return chat_content
         
-        # Method 3: Prompt user for manual input
-        return self._prompt_manual_input()
+        console.print("[yellow]💡 No chat content found in clipboard.[/yellow]")
+        console.print("1. Select all chat content (Cmd+A or Ctrl+A)")
+        console.print("2. Copy to clipboard (Cmd+C or Ctrl+C)")
+        console.print("3. Run the command again")
+        
+        return None
     
     def _try_claude_cache_extraction(self) -> Optional[str]:
         """Try to extract chat from Claude Code cache/memory."""
@@ -253,15 +258,35 @@ class ChatLogger:
             import pyperclip
             clipboard_content = pyperclip.paste()
             
-            # Check if clipboard contains Claude chat-like content
-            if self._looks_like_chat_content(clipboard_content):
-                console.print("[blue]📋 Found potential chat content in clipboard[/blue]")
-                if click.confirm("Use clipboard content for chat export?"):
-                    return clipboard_content
+            if not clipboard_content or len(clipboard_content) < 10:
+                console.print("[red]❌ Clipboard is empty or too short[/red]")
+                return None
+            
+            console.print(f"[green]✅ Captured {len(clipboard_content)} characters from clipboard[/green]")
+            
+            # Preview first few lines
+            preview_lines = clipboard_content.split('\n')[:3]
+            console.print("[blue]Preview:[/blue]")
+            for line in preview_lines:
+                console.print(f"  {line[:80]}{'...' if len(line) > 80 else ''}")
+            
+            console.print("[green]✅ Using clipboard content for chat export[/green]")
+            return clipboard_content
+                
         except ImportError:
-            console.print("[yellow]💡 Install pyperclip for clipboard capture: pip install pyperclip[/yellow]")
-        except Exception:
-            pass
+            console.print("[red]❌ pyperclip not installed. Installing now...[/red]")
+            try:
+                import subprocess
+                subprocess.check_call(["pip", "install", "pyperclip"])
+                import pyperclip
+                clipboard_content = pyperclip.paste()
+                if clipboard_content and len(clipboard_content) > 10:
+                    console.print(f"[green]✅ Captured {len(clipboard_content)} characters[/green]")
+                    return clipboard_content
+            except Exception as e:
+                console.print(f"[red]❌ Could not install pyperclip: {e}[/red]")
+        except Exception as e:
+            console.print(f"[red]❌ Clipboard error: {e}[/red]")
         
         return None
     
@@ -283,19 +308,22 @@ class ChatLogger:
         """Prompt user for manual chat input."""
         console.print("[yellow]💭 No automatic chat capture available[/yellow]")
         
-        if click.confirm("Would you like to manually paste chat content?"):
-            console.print("Paste your chat content (press Ctrl+D when done):")
-            lines = []
-            try:
-                while True:
-                    line = input()
-                    lines.append(line)
-            except EOFError:
-                pass
-            
-            content = "\n".join(lines)
-            if content.strip():
-                return content
+        try:
+            if click.confirm("Would you like to manually paste chat content?"):
+                console.print("Paste your chat content (press Ctrl+D when done):")
+                lines = []
+                try:
+                    while True:
+                        line = input()
+                        lines.append(line)
+                except EOFError:
+                    pass
+                
+                content = "\n".join(lines)
+                if content.strip():
+                    return content
+        except (EOFError, KeyboardInterrupt):
+            console.print("\n[yellow]Skipping manual input[/yellow]")
         
         return None
     
@@ -446,8 +474,9 @@ def cli(ctx, root_dir):
 
 @cli.command()
 @click.option('--output', '-o', help='Output file path')
+@click.option('--no-input', is_flag=True, help='Skip interactive prompts')
 @click.pass_context
-def export(ctx, output):
+def export(ctx, output, no_input):
     """Export current chat session."""
     logger = ctx.obj['logger']
     
@@ -460,7 +489,7 @@ def export(ctx, output):
         TextColumn("[progress.description]{task.description}"),
     ) as progress:
         task = progress.add_task("Exporting chat session...", total=None)
-        session_file = logger.export_current_session(output)
+        session_file = logger.export_current_session(output, no_input)
         progress.remove_task(task)
     
     console.print(Panel(

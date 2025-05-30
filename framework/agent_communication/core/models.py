@@ -203,7 +203,7 @@ class AgentMessage(BaseModel):
     @model_validator(mode='before')
     @classmethod
     def validate_content_type(cls, values):
-        """Ensure content matches message type."""
+        """Ensure content matches message type and convert dicts to proper models."""
         msg_type = values.get('type')
         content = values.get('content')
         
@@ -219,8 +219,12 @@ class AgentMessage(BaseModel):
         
         if msg_type and content:
             expected_type = type_mapping.get(msg_type)
-            if expected_type and not isinstance(content, expected_type):
-                raise ValueError(f"Content type mismatch: expected {expected_type.__name__} for {msg_type}")
+            if expected_type:
+                # If content is a dict, convert it to the proper model
+                if isinstance(content, dict):
+                    values['content'] = expected_type(**content)
+                elif not isinstance(content, expected_type):
+                    raise ValueError(f"Content type mismatch: expected {expected_type.__name__} for {msg_type}")
         
         return values
     

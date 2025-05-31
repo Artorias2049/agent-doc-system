@@ -82,8 +82,8 @@ echo "Starting validation..."
 if [ "$SELF_VALIDATE" = true ]; then
     # Validate framework documentation and components (they're in the same directory)
     validate_files "*.md" "doc" "$FRAMEWORK_DIR/docs" || exit 1
-    # Validate agent messages
-    validate_files "*.json" "message" "$FRAMEWORK_DIR/agent_communication" || exit 1
+    # Validate agent message files
+    validate_files "*.json" "message_file" "$FRAMEWORK_DIR/agent_communication" || exit 1
 else
     # Validate project documentation
     validate_files "*.md" "doc" "$PROJECT_DOCS_DIR" || exit 1

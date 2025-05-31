@@ -218,7 +218,8 @@ class Validator:
 
             # Validate cleanup policy
             if 'messages' in file_data:
-                current_time = datetime.now()
+                from datetime import timezone
+                current_time = datetime.now(timezone.utc)
                 for message in file_data['messages']:
                     if 'timestamp' in message:
                         try:

@@ -194,11 +194,12 @@ class EnhancedAgentProtocol:
 
     def _write_message_file(self, message_file: MessageFile):
         """Write validated message file."""
-        message_file.last_updated = datetime.now(timezone.utc)
+        message_file.last_updated = datetime.now(timezone.utc).replace(microsecond=0)
 
+        from .models import serialize_message_file
         with open(self.message_file, "w") as f:
             json.dump(
-                message_file.dict(by_alias=True), f, indent=2, default=str
+                serialize_message_file(message_file), f, indent=2
             )
 
     def send_message(

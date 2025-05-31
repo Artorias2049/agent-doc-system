@@ -185,7 +185,7 @@ class DocumentationUpdateContent(BaseModel):
 class AgentMessage(BaseModel):
     """Main agent message model with comprehensive validation."""
     id: UUID = Field(default_factory=uuid4)
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc).replace(microsecond=0))
     sender: str = Field(..., pattern=r"^[a-zA-Z0-9_-]+$")
     type: MessageType
     content: Union[
@@ -238,7 +238,7 @@ class AgentMessage(BaseModel):
 class MessageFile(BaseModel):
     """Message file container model."""
     messages: List[AgentMessage] = Field(default_factory=list)
-    last_updated: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    last_updated: datetime = Field(default_factory=lambda: datetime.now(timezone.utc).replace(microsecond=0))
     version: str = Field("1.1.0", pattern=r"^\d+\.\d+\.\d+$")
     metadata: Optional[Dict[str, Any]] = Field(default_factory=dict)
     
@@ -304,4 +304,59 @@ def validate_message_dict(message_dict: Dict[str, Any]) -> AgentMessage:
 
 def serialize_message(message: AgentMessage) -> Dict[str, Any]:
     """Serialize message to dictionary for JSON storage."""
-    return message.dict(by_alias=True, exclude_none=True)
+    from uuid import UUID
+    
+    data = message.dict(by_alias=True, exclude_none=True)
+    
+    # Convert UUID to string
+    if isinstance(data.get('id'), UUID):
+        data['id'] = str(data['id'])
+    
+    # Convert timestamp to schema-compliant format (YYYY-MM-DDTHH:MM:SSZ)
+    if isinstance(data.get('timestamp'), datetime):
+        data['timestamp'] = data['timestamp'].strftime('%Y-%m-%dT%H:%M:%SZ')
+    elif isinstance(data.get('timestamp'), str):
+        # If already string, ensure Z format
+        try:
+            dt = datetime.fromisoformat(data['timestamp'].replace('Z', '+00:00'))
+            data['timestamp'] = dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+        except ValueError:
+            pass  # Leave as-is if parsing fails
+    return data
+
+
+def serialize_message_file(message_file: MessageFile) -> Dict[str, Any]:
+    """Serialize message file to dictionary for JSON storage."""
+    import json
+    from uuid import UUID
+    
+    # Use Pydantic's JSON serialization with custom datetime handling
+    data = json.loads(message_file.json(by_alias=True, exclude_none=True))
+    
+    # Fix timestamp formats to match schema (YYYY-MM-DDTHH:MM:SSZ)
+    def fix_timestamp(ts_str):
+        if isinstance(ts_str, str):
+            try:
+                # Parse various timestamp formats and convert to Z format
+                if '+00:00' in ts_str:
+                    dt = datetime.fromisoformat(ts_str)
+                elif 'Z' in ts_str:
+                    dt = datetime.fromisoformat(ts_str.replace('Z', '+00:00'))
+                else:
+                    dt = datetime.fromisoformat(ts_str)
+                return dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+            except ValueError:
+                pass
+        return ts_str
+    
+    # Fix message timestamps
+    if 'messages' in data:
+        for msg in data['messages']:
+            if 'timestamp' in msg:
+                msg['timestamp'] = fix_timestamp(msg['timestamp'])
+    
+    # Fix last_updated timestamp  
+    if 'last_updated' in data:
+        data['last_updated'] = fix_timestamp(data['last_updated'])
+    
+    return data

@@ -1,20 +1,36 @@
 #!/usr/bin/env python3
+"""
+Validator for agent documentation system with schema validation.
+"""
 
-import sys
-import yaml
 import json
 import re
-from pathlib import Path
-from datetime import datetime
+import sys
 import uuid
-from typing import Dict, List, Tuple, Any, Set
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List
+
+import yaml
 
 class Validator:
+    """Validator class for documentation and message validation."""
+    
     def __init__(self, root_dir):
+        """Initialize validator with root directory."""
         self.root_dir = Path(root_dir)
+        
+        # Handle both framework directory and project root directory
+        if self.root_dir.name == "framework":
+            # Called with framework directory, schemas are in ./schemas/
+            schema_dir = self.root_dir / "schemas"
+        else:
+            # Called with project root, schemas are in framework/schemas/
+            schema_dir = self.root_dir / "framework" / "schemas"
+            
         self.schemas = {
-            'document': self.root_dir / 'schemas/document_protocol.yml',
-            'agent': self.root_dir / 'schemas/agent_communication.yml'
+            "document": schema_dir / "document_protocol.yml",
+            "agent": schema_dir / "agent_communication.yml"
         }
         self._load_schemas()
 
@@ -24,6 +40,7 @@ class Validator:
             self.schema_data = {
                 name: yaml.safe_load(path.read_text())
                 for name, path in self.schemas.items()
+                if path.exists()
             }
         except Exception as e:
             print(f"❌ Error loading schemas: {e}")
@@ -77,23 +94,26 @@ class Validator:
         except Exception as e:
             return False, str(e)
 
-    def _validate_section(self, data: Dict, schema: Dict, required_fields: List[str]) -> List[str]:
+    def _validate_section(
+        self, data: Dict[str, Any], schema: Dict[str, Any], required_fields: List[str]
+    ) -> List[str]:
         """Validate a section against its schema definition."""
         errors = []
 
         # Check required fields
-        if missing := set(required_fields) - set(data.keys()):
+        missing = set(required_fields) - set(data.keys())
+        if missing:
             errors.append(f"Missing required fields: {missing}")
 
         # Validate each field against its schema
         for field, value in data.items():
-            if field in schema['properties']:
-                field_errors = self._validate_field(value, schema['properties'][field])
+            if field in schema.get("properties", {}):
+                field_errors = self._validate_field(value, schema["properties"][field])
                 errors.extend([f"{field}: {error}" for error in field_errors])
 
         return errors
 
-    def _validate_field(self, value: Any, schema: Dict) -> List[str]:
+    def _validate_field(self, value: Any, schema: Dict[str, Any]) -> List[str]:
         """Validate a field against its schema definition."""
         errors = []
 
@@ -198,7 +218,8 @@ class Validator:
 
             # Validate cleanup policy
             if 'messages' in file_data:
-                current_time = datetime.now()
+                from datetime import timezone
+                current_time = datetime.now(timezone.utc)
                 for message in file_data['messages']:
                     if 'timestamp' in message:
                         try:

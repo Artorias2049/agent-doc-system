@@ -1,30 +1,46 @@
 # Claude Code Configuration for Agent Documentation System
 
-This CLAUDE.md file configures Claude Code for optimal productivity with the enhanced agent-doc-system framework. It implements Claude Code best practices while integrating with our agent communication protocol.
+This CLAUDE.md file configures Claude Code for optimal productivity with the agent-doc-system framework, focusing on Python development best practices and the agent communication protocol.
 
 ## Project Context and Architecture
 
 ### Core Project Structure
+
+**Nested Usage Pattern (Recommended for new projects):**
 ```
-agent-doc-system/
-├── .claude/                    # Claude-specific configurations
-│   ├── config/                # Agent settings and permissions
-│   └── commands/              # Custom slash commands
-├── framework/                  # Core framework components
-│   ├── agent_communication/   # Enhanced agent protocol
-│   │   └── core/             # Pydantic models and enhanced protocol
-│   ├── docs/                 # Framework documentation
-│   ├── schemas/              # YAML schema definitions (v1.1.0)
-│   ├── scripts/              # Validation and utility scripts
-│   └── validators/           # Python validation framework
-├── tests/                    # Comprehensive pytest suite
-├── .github/workflows/        # CI/CD pipeline
-└── pyproject.toml           # Poetry configuration
+your_project/                   # Your project root (e.g., my_app/, web_service/, etc.)
+├── src/                       # Your project code
+├── requirements.txt           # Your dependencies
+├── project_docs/              # Your project documentation
+└── agent-doc-system/          # Cloned framework (git clone)
+    ├── framework/             # Core framework components
+    │   ├── agent_communication/ # Enhanced agent protocol
+    │   │   ├── core/          # Pydantic models and enhanced protocol
+    │   │   ├── config/        # Agent settings
+    │   │   └── history/       # Message storage
+    │   ├── docs/              # Framework documentation
+    │   │   ├── components/    # Component documentation
+    │   │   └── templates/     # Documentation templates
+    │   ├── schemas/           # YAML schema definitions
+    │   ├── scripts/           # Validation and utility scripts
+    │   └── validators/        # Python validation framework
+    ├── tests/                 # Comprehensive pytest suite
+    ├── project_docs/          # Framework-specific documentation
+    └── pyproject.toml         # Poetry configuration
+```
+
+**Direct Usage Pattern (Legacy):**
+```
+agent-doc-system/              # Framework as project root
+├── framework/                 # Core framework components
+├── tests/                     # Comprehensive pytest suite
+├── project_docs/              # Project-specific documentation
+└── pyproject.toml            # Poetry configuration
 ```
 
 ### Technology Stack
 - **Python 3.9+** with Poetry dependency management
-- **Pydantic v2** for type-safe message validation (50% faster than JSON schema)
+- **Pydantic v2** for type-safe message validation
 - **Rich & Click** for enhanced CLI experience
 - **Pytest** with 90%+ coverage requirement
 - **MyPy** strict type checking
@@ -32,39 +48,74 @@ agent-doc-system/
 
 ## Enhanced Agent Communication Protocol
 
-### Message Types (Extended)
-The framework now supports 7 message types with full Pydantic validation:
+### Message Types
+The framework supports 7 message types with full Pydantic validation:
 
 1. **test_request** - Unit/integration/e2e/performance testing
 2. **test_result** - Test execution results with artifacts
 3. **status_update** - Agent state and progress tracking
 4. **context_update** - Context data management
-5. **workflow_request** - Multi-step agent workflows (NEW)
-6. **validation_request** - Schema/doc validation requests (NEW) 
-7. **documentation_update** - Automated doc generation (NEW)
+5. **workflow_request** - Multi-step agent workflows
+6. **validation_request** - Schema/doc validation requests
+7. **documentation_update** - Automated doc generation
 
 ### Usage Examples
+
+**Nested Usage Pattern (from your project root):**
+```python
+# Example using the enhanced protocol with Pydantic models
+import sys
+sys.path.append('agent-doc-system')
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+
+# Auto-detects nested structure: your_project/agent-doc-system/framework/
+protocol = EnhancedAgentProtocol(agent_id="my_project_agent")
+
+# Send test request using type-safe Pydantic models
+message_id = protocol.create_test_request(
+    test_type="unit",
+    test_file="tests/test_models.py",
+    parameters={
+        "environment": "development",
+        "verbose": True
+    }
+)
+```
+
 ```bash
-# Send workflow request
-/agent:send workflow_request agent1 {
-  "workflow_name": "validate_and_test",
-  "steps": [
-    {"name": "validate_schemas", "action": "validate", "parameters": {"target": "schemas/*.yml"}},
-    {"name": "run_tests", "action": "test", "depends_on": ["validate_schemas"]}
-  ],
-  "parallel_execution": false
-}
+# Validate your project documentation from project root
+./agent-doc-system/framework/scripts/validate.sh
 
-# Send validation request
-/agent:send validation_request agent1 {
-  "validation_type": "project",
-  "target_files": ["framework/**/*.py"],
-  "validation_level": "strict",
-  "generate_report": true
-}
+# Validate framework itself
+./agent-doc-system/framework/scripts/validate.sh --self_validate
 
-# Execute workflow
-/agent:workflow validate_and_test --environment development --parallel
+# Validate using Python validator
+python agent-doc-system/framework/validators/validator.py --target messages
+```
+
+**Direct Usage Pattern (Legacy):**
+```python
+# Example using the enhanced protocol with Pydantic models
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+
+protocol = EnhancedAgentProtocol()
+
+# Send test request using type-safe Pydantic models
+message = protocol.create_test_request(
+    test_type="unit",
+    test_file="tests/test_models.py",
+    parameters={
+        "environment": "development",
+        "verbose": True
+    },
+    sender="agent1"
+)
+
+# Validate messages
+python framework/validators/validator.py --target messages
+
+# Run validation script
+./framework/scripts/validate.sh
 ```
 
 ## Development Workflows
@@ -84,7 +135,7 @@ mypy framework/agent_communication/core/ --strict
 ```
 
 ### Pre-commit Quality Gates
-All code changes are automatically validated through:
+All code changes are validated through:
 - **Black** formatting (line length 100)
 - **MyPy** strict type checking
 - **Ruff** linting with performance optimizations
@@ -93,29 +144,56 @@ All code changes are automatically validated through:
 - **Schema validation** for YAML files
 - **Documentation validation** using enhanced validator
 
-## Custom Slash Commands
+## Development Commands
 
-### Agent Operations
-- `/agent:send <type> <content>` - Send validated messages
-- `/agent:workflow <name> [params]` - Execute multi-step workflows
-- `/agent:validate <target>` - Comprehensive validation
-- `/agent:audit <component>` - Security and compliance analysis
-
-### Chat Management (NEW)
-- `/chat:export [options]` - Export current chat session with metadata
-- `/chat:history <action>` - Manage and browse chat history
-- `/chat:config <action>` - Configure chat logging settings
-
-### Workflow Automation
+### Testing and Validation
 ```bash
-# Complete validation and testing pipeline
-/agent:workflow validate_and_test --target framework --coverage 95
+# Run full test suite with coverage
+pytest tests/ --cov=framework --cov-report=html --cov-report=term-missing
 
-# Documentation synchronization
-/agent:workflow documentation_sync --update_metadata --check_links
+# Run specific test categories
+pytest tests/test_models.py -v                    # Pydantic model tests
+pytest tests/test_enhanced_protocol.py -v        # Protocol integration tests
 
-# Security audit with OWASP compliance
-/agent:workflow security_audit --component agent_communication --depth comprehensive
+# Type checking
+mypy framework/agent_communication/core/ --strict
+
+# Linting and formatting
+black framework/ tests/
+ruff check framework/ tests/
+
+# Security scanning
+bandit -r framework/
+
+# Schema validation
+python framework/validators/validator.py --target schemas
+```
+
+### Agent Communication Operations
+```python
+# Use the enhanced protocol directly with Python
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+
+protocol = EnhancedAgentProtocol()
+
+# Send messages using Pydantic models
+message = protocol.create_test_request(
+    test_type="unit",
+    test_file="tests/test_example.py",
+    parameters={"environment": "development", "verbose": True},
+    sender="agent1"
+)
+
+# Read messages
+messages = protocol.read_messages()
+
+# Cleanup old messages
+protocol.cleanup_old_messages(days=7)
+```
+
+```bash
+# Validate all components
+./framework/scripts/validate.sh
 ```
 
 ## Type Safety and Validation
@@ -124,7 +202,7 @@ All code changes are automatically validated through:
 All agent messages use Pydantic v2 for:
 - **Runtime validation** with detailed error messages
 - **Type coercion** and automatic serialization
-- **Performance optimization** (50% faster than JSON schema)
+- **Performance optimization**
 - **IDE integration** with full autocomplete support
 
 ### Validation Levels
@@ -134,65 +212,16 @@ All agent messages use Pydantic v2 for:
 
 ## Testing Framework
 
-### Comprehensive Test Coverage
-```bash
-# Run full test suite with coverage
-pytest tests/ --cov=framework --cov-report=html --cov-report=term-missing
-
-# Run specific test categories
-pytest tests/test_models.py -v                    # Pydantic model tests
-pytest tests/test_enhanced_protocol.py -v        # Protocol integration tests
-pytest tests/ -k "test_workflow" -v             # Workflow-specific tests
-
-# Performance benchmarks
-pytest tests/ --benchmark-only
-```
-
 ### Test Categories
 - **Unit Tests**: Pydantic model validation
 - **Integration Tests**: End-to-end protocol communication
 - **Performance Tests**: Message creation and validation benchmarks
 - **Security Tests**: Input validation and injection prevention
 
-## CI/CD Pipeline Features
-
-### Automated Quality Assurance
-- **Multi-Python Testing** (3.9, 3.10, 3.11, 3.12)
-- **Schema Validation** for all YAML configuration files
-- **Documentation Validation** using enhanced validator
-- **Security Scanning** with bandit and secret detection
-- **Performance Benchmarking** with regression detection
-- **Coverage Reporting** with Codecov integration
-
-### Environment-Specific Testing
-```yaml
-# Development
-environment: development
-message_storage: framework/agent_communication/history/dev_messages.json
-debug_mode: true
-
-# Production  
-environment: production
-message_storage: framework/agent_communication/history/agent_messages.json
-encryption: true
-```
-
-## Performance Optimizations
-
-### Benchmarked Improvements
-- **50% faster** message validation through Pydantic
-- **Reduced memory usage** with efficient serialization
-- **Enhanced debugging** with Rich console formatting
-- **Streamlined CLI** with Click integration
-
-### Monitoring and Metrics
-```bash
-# Performance monitoring
-/agent:validate project --generate_report --benchmark
-
-# Message processing metrics
-/agent:workflow performance_analysis --component agent_communication
-```
+### Coverage Requirements
+- Minimum 90% test coverage for all framework code
+- All public methods must have corresponding tests
+- Integration tests for agent communication workflows
 
 ## Security and Compliance
 
@@ -202,23 +231,6 @@ encryption: true
 - **Dependency scanning** with safety checks
 - **Access control** through permission configuration
 - **Audit logging** for all agent operations
-
-### OWASP Compliance
-The security audit workflow checks for:
-- SQL injection vectors
-- XSS vulnerabilities  
-- Command injection risks
-- PII leakage detection
-- Authentication/authorization issues
-
-## Configuration Management
-
-### Environment Detection
-The system automatically detects environment based on:
-- Environment variables
-- Git branch names
-- Hostname patterns
-- Explicit configuration
 
 ### Permission System
 ```json
@@ -245,109 +257,103 @@ The system automatically detects environment based on:
 |-------|---------|------------------|
 | Type errors | `mypy framework/ --strict` | Zero type errors |
 | Test failures | `pytest tests/ -x -v` | Detailed failure info |
-| Schema issues | `/agent:validate schemas --auto-fix` | Auto-corrected schemas |
-| Performance | `/agent:workflow performance_analysis` | Benchmark report |
+| Schema issues | `python framework/validators/validator.py --target schemas` | Validation report |
+| Linting issues | `ruff check framework/ --fix` | Auto-fixed issues |
 
 ### Debug Mode
-```bash
-# Enable verbose debugging
-export CLAUDE_DEBUG=1
-/agent:send test_request agent1 {...} --debug
+```python
+# Enable verbose debugging for agent communication using enhanced protocol
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
 
-# Message validation debugging  
-/agent:validate messages --validation_level strict --debug
+protocol = EnhancedAgentProtocol()
+message = protocol.create_test_request(
+    test_type="unit",
+    test_file="tests/test_example.py", 
+    parameters={"environment": "development", "verbose": True},
+    sender="agent1"
+)
+```
+
+```bash
+# Validate with detailed output
+python framework/validators/validator.py --target messages --verbose
 ```
 
 ## Integration Examples
 
 ### Complete Development Workflow
 ```bash
-# 1. Start development
+# 1. Start development (from your project root)
 git checkout -b feature/new-message-type
 
 # 2. Create tests first (TDD)
-pytest tests/test_new_feature.py --create-missing
+pytest agent-doc-system/tests/test_new_feature.py --create-missing
 
 # 3. Implement feature with validation
-/agent:send workflow_request agent1 {
-  "workflow_name": "implement_feature", 
-  "steps": [
-    {"name": "create_model", "action": "generate"},
-    {"name": "add_validation", "action": "validate"},
-    {"name": "test_integration", "action": "test"}
-  ]
-}
+# Edit agent-doc-system/framework/agent_communication/core/models.py
+# Add new message type with Pydantic validation
 
-# 4. Validate and test
-/agent:workflow validate_and_test --coverage 95
-/agent:audit agent_communication --level comprehensive
+# 4. Run validation and tests
+./agent-doc-system/framework/scripts/validate.sh
+pytest agent-doc-system/tests/ --cov=agent-doc-system/framework --cov-fail-under=90
+mypy agent-doc-system/framework/ --strict
 
 # 5. Create pull request
 git add . && git commit -m "feat: add new message type with validation"
 git push origin feature/new-message-type
-gh pr create --title "feat: Enhanced message types" --body "Implements new workflow capabilities"
 ```
 
 ### Message Processing Pipeline
+```python
+# Send workflow request using enhanced protocol (nested usage)
+import sys
+sys.path.append('agent-doc-system')
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+
+protocol = EnhancedAgentProtocol(agent_id="workflow_coordinator")
+
+# Send workflow request
+workflow_msg = protocol.create_workflow_request(
+    workflow_name="process_documentation",
+    steps=[
+        {"name": "validate_syntax", "action": "validate"},
+        {"name": "check_links", "action": "verify"},
+        {"name": "update_metadata", "action": "update"}
+    ]
+)
+
+# Monitor messages
+messages = protocol.read_messages()
+```
+
+## Environment Configuration
+
+### Development Environment
 ```bash
-# Send message with full validation
-/agent:send workflow_request coordinator {
-  "workflow_name": "process_documentation",
-  "steps": [
-    {"name": "validate_syntax", "action": "validate"},
-    {"name": "check_links", "action": "verify"},
-    {"name": "update_metadata", "action": "update"},
-    {"name": "generate_report", "action": "report"}
-  ],
-  "failure_strategy": "continue"
-}
+# Install dependencies
+poetry install
 
-# Monitor progress
-/agent:read --status pending --type workflow_request --limit 10
+# Set up pre-commit hooks
+pre-commit install
+
+# Run initial validation
+./framework/scripts/validate.sh
 ```
 
-## Chat Session Management (NEW)
-
-### Automatic Chat Export
+### Production Environment
 ```bash
-# Run Claude with automatic chat logging
-claude-with-logging [args]
+# Install production dependencies only
+poetry install --no-dev
 
-# Manual export current session
-/chat:export --format markdown --include-metadata --sanitize
-
-# Browse chat history
-/chat:history list --limit 10 --format table
-/chat:history search "agent communication" --date-range 7d
+# Run comprehensive validation
+python framework/validators/validator.py --target all --validation_level strict
 ```
 
-### Privacy-Aware Logging
-- **Automatic sanitization** removes passwords, tokens, API keys
-- **PII redaction** for email addresses and phone numbers  
-- **Configurable patterns** for custom sensitive data
-- **Encryption support** for sensitive sessions
-
-### Integration Features
-- **Git hooks** automatically export chats on commits
-- **Agent workflows** trigger exports on session events
-- **Retention policies** with automatic cleanup and archiving
-- **Multiple formats** (Markdown, JSON, HTML)
-
-### Storage Organization
-```
-.claude/chat_history/
-├── sessions/           # Individual chat sessions
-├── archives/          # Archived old sessions  
-├── exports/           # Batch exports
-└── backups/           # Encrypted backups
-```
-
-This configuration maximizes productivity through:
+This configuration optimizes Claude Code for Python development with:
 1. **Type-safe development** with Pydantic models
-2. **Automated quality assurance** via comprehensive CI/CD
-3. **Enhanced debugging** with Rich console integration  
-4. **Streamlined workflows** through custom slash commands
-5. **Security compliance** with automated scanning and validation
-6. **Chat session preservation** with automatic export and privacy protection (NEW)
+2. **Comprehensive testing** with pytest and coverage requirements
+3. **Code quality** through automated linting and formatting
+4. **Security** with automated scanning and validation
+5. **Clear workflows** for development and deployment
 
-The framework is now optimized for Claude Code development with 50% faster validation, comprehensive testing, enterprise-grade security features, and complete chat session management.
+The framework provides a solid foundation for agent communication systems with full validation, testing, and documentation capabilities.

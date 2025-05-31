@@ -24,36 +24,39 @@ A simple and efficient system for inter-agent communication within the agent-doc
 ```
 agent_communication/
 ├── core/
-│   └── protocol.py        # Main communication protocol
-├── history/              # Message history storage
+│   ├── enhanced_protocol.py  # Enhanced protocol with Pydantic models
+│   └── models.py             # Pydantic message models
+├── history/                  # Message history storage
 ├── config/
-│   └── settings.py       # Configuration settings
+│   └── settings.py          # Configuration settings
 └── README.md
 ```
 
 ## Usage
 
 ```python
-from agent_communication.core.protocol import AgentProtocol
+from agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
 
-# Initialize the protocol for an agent
-agent = AgentProtocol(agent_id="my_agent", root_dir="/path/to/root")
+# Initialize the enhanced protocol for an agent
+protocol = EnhancedAgentProtocol(agent_id="my_agent", root_dir="/path/to/root")
 
-# Send a message
-message_id = agent.send_message(
-    target_agent="other_agent",
-    message_type="request",
-    content={"action": "process_document", "doc_id": "123"}
+# Send a message using Pydantic models
+message_id = protocol.send_message(
+    message_type="workflow_request",
+    content={
+        "workflow_name": "process_document", 
+        "steps": [{"action": "validate", "doc_id": "123"}]
+    }
 )
 
-# Get pending messages
-pending = agent.get_pending_messages()
+# Get messages with filtering
+messages = protocol.get_messages(status="pending", limit=10)
 
 # Update message status
-agent.update_message_status(message_id, "completed", {"result": "success"})
+protocol.update_message_status(message_id, "processed")
 
-# Cleanup old messages
-agent.cleanup_old_messages(days=7)
+# Cleanup old messages with archiving
+protocol.cleanup_old_messages(days=7, archive=True)
 ```
 
 ## Message Format

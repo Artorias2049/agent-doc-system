@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
+"""
+Configuration settings for the agent communication system.
+"""
 
-from pathlib import Path
 import os
+from pathlib import Path
 
 # Base directory for agent communication
 BASE_DIR = Path(__file__).parent.parent.parent
@@ -11,9 +14,12 @@ MESSAGE_RETENTION_DAYS = 7
 MAX_MESSAGE_SIZE = 1024 * 1024  # 1MB
 SUPPORTED_MESSAGE_TYPES = [
     "test_request",
-    "test_result",
+    "test_result", 
     "status_update",
-    "context_update"
+    "context_update",
+    "workflow_request",
+    "validation_request",
+    "documentation_update"
 ]
 
 # Message status options

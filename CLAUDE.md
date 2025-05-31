@@ -5,22 +5,37 @@ This CLAUDE.md file configures Claude Code for optimal productivity with the age
 ## Project Context and Architecture
 
 ### Core Project Structure
+
+**Nested Usage Pattern (Recommended for new projects):**
 ```
-agent-doc-system/
-├── framework/                  # Core framework components
-│   ├── agent_communication/   # Enhanced agent protocol
-│   │   ├── core/             # Pydantic models and enhanced protocol
-│   │   ├── config/           # Agent settings
-│   │   └── history/          # Message storage
-│   ├── docs/                 # Framework documentation
-│   │   ├── components/       # Component documentation
-│   │   └── templates/        # Documentation templates
-│   ├── schemas/              # YAML schema definitions
-│   ├── scripts/              # Validation and utility scripts
-│   └── validators/           # Python validation framework
-├── tests/                    # Comprehensive pytest suite
-├── project_docs/             # Project-specific documentation
-└── pyproject.toml           # Poetry configuration
+your_project/                   # Your project root (e.g., my_app/, web_service/, etc.)
+├── src/                       # Your project code
+├── requirements.txt           # Your dependencies
+├── project_docs/              # Your project documentation
+└── agent-doc-system/          # Cloned framework (git clone)
+    ├── framework/             # Core framework components
+    │   ├── agent_communication/ # Enhanced agent protocol
+    │   │   ├── core/          # Pydantic models and enhanced protocol
+    │   │   ├── config/        # Agent settings
+    │   │   └── history/       # Message storage
+    │   ├── docs/              # Framework documentation
+    │   │   ├── components/    # Component documentation
+    │   │   └── templates/     # Documentation templates
+    │   ├── schemas/           # YAML schema definitions
+    │   ├── scripts/           # Validation and utility scripts
+    │   └── validators/        # Python validation framework
+    ├── tests/                 # Comprehensive pytest suite
+    ├── project_docs/          # Framework-specific documentation
+    └── pyproject.toml         # Poetry configuration
+```
+
+**Direct Usage Pattern (Legacy):**
+```
+agent-doc-system/              # Framework as project root
+├── framework/                 # Core framework components
+├── tests/                     # Comprehensive pytest suite
+├── project_docs/              # Project-specific documentation
+└── pyproject.toml            # Poetry configuration
 ```
 
 ### Technology Stack
@@ -45,16 +60,56 @@ The framework supports 7 message types with full Pydantic validation:
 7. **documentation_update** - Automated doc generation
 
 ### Usage Examples
+
+**Nested Usage Pattern (from your project root):**
 ```python
-# Example using the agent communication script
-python framework/scripts/agent_communication.py --action send --type "test_request" --sender "agent1" --content '{
-  "test_type": "unit",
-  "test_file": "tests/test_models.py",
-  "parameters": {
-    "environment": "development",
-    "verbose": true
-  }
-}'
+# Example using the enhanced protocol with Pydantic models
+import sys
+sys.path.append('agent-doc-system')
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+
+# Auto-detects nested structure: your_project/agent-doc-system/framework/
+protocol = EnhancedAgentProtocol(agent_id="my_project_agent")
+
+# Send test request using type-safe Pydantic models
+message_id = protocol.create_test_request(
+    test_type="unit",
+    test_file="tests/test_models.py",
+    parameters={
+        "environment": "development",
+        "verbose": True
+    }
+)
+```
+
+```bash
+# Validate your project documentation from project root
+./agent-doc-system/framework/scripts/validate.sh
+
+# Validate framework itself
+./agent-doc-system/framework/scripts/validate.sh --self_validate
+
+# Validate using Python validator
+python agent-doc-system/framework/validators/validator.py --target messages
+```
+
+**Direct Usage Pattern (Legacy):**
+```python
+# Example using the enhanced protocol with Pydantic models
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+
+protocol = EnhancedAgentProtocol()
+
+# Send test request using type-safe Pydantic models
+message = protocol.create_test_request(
+    test_type="unit",
+    test_file="tests/test_models.py",
+    parameters={
+        "environment": "development",
+        "verbose": True
+    },
+    sender="agent1"
+)
 
 # Validate messages
 python framework/validators/validator.py --target messages
@@ -115,16 +170,28 @@ python framework/validators/validator.py --target schemas
 ```
 
 ### Agent Communication Operations
-```bash
-# Send messages
-python framework/scripts/agent_communication.py --action send --type <type> --sender <sender> --content <json_content>
+```python
+# Use the enhanced protocol directly with Python
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+
+protocol = EnhancedAgentProtocol()
+
+# Send messages using Pydantic models
+message = protocol.create_test_request(
+    test_type="unit",
+    test_file="tests/test_example.py",
+    parameters={"environment": "development", "verbose": True},
+    sender="agent1"
+)
 
 # Read messages
-python framework/scripts/agent_communication.py --action read
+messages = protocol.read_messages()
 
 # Cleanup old messages
-python framework/scripts/agent_communication.py --action cleanup --days 7
+protocol.cleanup_old_messages(days=7)
+```
 
+```bash
 # Validate all components
 ./framework/scripts/validate.sh
 ```
@@ -194,10 +261,20 @@ All agent messages use Pydantic v2 for:
 | Linting issues | `ruff check framework/ --fix` | Auto-fixed issues |
 
 ### Debug Mode
-```bash
-# Enable verbose debugging for agent communication
-python framework/scripts/agent_communication.py --action send --type test_request --sender agent1 --content {...} --verbose
+```python
+# Enable verbose debugging for agent communication using enhanced protocol
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
 
+protocol = EnhancedAgentProtocol()
+message = protocol.create_test_request(
+    test_type="unit",
+    test_file="tests/test_example.py", 
+    parameters={"environment": "development", "verbose": True},
+    sender="agent1"
+)
+```
+
+```bash
 # Validate with detailed output
 python framework/validators/validator.py --target messages --verbose
 ```
@@ -206,20 +283,20 @@ python framework/validators/validator.py --target messages --verbose
 
 ### Complete Development Workflow
 ```bash
-# 1. Start development
+# 1. Start development (from your project root)
 git checkout -b feature/new-message-type
 
 # 2. Create tests first (TDD)
-pytest tests/test_new_feature.py --create-missing
+pytest agent-doc-system/tests/test_new_feature.py --create-missing
 
 # 3. Implement feature with validation
-# Edit framework/agent_communication/core/models.py
+# Edit agent-doc-system/framework/agent_communication/core/models.py
 # Add new message type with Pydantic validation
 
 # 4. Run validation and tests
-./framework/scripts/validate.sh
-pytest tests/ --cov=framework --cov-fail-under=90
-mypy framework/ --strict
+./agent-doc-system/framework/scripts/validate.sh
+pytest agent-doc-system/tests/ --cov=agent-doc-system/framework --cov-fail-under=90
+mypy agent-doc-system/framework/ --strict
 
 # 5. Create pull request
 git add . && git commit -m "feat: add new message type with validation"
@@ -227,19 +304,26 @@ git push origin feature/new-message-type
 ```
 
 ### Message Processing Pipeline
-```bash
-# Send test request
-python framework/scripts/agent_communication.py --action send --type "workflow_request" --sender "coordinator" --content '{
-  "workflow_name": "process_documentation",
-  "steps": [
-    {"name": "validate_syntax", "action": "validate"},
-    {"name": "check_links", "action": "verify"},
-    {"name": "update_metadata", "action": "update"}
-  ]
-}'
+```python
+# Send workflow request using enhanced protocol (nested usage)
+import sys
+sys.path.append('agent-doc-system')
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+
+protocol = EnhancedAgentProtocol(agent_id="workflow_coordinator")
+
+# Send workflow request
+workflow_msg = protocol.create_workflow_request(
+    workflow_name="process_documentation",
+    steps=[
+        {"name": "validate_syntax", "action": "validate"},
+        {"name": "check_links", "action": "verify"},
+        {"name": "update_metadata", "action": "update"}
+    ]
+)
 
 # Monitor messages
-python framework/scripts/agent_communication.py --action read
+messages = protocol.read_messages()
 ```
 
 ## Environment Configuration

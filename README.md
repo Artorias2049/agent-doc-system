@@ -118,9 +118,11 @@ mypy framework/agent_communication/core/ --strict
 
 ## Claude Code Integration
 
-The system includes comprehensive Claude Code optimization configured in `CLAUDE.md`:
+The system includes comprehensive Claude Code optimization configured in `CLAUDE.md` and `.claude/config/`:
 
 - Enhanced agent communication protocol with Pydantic models
+- Permission configurations for Claude Code operations
+- Agent communication settings and cleanup policies
 - Type-safe validation and development workflows
 - Automated testing and security scanning
 

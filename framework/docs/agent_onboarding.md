@@ -34,6 +34,14 @@ content:
     - title: "Changelog"
       content: "1.0.0 (2024-03-21): Initial release of THE PROTOCOL"
   changelog:
+    - version: "1.1.1"
+      date: "2025-01-31"
+      changes:
+        - "Enhanced path detection for nested usage pattern (project_root/agent-doc-system/framework/)"
+        - "Updated validation scripts to auto-detect usage pattern"
+        - "Added comprehensive documentation for nested vs direct usage patterns"
+        - "Improved framework directory detection in EnhancedAgentProtocol"
+        - "Updated CLAUDE.md with nested usage examples and best practices"
     - version: "1.1.0"
       date: "2024-12-29"
       changes:
@@ -83,7 +91,13 @@ This document serves as THE PROTOCOL - the single source of truth for understand
 - **Key Files:**
   - [Agent Communication Component](../components/agent_communication/overview.md)
   - [Agent Communication Schema](../schemas/agent_communication.yml)
-- **Core Operations:**
+- **Core Operations (Nested Usage Pattern):**
+  - From your project root (e.g., `your_project/`):
+  - Validate project: `./agent-doc-system/framework/scripts/validate.sh`
+  - Validate framework: `./agent-doc-system/framework/scripts/validate.sh --self_validate`
+  - Use enhanced protocol: Auto-detects nested structure
+  - Create messages using Pydantic models in `agent-doc-system/framework/agent_communication/core/models.py`
+- **Core Operations (Direct Usage Pattern):**
   - Use enhanced protocol: `python -m framework.agent_communication.core.enhanced_protocol`
   - Create messages using Pydantic models in `framework/agent_communication/core/models.py`
   - Validate using: `python framework/validators/validator.py`
@@ -99,15 +113,18 @@ This document serves as THE PROTOCOL - the single source of truth for understand
     - Content (JSON)
     - Status (pending/processed/failed)
   - Messages are automatically cleaned up after specified days (default: 7)
-- **File Structure:**
+- **File Structure - Nested Usage Pattern (RECOMMENDED):**
   ```
-  project_root/
-  └── agent-doc-system/
+  your_project/                       # Your project root
+  ├── src/                           # Your project code
+  ├── requirements.txt               # Your dependencies  
+  ├── project_docs/                  # Your project documentation
+  └── agent-doc-system/              # Cloned framework (git clone)
       ├── framework/
       │   ├── agent_communication/
       │   │   ├── core/
       │   │   ├── config/
-      │   │   ├── history/
+      │   │   ├── history/            # Messages stored here
       │   │   └── README.md
       │   ├── components/
       │   │   ├── feedback/
@@ -121,6 +138,13 @@ This document serves as THE PROTOCOL - the single source of truth for understand
       │   ├── schemas/
       │   └── validators/
       └── project_docs/
+  ```
+  
+- **Alternative: Direct Usage Pattern (Legacy):**
+  ```
+  project_root/                      # Framework as project root
+  ├── framework/                     # Framework directory
+  └── project_docs/                  # Project documentation
   ```
 - **Message Types:**
   - `test_request`:
@@ -193,13 +217,12 @@ This document serves as THE PROTOCOL - the single source of truth for understand
   # Using enhanced protocol with Pydantic models
   from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
   
-  protocol = EnhancedAgentProtocol()
+  protocol = EnhancedAgentProtocol(agent_id="agent1")
   
   # Create and send workflow request
-  message = protocol.create_workflow_request(
+  message_id = protocol.create_workflow_request(
       workflow_name="validate_and_test",
-      steps=[{"name": "validate", "action": "check"}],
-      sender="agent1"
+      steps=[{"name": "validate", "action": "check"}]
   )
   
   # Read messages
@@ -288,24 +311,19 @@ All agent messages must follow the JSON schema defined in `framework/schemas/age
 Example usage:
 ```python
 from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
-from framework.agent_communication.core.models import TestRequestMessage
 
 # Initialize the protocol
-protocol = EnhancedAgentProtocol()
+protocol = EnhancedAgentProtocol(agent_id="agent1")
 
-# Create a test request message using Pydantic model
-test_request = protocol.create_test_request(
+# Create a test request message using convenience method
+message_id = protocol.create_test_request(
     test_type="unit",
     test_file="tests/test_example.py",
     parameters={
         "environment": "development",
         "verbose": True
-    },
-    sender="agent1"
+    }
 )
-
-# Send the message
-protocol.send_message(test_request)
 
 # Read messages
 messages = protocol.read_messages()
@@ -320,7 +338,7 @@ Message Format:
   "id": "uuid-string",
   "timestamp": "2024-03-21T12:00:00Z",
   "sender": "agent-name",
-  "type": "test_request|test_result|status_update|context_update",
+  "type": "test_request|test_result|status_update|context_update|workflow_request|validation_request|documentation_update",
   "content": {
     // Message-specific content based on type
   },
@@ -335,7 +353,7 @@ Message File Format:
     // Array of messages following the message format above
   ],
   "last_updated": "2024-03-21T12:00:00Z",
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
 ```
 
@@ -385,10 +403,73 @@ If validation fails, check the error messages for:
 
 ## Getting Started
 
-1. Read the main documentation files in `agent-doc-system/framework/docs/`
+### Quick Start (5 minutes) 🚀
+
+**Nested Usage Pattern (Recommended for new projects):**
+```bash
+# 1. Set up your project
+mkdir my_project && cd my_project
+git clone https://github.com/your-org/agent-doc-system.git
+
+# 2. Test the framework
+./agent-doc-system/framework/scripts/validate.sh
+```
+
+```python
+# 3. Your first working example - copy and run this from my_project/
+import sys
+sys.path.append('agent-doc-system')
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+
+# 1. Initialize protocol (auto-detects nested structure)
+protocol = EnhancedAgentProtocol(agent_id="my_project_agent")
+
+# 2. Send your first message
+message_id = protocol.create_test_request(
+    test_type="unit",
+    test_file="tests/hello_world.py", 
+    parameters={"environment": "development", "verbose": True}
+)
+print(f"✅ Sent message: {message_id}")
+
+# 3. Read messages (stored in agent-doc-system/framework/agent_communication/history/)
+messages = protocol.read_messages()
+print(f"✅ Found {len(messages)} messages")
+
+# 4. Success! You're now using THE PROTOCOL
+print("🎉 THE PROTOCOL is working with nested structure")
+```
+
+**Direct Usage Pattern (Legacy):**
+```python
+# Your first working example - copy and run this!
+from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+
+# 1. Initialize protocol
+protocol = EnhancedAgentProtocol(agent_id="my_first_agent")
+
+# 2. Send your first message
+message_id = protocol.create_test_request(
+    test_type="unit",
+    test_file="tests/hello_world.py", 
+    parameters={"environment": "development", "verbose": True}
+)
+print(f"✅ Sent message: {message_id}")
+
+# 3. Read messages
+messages = protocol.read_messages()
+print(f"✅ Found {len(messages)} messages")
+
+# 4. Success! You're now using THE PROTOCOL
+print("🎉 THE PROTOCOL is working")
+```
+
+### Full Onboarding Path
+
+1. **Try the Quick Start** above (5 minutes)
 2. Review the templates in `agent-doc-system/framework/docs/templates/`
 3. Review the schemas in `agent-doc-system/framework/schemas/`
-4. Use the provided Python classes and scripts
+4. Read the comprehensive documentation below
 5. Run the validation script before submitting changes
 
 ## Quickstart Checklist

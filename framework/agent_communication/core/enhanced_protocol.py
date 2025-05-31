@@ -6,7 +6,7 @@ Enhanced agent communication protocol with Pydantic models, type safety, and Cla
 import json
 import logging
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
@@ -62,19 +62,26 @@ class EnhancedAgentProtocol:
 
     def __init__(
         self,
-        agent_id: str,
+        agent_id: Optional[str] = None,
         root_dir: Optional[str] = None,
         environment: str = "development",
     ):
-        self.agent_id = agent_id
+        self.agent_id = agent_id or "default_agent"
         self.environment = environment
         self.root_dir = Path(root_dir) if root_dir else self._detect_root_dir()
 
-        # Configuration paths
+        # Configuration paths - handle nested agent-doc-system usage
         self.config_dir = self.root_dir / ".claude" / "config"
-        self.message_dir = (
-            self.root_dir / "framework" / "agent_communication" / "history"
-        )
+        
+        # Determine framework path based on usage pattern
+        if (self.root_dir / "agent-doc-system" / "framework").exists():
+            # Nested usage: your_project/agent-doc-system/framework/
+            self.framework_dir = self.root_dir / "agent-doc-system" / "framework"
+        else:
+            # Direct usage: project_root/framework/
+            self.framework_dir = self.root_dir / "framework"
+            
+        self.message_dir = self.framework_dir / "agent_communication" / "history"
 
         # Environment-specific message file
         if environment == "development":
@@ -88,12 +95,21 @@ class EnhancedAgentProtocol:
         self._initialize_protocol()
 
     def _detect_root_dir(self) -> Path:
-        """Auto-detect project root directory."""
+        """
+        Auto-detect project root directory.
+        
+        Supports nested usage pattern where agent-doc-system is cloned into project directories:
+        your_project/                   # Project root (returned)
+        └── agent-doc-system/           # Cloned framework
+            └── framework/              # Framework directory
+        """
         current = Path.cwd()
         while current != current.parent:
-            if (current / "framework").exists() or (
-                current / ".claude"
-            ).exists():
+            # Check for nested agent-doc-system pattern first
+            if (current / "agent-doc-system" / "framework").exists():
+                return current
+            # Check for direct framework usage (backward compatibility)
+            elif (current / "framework").exists() or (current / ".claude").exists():
                 return current
             current = current.parent
         return Path.cwd()
@@ -178,7 +194,7 @@ class EnhancedAgentProtocol:
 
     def _write_message_file(self, message_file: MessageFile):
         """Write validated message file."""
-        message_file.last_updated = datetime.utcnow()
+        message_file.last_updated = datetime.now(timezone.utc)
 
         with open(self.message_file, "w") as f:
             json.dump(
@@ -307,7 +323,7 @@ class EnhancedAgentProtocol:
         ).get("default_retention_days", 7)
 
         message_file = self._read_message_file()
-        cutoff_date = datetime.utcnow() - timedelta(days=days)
+        cutoff_date = datetime.now(timezone.utc) - timedelta(days=days)
 
         old_messages = []
         current_messages = []
@@ -325,14 +341,14 @@ class EnhancedAgentProtocol:
             # Archive old messages
             archive_file = (
                 self.message_dir
-                / f"archive_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json"
+                / f"archive_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.json"
             )
             archive_data = MessageFile(
                 messages=old_messages,
                 version=message_file.version,
                 metadata={
                     "archived_from": str(self.message_file),
-                    "archive_date": datetime.utcnow(),
+                    "archive_date": datetime.now(timezone.utc),
                 },
             )
 
@@ -412,6 +428,77 @@ class EnhancedAgentProtocol:
             )
 
         console.print(table)
+
+    # Convenience methods to match THE PROTOCOL documentation
+    
+    def create_test_request(
+        self,
+        test_type: str,
+        test_file: str,
+        parameters: Dict[str, Any],
+        sender: Optional[str] = None,
+    ) -> str:
+        """Create and send a test request message."""
+        content = {
+            "test_type": test_type,
+            "test_file": test_file,
+            "parameters": parameters
+        }
+        return self.send_message(
+            message_type=MessageType.TEST_REQUEST,
+            content=content,
+            metadata={"created_by": "create_test_request"}
+        )
+
+    def create_workflow_request(
+        self,
+        workflow_name: str,
+        steps: List[Dict[str, Any]],
+        sender: Optional[str] = None,
+        parameters: Optional[Dict[str, Any]] = None,
+        parallel_execution: bool = False,
+        failure_strategy: str = "abort"
+    ) -> str:
+        """Create and send a workflow request message."""
+        content = {
+            "workflow_name": workflow_name,
+            "steps": steps,
+            "parameters": parameters or {},
+            "parallel_execution": parallel_execution,
+            "failure_strategy": failure_strategy
+        }
+        return self.send_message(
+            message_type=MessageType.WORKFLOW_REQUEST,
+            content=content,
+            metadata={"created_by": "create_workflow_request"}
+        )
+
+    def create_validation_request(
+        self,
+        validation_type: str,
+        target_files: List[str],
+        sender: Optional[str] = None,
+        validation_level: str = "enhanced",
+        auto_fix: bool = False,
+        generate_report: bool = True
+    ) -> str:
+        """Create and send a validation request message."""
+        content = {
+            "validation_type": validation_type,
+            "target_files": target_files,
+            "validation_level": validation_level,
+            "auto_fix": auto_fix,
+            "generate_report": generate_report
+        }
+        return self.send_message(
+            message_type=MessageType.VALIDATION_REQUEST,
+            content=content,
+            metadata={"created_by": "create_validation_request"}
+        )
+
+    def read_messages(self, **filters) -> List[AgentMessage]:
+        """Alias for get_messages to match THE PROTOCOL documentation."""
+        return self.get_messages(**filters)
 
 
 # CLI Commands using Click

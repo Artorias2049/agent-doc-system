@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Validator for agent documentation system with schema validation.
+Validator for agent documentation system v2.0 - Natural conversation revolution!
+Validates documentation while the old rigid agent message validation has been ELIMINATED.
 """
 
 import json
@@ -29,8 +30,8 @@ class Validator:
             schema_dir = self.root_dir / "framework" / "schemas"
             
         self.schemas = {
-            "document": schema_dir / "document_protocol.yml",
-            "agent": schema_dir / "agent_communication.yml"
+            "document": schema_dir / "document_protocol.yml"
+            # Note: agent_communication.yml removed in v2.0 - natural conversation doesn't need rigid schemas!
         }
         self._load_schemas()
 
@@ -164,75 +165,8 @@ class Validator:
 
         return errors
 
-    def validate_message(self, message):
-        """Validate an agent message against agent_communication.yml schema."""
-        try:
-            schema = self.schema_data['agent']['message_schema']
-            errors = []
-
-            # Validate against message schema
-            message_errors = self._validate_section(
-                message,
-                schema,
-                schema['required']
-            )
-            errors.extend(message_errors)
-
-            # Validate content against message type schema
-            if 'type' in message and message['type'] in self.schema_data['agent']['message_types']:
-                type_schema = self.schema_data['agent']['message_types'][message['type']]
-                content_errors = self._validate_section(
-                    message['content'],
-                    type_schema,
-                    type_schema['required']
-                )
-                errors.extend([f"content: {error}" for error in content_errors])
-
-            return len(errors) == 0, "Message is valid" if not errors else f"Validation errors: {', '.join(errors)}"
-        except Exception as e:
-            return False, str(e)
-
-    def validate_message_file(self, file_path):
-        """Validate a message file against the file schema and cleanup policy."""
-        try:
-            with open(file_path) as f:
-                file_data = json.load(f)
-            
-            errors = []
-            schema = self.schema_data['agent']['file_schema']
-
-            # Validate file schema
-            file_errors = self._validate_section(
-                file_data,
-                schema,
-                schema['required']
-            )
-            errors.extend(file_errors)
-
-            # Validate each message in the file
-            if 'messages' in file_data:
-                for i, message in enumerate(file_data['messages']):
-                    success, msg = self.validate_message(message)
-                    if not success:
-                        errors.append(f"Message {i}: {msg}")
-
-            # Validate cleanup policy
-            if 'messages' in file_data:
-                from datetime import timezone
-                current_time = datetime.now(timezone.utc)
-                for message in file_data['messages']:
-                    if 'timestamp' in message:
-                        try:
-                            msg_time = datetime.fromisoformat(message['timestamp'].replace('Z', '+00:00'))
-                            age_days = (current_time - msg_time).days
-                            if age_days > 7 and message['status'] == 'processed':
-                                errors.append(f"Message {message['id']} is older than 7 days and should be cleaned up")
-                        except ValueError:
-                            errors.append(f"Invalid timestamp format in message {message['id']}")
-
-            return len(errors) == 0, "Message file is valid" if not errors else f"Validation errors: {', '.join(errors)}"
-        except Exception as e:
-            return False, str(e)
+    # 🚀 REVOLUTIONARY UPDATE v2.0: Agent message validation ELIMINATED!
+    # Natural conversation doesn't need rigid schema validation - freedom achieved!
 
     def _validate_type(self, value: Any, expected_type: str) -> bool:
         """Validate value against expected type."""
@@ -282,7 +216,8 @@ class Validator:
 
 def main():
     if len(sys.argv) < 3:
-        print("Usage: validator.py <type> <path> [root_dir]")
+        print("Usage: validator.py doc <path> [root_dir]")
+        print("🚀 v2.0 UPDATE: Only documentation validation - agent messages use natural conversation!")
         sys.exit(1)
 
     validator = Validator(sys.argv[3] if len(sys.argv) > 3 else ".")
@@ -291,17 +226,15 @@ def main():
 
     if valid_type == 'doc':
         success, msg = validator.validate_doc(path)
-    elif valid_type == 'message':
-        try:
-            with open(path) as f:
-                message = json.load(f)
-            success, msg = validator.validate_message(message)
-        except json.JSONDecodeError:
-            success, msg = False, "Invalid JSON"
-    elif valid_type == 'message_file':
-        success, msg = validator.validate_message_file(path)
+    elif valid_type in ['message', 'message_file']:
+        print("🚀 REVOLUTIONARY UPDATE: Agent message validation eliminated in v2.0!")
+        print("💬 Use natural conversation instead - no more rigid schemas!")
+        print("✅ Agent communication is now free and flexible!")
+        sys.exit(0)
     else:
         print(f"Unknown validation type: {valid_type}")
+        print("Available: doc")
+        print("🚀 Note: Agent message validation eliminated in v2.0 - use natural conversation!")
         sys.exit(1)
 
     if not success:

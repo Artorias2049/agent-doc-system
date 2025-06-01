@@ -1,5 +1,6 @@
 #!/bin/bash
 # agent-doc-system/framework/scripts/framework_protection.sh
+# v2.0 UPDATE: Framework protection for the natural conversation revolution!
 
 # Get the directory where this script is located
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -122,7 +123,7 @@ allowed_files=(
     
     # Framework schemas
     "schemas/document_protocol.yml"
-    "schemas/agent_communication.yml"
+    # Note: agent_communication.yml removed in v2.0 - natural conversation doesn't need rigid schemas!
     
     # Framework validators
     "validators/validator.py"

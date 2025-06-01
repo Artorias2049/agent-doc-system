@@ -32,13 +32,13 @@ feedback:
       impact: "Helps users resolve common issues quickly"
   suggestions:
     - action: "Add more example commands"
-      priority: "Low"
+      priority: "low"
   status:
-    value: "Approved"
+    value: "approved"
     updated_by: "Documentation Team"
     date: "2024-03-21"
-    validation: "Passed"
-    implementation: "Complete"
+    validation: "passed"
+    implementation: "complete"
 ```
 
 ## Prerequisites

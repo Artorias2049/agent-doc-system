@@ -32,13 +32,13 @@ feedback:
       impact: "Makes it easy to understand and use the API"
   suggestions:
     - action: "Add request/response examples"
-      priority: "High"
+      priority: "high"
   status:
-    value: "Approved"
+    value: "approved"
     updated_by: "Documentation Team"
     date: "2024-03-21"
-    validation: "Passed"
-    implementation: "Complete"
+    validation: "passed"
+    implementation: "complete"
 ```
 
 ## Overview

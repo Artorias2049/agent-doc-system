@@ -65,15 +65,15 @@ content:
         - "Enhanced path detection for nested usage pattern (project_root/agent-doc-system/framework/)"
         - "Updated validation scripts to auto-detect usage pattern"
         - "Added comprehensive documentation for nested vs direct usage patterns"
-        - "Improved framework directory detection in EnhancedAgentProtocol"
+        - "Improved framework directory detection in database operations"
         - "Updated CLAUDE.md with nested usage examples and best practices"
     - version: "1.1.0"
       date: "2024-12-29"
       changes:
         - "Added Claude Code optimization framework"
-        - "Implemented Pydantic v2 models for type-safe validation"
+        - "Implemented database operations for type-safe validation"
         - "Added new message types: workflow_request, validation_request, documentation_update"
-        - "Enhanced agent communication protocol with comprehensive type safety"
+        - "Database connectivity system with comprehensive type safety"
         - "Added comprehensive pytest testing framework with 90% coverage"
         - "Implemented enhanced validation with Rich console formatting"
         - "Added Poetry dependency management and modern Python tooling"
@@ -188,8 +188,7 @@ python3 framework/scripts/self_improvement_tracker.py report
   │   │   └── self_improvement_tracker.py  # Improvement tracking
   │   └── validators/
   │       └── validator.py           # Python validation framework
-  ├── tests/                         # Test suite
-  ├── project_docs/                  # Project-specific documentation
+  ├── tests/                         # Test suite (validation tests)
   ├── CLAUDE.md                      # Claude Code configuration
   └── README.md                      # Project overview
   ```
@@ -447,7 +446,7 @@ if test_database_connection():
     print("🎉 Ready to use the database!")
 ```
 
-For complete database documentation and advanced operations, see the [Database Connection Guide](~/.claude/agent-doc-system/project_docs/database_connection_guide.md).
+For complete database documentation and advanced operations, see the external [Database Connection Guide](~/.claude/agent-doc-system/project_docs/database_connection_guide.md).
 
 ## Best Practices
 
@@ -498,7 +497,6 @@ For complete database documentation and advanced operations, see the [Database C
 - **Feedback Agent:** `framework/agent_communication/feedback_agent.py`
 - **Validators:** `framework/validators/`
 - **Tests:** `tests/`
-- **Project Documentation:** `project_docs/`
 
 ## Getting Started
 
@@ -529,6 +527,7 @@ For complete database documentation and advanced operations, see the [Database C
    ```python
    # Test database connectivity
    import sqlite3
+   import os
    
    DB_PATH = os.path.expanduser("~/.claude/mcp-global-hub/database/agent_communication.db")
    conn = sqlite3.connect(DB_PATH)
@@ -574,8 +573,8 @@ For complete database documentation and advanced operations, see the [Database C
 
 5. **Create Documentation:**
    ```bash
-   # Copy template
-   cp framework/docs/templates/projects/overview.md project_docs/my_document.md
+   # Copy template to local directory
+   cp framework/docs/templates/projects/overview.md ./my_document.md
    
    # Edit content and metadata
    # Ensure proper YAML metadata section
@@ -590,7 +589,7 @@ For complete database documentation and advanced operations, see the [Database C
    ./framework/scripts/enhanced_validate.sh --feedback
    
    # Generate specific document feedback
-   python3 framework/agent_communication/feedback_agent.py project_docs/my_document.md
+   python3 framework/agent_communication/feedback_agent.py ./my_document.md
    ```
 
 7. **Track Improvements:**
@@ -665,5 +664,5 @@ For complete database documentation and advanced operations, see the [Database C
   - Improved performance and reduced validation constraints
 
 - **1.1.1** (2025-01-31): Path detection improvements
-- **1.1.0** (2024-12-29): Pydantic validation framework
+- **1.1.0** (2024-12-29): SQLite validation framework
 - **1.0.0** (2024-03-21): Initial documentation system 

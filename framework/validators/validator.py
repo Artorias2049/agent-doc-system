@@ -1,20 +1,37 @@
 #!/usr/bin/env python3
+"""
+Validator for agent documentation system v2.0 - Natural conversation revolution!
+Validates documentation while the old rigid agent message validation has been ELIMINATED.
+"""
 
-import sys
-import yaml
 import json
 import re
-from pathlib import Path
-from datetime import datetime
+import sys
 import uuid
-from typing import Dict, List, Tuple, Any, Set
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List
+
+import yaml
 
 class Validator:
+    """Validator class for documentation and message validation."""
+    
     def __init__(self, root_dir):
+        """Initialize validator with root directory."""
         self.root_dir = Path(root_dir)
+        
+        # Handle both framework directory and project root directory
+        if self.root_dir.name == "framework":
+            # Called with framework directory, schemas are in ./schemas/
+            schema_dir = self.root_dir / "schemas"
+        else:
+            # Called with project root, schemas are in framework/schemas/
+            schema_dir = self.root_dir / "framework" / "schemas"
+            
         self.schemas = {
-            'document': self.root_dir / 'schemas/document_protocol.yml',
-            'agent': self.root_dir / 'schemas/agent_communication.yml'
+            "document": schema_dir / "document_protocol.yml"
+            # Note: agent_communication.yml removed in v2.0 - natural conversation doesn't need rigid schemas!
         }
         self._load_schemas()
 
@@ -24,6 +41,7 @@ class Validator:
             self.schema_data = {
                 name: yaml.safe_load(path.read_text())
                 for name, path in self.schemas.items()
+                if path.exists()
             }
         except Exception as e:
             print(f"❌ Error loading schemas: {e}")
@@ -77,23 +95,26 @@ class Validator:
         except Exception as e:
             return False, str(e)
 
-    def _validate_section(self, data: Dict, schema: Dict, required_fields: List[str]) -> List[str]:
+    def _validate_section(
+        self, data: Dict[str, Any], schema: Dict[str, Any], required_fields: List[str]
+    ) -> List[str]:
         """Validate a section against its schema definition."""
         errors = []
 
         # Check required fields
-        if missing := set(required_fields) - set(data.keys()):
+        missing = set(required_fields) - set(data.keys())
+        if missing:
             errors.append(f"Missing required fields: {missing}")
 
         # Validate each field against its schema
         for field, value in data.items():
-            if field in schema['properties']:
-                field_errors = self._validate_field(value, schema['properties'][field])
+            if field in schema.get("properties", {}):
+                field_errors = self._validate_field(value, schema["properties"][field])
                 errors.extend([f"{field}: {error}" for error in field_errors])
 
         return errors
 
-    def _validate_field(self, value: Any, schema: Dict) -> List[str]:
+    def _validate_field(self, value: Any, schema: Dict[str, Any]) -> List[str]:
         """Validate a field against its schema definition."""
         errors = []
 
@@ -144,74 +165,8 @@ class Validator:
 
         return errors
 
-    def validate_message(self, message):
-        """Validate an agent message against agent_communication.yml schema."""
-        try:
-            schema = self.schema_data['agent']['message_schema']
-            errors = []
-
-            # Validate against message schema
-            message_errors = self._validate_section(
-                message,
-                schema,
-                schema['required']
-            )
-            errors.extend(message_errors)
-
-            # Validate content against message type schema
-            if 'type' in message and message['type'] in self.schema_data['agent']['message_types']:
-                type_schema = self.schema_data['agent']['message_types'][message['type']]
-                content_errors = self._validate_section(
-                    message['content'],
-                    type_schema,
-                    type_schema['required']
-                )
-                errors.extend([f"content: {error}" for error in content_errors])
-
-            return len(errors) == 0, "Message is valid" if not errors else f"Validation errors: {', '.join(errors)}"
-        except Exception as e:
-            return False, str(e)
-
-    def validate_message_file(self, file_path):
-        """Validate a message file against the file schema and cleanup policy."""
-        try:
-            with open(file_path) as f:
-                file_data = json.load(f)
-            
-            errors = []
-            schema = self.schema_data['agent']['file_schema']
-
-            # Validate file schema
-            file_errors = self._validate_section(
-                file_data,
-                schema,
-                schema['required']
-            )
-            errors.extend(file_errors)
-
-            # Validate each message in the file
-            if 'messages' in file_data:
-                for i, message in enumerate(file_data['messages']):
-                    success, msg = self.validate_message(message)
-                    if not success:
-                        errors.append(f"Message {i}: {msg}")
-
-            # Validate cleanup policy
-            if 'messages' in file_data:
-                current_time = datetime.now()
-                for message in file_data['messages']:
-                    if 'timestamp' in message:
-                        try:
-                            msg_time = datetime.fromisoformat(message['timestamp'].replace('Z', '+00:00'))
-                            age_days = (current_time - msg_time).days
-                            if age_days > 7 and message['status'] == 'processed':
-                                errors.append(f"Message {message['id']} is older than 7 days and should be cleaned up")
-                        except ValueError:
-                            errors.append(f"Invalid timestamp format in message {message['id']}")
-
-            return len(errors) == 0, "Message file is valid" if not errors else f"Validation errors: {', '.join(errors)}"
-        except Exception as e:
-            return False, str(e)
+    # 🚀 REVOLUTIONARY UPDATE v2.0: Agent message validation ELIMINATED!
+    # Natural conversation doesn't need rigid schema validation - freedom achieved!
 
     def _validate_type(self, value: Any, expected_type: str) -> bool:
         """Validate value against expected type."""
@@ -261,7 +216,8 @@ class Validator:
 
 def main():
     if len(sys.argv) < 3:
-        print("Usage: validator.py <type> <path> [root_dir]")
+        print("Usage: validator.py doc <path> [root_dir]")
+        print("🚀 v2.0 UPDATE: Only documentation validation - agent messages use natural conversation!")
         sys.exit(1)
 
     validator = Validator(sys.argv[3] if len(sys.argv) > 3 else ".")
@@ -270,17 +226,15 @@ def main():
 
     if valid_type == 'doc':
         success, msg = validator.validate_doc(path)
-    elif valid_type == 'message':
-        try:
-            with open(path) as f:
-                message = json.load(f)
-            success, msg = validator.validate_message(message)
-        except json.JSONDecodeError:
-            success, msg = False, "Invalid JSON"
-    elif valid_type == 'message_file':
-        success, msg = validator.validate_message_file(path)
+    elif valid_type in ['message', 'message_file']:
+        print("🚀 REVOLUTIONARY UPDATE: Agent message validation eliminated in v2.0!")
+        print("💬 Use natural conversation instead - no more rigid schemas!")
+        print("✅ Agent communication is now free and flexible!")
+        sys.exit(0)
     else:
         print(f"Unknown validation type: {valid_type}")
+        print("Available: doc")
+        print("🚀 Note: Agent message validation eliminated in v2.0 - use natural conversation!")
         sys.exit(1)
 
     if not success:

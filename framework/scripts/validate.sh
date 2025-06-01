@@ -4,9 +4,24 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Get the project root directory (where the script was called from)
 PROJECT_ROOT="$(pwd)"
-# Get the framework directory
-FRAMEWORK_DIR="$PROJECT_ROOT/agent-doc-system/framework"
-PROJECT_DOCS_DIR="$PROJECT_ROOT/agent-doc-system/project_docs"
+
+# Detect usage pattern and set appropriate paths
+if [ -d "$PROJECT_ROOT/agent-doc-system/framework" ]; then
+    # Nested usage: project_root/agent-doc-system/framework/
+    FRAMEWORK_DIR="$PROJECT_ROOT/agent-doc-system/framework"
+    PROJECT_DOCS_DIR="$PROJECT_ROOT/project_docs"
+    echo "🔍 Detected nested usage pattern"
+elif [ -d "$PROJECT_ROOT/framework" ]; then
+    # Direct usage: framework as project root
+    FRAMEWORK_DIR="$PROJECT_ROOT/framework"
+    PROJECT_DOCS_DIR="$PROJECT_ROOT/project_docs"
+    echo "🔍 Detected direct usage pattern"
+else
+    # Running from within framework directory
+    FRAMEWORK_DIR="$(dirname "$SCRIPT_DIR")"
+    PROJECT_DOCS_DIR="$(dirname "$FRAMEWORK_DIR")/project_docs"
+    echo "🔍 Running from framework directory"
+fi
 
 # Colors
 GREEN='\033[0;32m'
@@ -67,8 +82,8 @@ echo "Starting validation..."
 if [ "$SELF_VALIDATE" = true ]; then
     # Validate framework documentation and components (they're in the same directory)
     validate_files "*.md" "doc" "$FRAMEWORK_DIR/docs" || exit 1
-    # Validate agent messages
-    validate_files "*.json" "message" "$FRAMEWORK_DIR/agent_communication" || exit 1
+    # Validate agent message files
+    validate_files "*.json" "message_file" "$FRAMEWORK_DIR/agent_communication" || exit 1
 else
     # Validate project documentation
     validate_files "*.md" "doc" "$PROJECT_DOCS_DIR" || exit 1

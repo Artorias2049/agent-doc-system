@@ -4,7 +4,7 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "1.0.0"
+  version: "1.1.0"
   status: "Active"
   owner: "Documentation Team"
   title: "Git Workflow Component"
@@ -28,6 +28,14 @@ content:
     - title: "Future Improvements"
       content: "Planned enhancements and features"
   changelog:
+    - version: "1.1.0"
+      date: "2024-12-29"
+      changes:
+        - "Enhanced workflow with Claude Code optimization integration"
+        - "Added pre-commit hooks for Pydantic model validation"
+        - "Implemented comprehensive CI/CD pipeline with pytest"
+        - "Added security scanning with OWASP compliance checks"
+        - "Enhanced commit message patterns for framework updates"
     - version: "1.0.0"
       date: "2024-03-21"
       changes:
@@ -77,6 +85,8 @@ The Git Workflow Component defines the standard practices for version control in
      - `refactor`: Code restructuring
      - `test`: Testing
      - `chore`: Maintenance
+     - `perf`: Performance improvements (NEW in v1.1.0)
+     - `security`: Security enhancements (NEW in v1.1.0)
    - Include ticket numbers
    - Write clear commit messages
 
@@ -91,18 +101,22 @@ The Git Workflow Component defines the standard practices for version control in
 
 4. **Code Review Guidelines**
    - Review for functionality
-   - Check code style
-   - Verify tests
-   - Ensure documentation
-   - Validate against requirements
+   - Check code style and type safety
+   - Verify tests (pytest with 90%+ coverage)
+   - Ensure documentation compliance
+   - Validate Pydantic models
+   - Security and OWASP compliance check
+   - Performance impact assessment
 
 5. **Deployment Process**
    1. Merge to `develop`
-   2. Run automated tests
-   3. Deploy to staging
-   4. Verify functionality
-   5. Merge to `main`
-   6. Deploy to production
+   2. Run comprehensive test suite (pytest)
+   3. Execute MyPy type checking
+   4. Run security scans (bandit, OWASP)
+   5. Deploy to staging
+   6. Verify functionality and performance
+   7. Merge to `main`
+   8. Deploy to production with monitoring
 
 ## Usage
 
@@ -151,11 +165,13 @@ The Git Workflow Component integrates with:
 ## Future Improvements
 
 Planned enhancements:
-- Automated testing
-- CI/CD pipeline
-- Branch protection
-- Deployment automation
+- Enhanced automated testing with performance benchmarks
+- Advanced CI/CD pipeline with multi-environment support
+- Advanced branch protection with security policies
+- Zero-downtime deployment automation
+- Automated dependency security scanning
 
 ## Changelog
 
+- **1.1.0** (2024-12-29): Enhanced workflow with Claude Code optimization, pre-commit hooks, comprehensive CI/CD, security scanning, and enhanced commit patterns
 - **1.0.0** (2024-03-21): Initial release as a component 

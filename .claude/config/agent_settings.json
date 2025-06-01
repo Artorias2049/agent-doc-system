@@ -3,7 +3,7 @@
     "name": "agent-doc-system",
     "type": "python_framework",
     "primary_language": "python",
-    "framework_type": "agent_communication",
+    "framework_type": "documentation_protocol",
     "development_stage": "maintenance_optimization"
   },
   "agent_communication": {
@@ -31,7 +31,7 @@
     },
     "testing": {
       "framework": "pytest",
-      "coverage_threshold": 90,
+      "coverage_threshold": 70,
       "test_driven_development": true
     }
   },

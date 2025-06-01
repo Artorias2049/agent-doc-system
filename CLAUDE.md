@@ -1,6 +1,8 @@
-# Claude Code Configuration for Agent Documentation System
+# Claude Code Configuration for Agent Documentation System v2.0
 
-This CLAUDE.md file configures Claude Code for optimal productivity with the agent-doc-system framework, focusing on Python development best practices and the agent communication protocol.
+🚀 **REVOLUTIONARY UPDATE v2.0:** This CLAUDE.md file configures Claude Code for the revolutionary agent-doc-system framework with natural conversation and MCP+Database backend - NO MORE RIGID SCHEMAS!
+
+**Welcome to the future of agent communication!** Natural conversation, flexible storage, real-time capabilities, and complete freedom from UUID tyranny.
 
 ## Project Context and Architecture
 
@@ -38,18 +40,45 @@ agent-doc-system/              # Framework as project root
 └── pyproject.toml            # Poetry configuration
 ```
 
-### Technology Stack
-- **Python 3.9+** with Poetry dependency management
-- **Pydantic v2** for type-safe message validation
-- **Rich & Click** for enhanced CLI experience
-- **Pytest** with 90%+ coverage requirement
-- **MyPy** strict type checking
-- **Black & Ruff** for code formatting and linting
+### Revolutionary Technology Stack v2.0
+- **🗄️ PostgreSQL Database** with flexible JSONB storage (replaces file-based hell)
+- **🔗 MCP Server Integration** - Filesystem, Git, Memory, Database, Sandbox
+- **💬 Natural Conversation API** - `agent.say()` instead of rigid validation
+- **⚡ Real-time Subscriptions** - Event-driven communication
+- **🎯 Python 3.9+** with Poetry dependency management  
+- **🏆 NO MORE UUID TYRANNY** - Human-readable communication
+- **📈 Performance Optimized** - Database queries vs JSON file parsing
+- **🚀 1-line Communication** vs 12-line rigid system (REVOLUTIONARY!)
 
-## Enhanced Agent Communication Protocol
+### Legacy Technology (DEPRECATED in v2.0)
+- ~~Pydantic v2 rigid validation~~ → Natural conversation
+- ~~Rich & Click CLI~~ → Simple natural interface  
+- ~~UUID constraints~~ → Human-readable names
+- ~~JSON file storage~~ → Database backend
 
-### Message Types
-The framework supports 7 message types with full Pydantic validation:
+## 🚀 Revolutionary Agent Communication Protocol v2.0
+
+**THE REVOLUTION IS COMPLETE!** No more rigid schemas, UUID tyranny, or validation hell. Welcome to natural agent conversation!
+
+### Natural Communication Methods
+The new framework supports UNLIMITED flexible communication with MCP+Database backend:
+
+**🎯 Primary Methods (RECOMMENDED):**
+- `agent.say(message)` - Natural conversation  
+- `agent.listen()` - Get responses from other agents
+- `agent.share(data)` - Share complex data structures
+- `agent.ask(question)` - Ask questions and get answers
+- `agent.collaborate(task)` - Start collaborative workflows
+
+**🗄️ Database-Powered Features:**
+- Conversation threading and context preservation
+- Real-time subscriptions and notifications  
+- Flexible JSONB storage for any message structure
+- Performance-optimized database queries
+- No schema constraints or validation requirements
+
+### Legacy Message Types (DEPRECATED)
+~~The old framework supported 7 rigid message types with Pydantic validation hell~~:
 
 1. **test_request** - Unit/integration/e2e/performance testing
 2. **test_result** - Test execution results with artifacts
@@ -59,28 +88,53 @@ The framework supports 7 message types with full Pydantic validation:
 6. **validation_request** - Schema/doc validation requests
 7. **documentation_update** - Automated doc generation
 
-### Usage Examples
+### 🚀 Revolutionary Usage Examples v2.0
 
-**Nested Usage Pattern (from your project root):**
+**🎯 Natural Communication (RECOMMENDED):**
 ```python
-# Example using the enhanced protocol with Pydantic models
-import sys
-sys.path.append('agent-doc-system')
-from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+# Welcome to the future of agent communication!
+from agent_doc_system.natural import Agent
 
-# Auto-detects nested structure: your_project/agent-doc-system/framework/
-protocol = EnhancedAgentProtocol(agent_id="my_project_agent")
+# Initialize natural agent with MCP+Database backend
+agent = Agent("my_project_agent")
 
-# Send test request using type-safe Pydantic models
-message_id = protocol.create_test_request(
-    test_type="unit",
-    test_file="tests/test_models.py",
-    parameters={
-        "environment": "development",
-        "verbose": True
-    }
-)
+# Natural conversation - NO MORE RIGID SCHEMAS!
+agent.say("Starting unit tests for the new feature!")
+
+# Share complex data naturally
+agent.share({
+    "test_results": {
+        "passed": 25,
+        "failed": 0,
+        "coverage": "98%"
+    },
+    "performance": "excellent",
+    "ready_for_deployment": True
+})
+
+# Ask questions and collaborate
+response = agent.ask("Are all integration tests passing?")
+agent.collaborate("code_review", {"branch": "feature/natural-communication"})
+
+# Listen for responses from other agents
+updates = agent.listen()
+print(f"🎉 Got {len(updates)} natural responses!")
 ```
+
+**🗄️ Database Operations:**
+```bash
+# Start the MCP+Database backend
+./agent-doc-system/framework/scripts/start_mcp_bridge.sh
+
+# Monitor natural conversations in real-time
+./agent-doc-system/framework/scripts/monitor_conversations.sh
+
+# Query conversation history
+./agent-doc-system/framework/scripts/query_conversations.sh --agent my_project_agent
+```
+
+### Legacy Usage (DEPRECATED - DO NOT USE)
+~~Old rigid Pydantic validation system - replaced by natural conversation~~
 
 ```bash
 # Validate your project documentation from project root

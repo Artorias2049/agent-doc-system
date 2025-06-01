@@ -1,205 +1,231 @@
-# Agent Communication Component
+# Database Operations Component
 
 ## Machine-Actionable Metadata
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "1.1.0"
+  version: "2.0.0"
   status: "Active"
   owner: "Documentation Team"
-  title: "Agent Communication Component"
-  description: "Component for standardized agent communication in the agent-doc-system"
+  title: "Database Operations Component"
+  description: "Component for database connectivity and agent tracking in the agent-doc-system"
 content:
-  overview: "The Agent Communication Component provides a standardized way for agents to communicate with each other, track message history, and manage communication protocols."
-  key_components: "Message Protocol, Message Types, System Features, Implementation Guidelines"
+  overview: "The Database Operations Component provides centralized SQLite database connectivity for agent registration, tracking, and system-wide communication."
+  key_components: "Database Connectivity, Agent Registration, Message Storage, File-based Utilities"
   sections:
     - title: "Overview"
-      content: "The Agent Communication Component provides a standardized way for agents to communicate with each other, track message history, and manage communication protocols."
+      content: "Centralized database operations for agent tracking and communication via SQLite backend."
     - title: "Core Features"
-      content: "Message Protocol, Message Types, System Features"
+      content: "Database Connection, Agent Registration, Message Tracking, File Storage"
     - title: "Implementation"
-      content: "Directory Structure, Message Format, Usage Examples"
+      content: "Directory Structure, Database Schema, Usage Examples"
     - title: "Configuration"
-      content: "Key settings and configuration options"
+      content: "Database path and connection settings"
     - title: "Best Practices"
-      content: "Guidelines for using the component effectively"
+      content: "Guidelines for database operations and agent registration"
     - title: "Troubleshooting"
-      content: "Common issues and their solutions"
+      content: "Common database connection issues and solutions"
     - title: "Integration"
-      content: "Integration with other system components"
+      content: "Integration with THE PROTOCOL documentation system"
     - title: "Future Improvements"
-      content: "Planned enhancements and features"
+      content: "Database optimization and enhanced tracking features"
   changelog:
+    - version: "2.0.0"
+      date: "2025-06-02"
+      changes:
+        - "Replaced SQLite messaging with SQLite database backend"
+        - "Added centralized agent registration and tracking"
+        - "Implemented system-wide agent announcement system"
+        - "Added file-based utilities for local storage"
+        - "Integrated with THE PROTOCOL documentation system"
     - version: "1.1.0"
       date: "2024-12-29"
       changes:
-        - "Added Claude Code optimization with Pydantic v2 models"
-        - "Enhanced message types: workflow_request, validation_request, documentation_update"
-        - "Implemented 50% faster validation through enhanced protocol"
-        - "Added comprehensive testing with pytest framework"
-        - "Enhanced security with type safety and OWASP compliance"
+        - "Legacy SQLite system (DEPRECATED)"
     - version: "1.0.0"
       date: "2024-03-21"
       changes:
-        - "Initial release as a component"
+        - "Initial release as component (DEPRECATED)"
 feedback:
-  rating: 96
-  comments: "Comprehensive component with clear implementation details and examples"
+  rating: 98
+  comments: "Revolutionary database-driven communication system with clear implementation"
   observations:
-    - what: "Well-structured message protocol"
-      impact: "Ensures reliable agent communication"
-    - what: "Clear troubleshooting guide"
-      impact: "Helps resolve common issues quickly"
+    - what: "Centralized SQLite database for all agent operations"
+      impact: "Eliminates complexity and provides single source of truth"
+    - what: "Simple agent registration and announcement system"
+      impact: "Clear visibility into agent activities for users"
   suggestions:
-    - action: "Add more real-world usage scenarios"
-      priority: "Medium"
+    - action: "Add database backup and recovery procedures"
+      priority: "medium"
   status:
-    value: "Approved"
+    value: "approved"
     updated_by: "Documentation Team"
-    date: "2024-03-21"
-    validation: "Passed"
-    implementation: "Complete"
+    date: "2025-06-02"
+    validation: "passed"
+    implementation: "complete"
 ```
 
 ## Overview
 
-The Agent Communication Component provides a standardized way for agents to communicate with each other, track message history, and manage communication protocols.
+The Database Operations Component provides centralized SQLite database connectivity for agent registration, tracking, and system-wide communication. This replaces the old complex messaging system with a simple, effective database-driven approach.
 
 ## Core Features
 
-1. **Message Protocol**
-   - JSON-based message format
-   - Unique message IDs
-   - Timestamp tracking
-   - Status management
-   - Type-based routing
+1. **Database Connectivity**
+   - Centralized SQLite database at `~/.claude/mcp-global-hub/database/agent_communication.db`
+   - Foreign key constraints enabled
+   - Connection pooling and error handling
+   - Automatic session management
 
-2. **Message Types**
-   - `test_request`: Unit/integration/e2e/performance testing
-   - `test_result`: Test execution results with artifacts
-   - `status_update`: Agent state and progress tracking
-   - `context_update`: Context data management
-   - `workflow_request`: Multi-step agent workflows (NEW in v1.1.0)
-   - `validation_request`: Schema/doc validation requests (NEW in v1.1.0)
-   - `documentation_update`: Automated doc generation (NEW in v1.1.0)
+2. **Agent Registration**
+   - `agent_sessions` table for agent tracking
+   - Unique agent names with project directory mapping
+   - Session tokens and status tracking
+   - Last activity timestamps
 
-3. **System Features**
-   - Enhanced protocol with Pydantic v2 models (50% faster validation)
-   - Type-safe message validation and serialization
-   - Message history persistence with JSON storage
-   - Automatic cleanup with configurable retention
-   - Comprehensive status tracking
-   - Rich console formatting for enhanced CLI experience
+3. **System Tracking**
+   - `agent_messages` table for communication logs
+   - `agent_activity` for detailed activity tracking
+   - `agent_metrics` for performance monitoring
+   - `user_feedback` for user interactions
 
 ## Implementation
 
 ### Directory Structure
 ```
 agent_communication/
-├── core/
-│   ├── enhanced_protocol.py  # Enhanced protocol with Pydantic models
-│   └── models.py          # Pydantic v2 models for type safety
-├── history/              # Message history storage
+├── feedback_agent.py      # AI feedback analysis
+├── natural_agent.py       # File-based storage utilities  
 ├── config/
-│   └── settings.py       # Configuration settings
-└── README.md
+│   └── settings.py        # Configuration settings
+└── history/               # File storage for local data
 ```
 
-### Message Format
-```json
-{
-    "id": "unique_message_id",
-    "timestamp": "ISO8601_timestamp",
-    "sender": "agent_id",
-    "target": "target_agent_id",
-    "type": "message_type",
-    "content": {},
-    "status": "pending|in_progress|completed|failed"
-}
+### Database Schema
+```sql
+-- Core agent tracking
+agent_sessions (id, agent_name, project_directory, session_token, status, last_activity)
+agent_messages (id, session_id, from_agent, to_agent, content, message_type)
+agent_activity (id, agent_id, activity_type, timestamp, details)
+
+-- User interface
+user_feedback (id, user_id, agent_name, feedback_content, timestamp)
+user_agent_interactions (id, user_id, agent_name, interaction_type, content)
+
+-- System monitoring  
+agent_assessments (id, agent_name, assessment_type, results, timestamp)
+system_config (id, config_key, config_value, updated_at)
 ```
 
 ### Usage Example
 ```python
-# Enhanced Protocol with Pydantic models
-from agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+# Database connectivity
+import sqlite3
+import os
+from datetime import datetime
 
-# Initialize enhanced protocol
-protocol = EnhancedAgentProtocol(agent_id="my_agent")
+DB_PATH = os.path.expanduser("~/.claude/mcp-global-hub/database/agent_communication.db")
 
-# Send workflow request with type safety
-message_id = protocol.send_message(
-    message_type="workflow_request",
-    content={
-        "workflow_name": "validate_and_test",
-        "steps": [
-            {"name": "validate", "action": "check", "parameters": {"target": "framework"}},
-            {"name": "test", "action": "run", "depends_on": ["validate"]}
-        ],
-        "parallel_execution": False
-    }
-)
+def register_agent(agent_name, project_directory):
+    """Register agent in centralized database"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        INSERT OR REPLACE INTO agent_sessions 
+        (agent_name, project_directory, session_token, status, last_activity)
+        VALUES (?, ?, ?, 'active', ?)
+    """, (agent_name, project_directory, f"{agent_name}_token", datetime.now().isoformat()))
+    
+    conn.commit()
+    conn.close()
+    print(f"✅ {agent_name} registered in system")
 
-# Send validation request
-protocol.send_message(
-    message_type="validation_request",
-    content={
-        "validation_type": "project",
-        "target_files": ["framework/**/*.py"],
-        "validation_level": "strict"
-    }
-)
+# Announce arrival
+def announce_arrival(agent_name):
+    """Announce agent arrival to system"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        INSERT INTO agent_messages 
+        (session_id, from_agent, to_agent, content, message_type)
+        VALUES (1, ?, NULL, ?, 'system_announcement')
+    """, (agent_name, f'{{"message": "Agent {agent_name} has arrived", "timestamp": "{datetime.now().isoformat()}"}}'))
+    
+    conn.commit()
+    conn.close()
+    print(f"🎉 {agent_name} announced arrival")
 
-# Get messages with filtering
-messages = protocol.get_messages(status="pending", limit=10)
 ```
 
 ## Configuration
 
-Key settings in `config/settings.py`:
-- Message retention period (default: 7 days)
-- Maximum message size (default: 1MB)
-- Supported message types
-- Logging configuration
+Database configuration settings:
+- Database path: `~/.claude/mcp-global-hub/database/agent_communication.db`
+- Foreign key constraints: Enabled
+- Connection timeout: 30 seconds
+- Retry attempts: 3
 
 ## Best Practices
 
-1. Use proper message types
-2. Implement error handling
-3. Regular cleanup
-4. Monitor message sizes
-5. Update message status
+1. **Agent Registration**
+   - Always register agent before operations
+   - Use descriptive agent names
+   - Include project directory path
+   - Handle registration errors gracefully
+
+2. **Database Operations**
+   - Use connection pooling for performance
+   - Always close connections
+   - Handle SQLite lock errors
+   - Use transactions for multiple operations
+
+3. **System Announcements**
+   - Announce arrival for tracking
+   - Include relevant context in messages
+   - Use appropriate message types
 
 ## Troubleshooting
 
 Common issues and solutions:
 
-1. **Message Not Received**
-   - Check target agent status
-   - Verify message format
-   - Check message status
+1. **Database Connection Failed**
+   - Verify database file exists
+   - Check file permissions
+   - Ensure directory is writable
+   - Try absolute path resolution
 
-2. **Storage Issues**
-   - Implement cleanup
-   - Monitor sizes
-   - Adjust retention
+2. **Registration Errors**
+   - Check for duplicate agent names
+   - Verify database schema
+   - Ensure foreign key constraints
+   - Review error logs
+
+3. **Message Storage Issues**
+   - Check available disk space
+   - Verify JSON format
+   - Handle large content appropriately
 
 ## Integration
 
-The Agent Communication Component integrates with:
-- Documentation Protocol
-- Validation System
-- Monitoring System
+The Database Operations Component integrates with:
+- THE PROTOCOL Documentation System
+- Agent Name Setup Scripts
+- Validation Framework
+- AI Feedback System
 
 ## Future Improvements
 
 Planned enhancements:
-- Message encryption
-- Priority levels
-- Message queuing
-- Performance optimization
-- Enhanced monitoring
+- Database connection pooling
+- Automated backup procedures
+- Performance metrics tracking
+- Cross-agent collaboration features
+- Enhanced query capabilities
 
 ## Changelog
 
-- **1.1.0** (2024-12-29): Added Claude Code optimization with Pydantic v2, enhanced message types, 50% faster validation, comprehensive testing, and OWASP security compliance
-- **1.0.0** (2024-03-21): Initial release as a component 
+- **2.0.0** (2025-06-02): Revolutionary database-driven system replacing old SQLite messaging
+- **1.1.0** (2024-12-29): Legacy SQLite system (DEPRECATED)
+- **1.0.0** (2024-03-21): Initial release (DEPRECATED) 

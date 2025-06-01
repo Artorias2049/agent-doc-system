@@ -1,10 +1,10 @@
 schema: "https://schema.org/TechnicalDocument"
 id: "doc-protocol-schema-001"
-version: "1.0.0"
+version: "2.0.0"
 
 status: "Active"
 priority: "P0"
-owner: "Documentation Team"
+owner: "Documentation Team & AI Feedback System"
 
 document_schema:
   type: object
@@ -116,6 +116,12 @@ document_schema:
                 type: string
               impact:
                 type: string
+              priority:
+                type: string
+                enum: [critical, high, medium, low]
+              category:
+                type: string
+                enum: [quality, performance, usability, maintainability, security, accessibility]
         suggestions:
           type: array
           items:
@@ -127,6 +133,15 @@ document_schema:
                 type: string
               priority:
                 type: string
+                enum: [critical, high, medium, low]
+              effort:
+                type: string
+                enum: [minimal, small, medium, large, extensive]
+              impact:
+                type: string
+                enum: [critical, high, medium, low]
+              assignee:
+                type: string
         status:
           type: object
           required:
@@ -136,6 +151,7 @@ document_schema:
           properties:
             value:
               type: string
+              enum: [draft, in_review, approved, needs_improvement, deprecated]
             updated_by:
               type: string
             date:
@@ -143,5 +159,152 @@ document_schema:
               format: date
             validation:
               type: string
+              enum: [passed, failed, pending, not_applicable]
             implementation:
-              type: string 
+              type: string
+              enum: [complete, in_progress, planned, not_started]
+        # Enhanced feedback fields (optional for backward compatibility)
+        current_state:
+          type: object
+          properties:
+            quality_score:
+              type: number
+              minimum: 0
+              maximum: 100
+            completeness:
+              type: number
+              minimum: 0
+              maximum: 100
+            accuracy:
+              type: number
+              minimum: 0
+              maximum: 100
+            usability:
+              type: number
+              minimum: 0
+              maximum: 100
+            last_updated:
+              type: string
+              format: date-time
+            assessed_by:
+              type: string
+        planned_state:
+          type: object
+          properties:
+            target_quality_score:
+              type: number
+              minimum: 0
+              maximum: 100
+            target_date:
+              type: string
+              format: date
+            planned_improvements:
+              type: array
+              items:
+                type: object
+                properties:
+                  improvement:
+                    type: string
+                  expected_impact:
+                    type: number
+                    minimum: 0
+                    maximum: 100
+                  effort_estimate:
+                    type: string
+                    enum: [minimal, small, medium, large, extensive]
+                  assigned_to:
+                    type: string
+        importance:
+          type: object
+          properties:
+            business_value:
+              type: string
+              enum: [critical, high, medium, low]
+            technical_priority:
+              type: string
+              enum: [critical, high, medium, low]
+            user_impact:
+              type: string
+              enum: [critical, high, medium, low]
+            strategic_alignment:
+              type: string
+              enum: [high, medium, low]
+            dependency_level:
+              type: string
+              enum: [blocker, high, medium, low, none]
+        agent_assessment:
+          type: object
+          properties:
+            honest_thoughts:
+              type: object
+              properties:
+                overall_impression:
+                  type: string
+                strengths:
+                  type: array
+                  items:
+                    type: string
+                weaknesses:
+                  type: array
+                  items:
+                    type: string
+                confidence_level:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+                assessment_timestamp:
+                  type: string
+                  format: date-time
+            automated_analysis:
+              type: object
+              properties:
+                readability_score:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+                technical_accuracy:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+                completeness_gaps:
+                  type: array
+                  items:
+                    type: string
+                consistency_issues:
+                  type: array
+                  items:
+                    type: string
+            recommendations:
+              type: object
+              properties:
+                immediate_actions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      action:
+                        type: string
+                      reason:
+                        type: string
+                      effort:
+                        type: string
+                        enum: [minimal, small, medium, large]
+                      expected_improvement:
+                        type: number
+                        minimum: 0
+                        maximum: 100
+                long_term_improvements:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      improvement:
+                        type: string
+                      justification:
+                        type: string
+                      estimated_effort:
+                        type: string
+                        enum: [small, medium, large, extensive]
+                      strategic_value:
+                        type: string
+                        enum: [critical, high, medium, low] 

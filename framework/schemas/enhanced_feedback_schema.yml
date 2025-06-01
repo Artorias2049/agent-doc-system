@@ -1,0 +1,454 @@
+schema: "https://schema.org/TechnicalDocument"
+id: "enhanced-feedback-schema-001"
+version: "2.0.0"
+status: "Draft"
+priority: "P0"
+owner: "DocSystemAgent & Feedback Research Team"
+title: "Enhanced Feedback Schema for AI Agent Integration"
+description: "Comprehensive feedback system with AI agent integration, self-improvement loops, and dynamic assessment capabilities"
+
+# Enhanced Feedback Schema - Building on existing foundation
+enhanced_feedback_schema:
+  type: object
+  required:
+    # Maintain backward compatibility with existing required fields
+    - rating
+    - comments
+    - observations
+    - suggestions
+    - status
+    # New required fields for v2.0
+    - current_state
+    - planned_state
+    - importance
+    - agent_assessment
+  properties:
+    # ========== EXISTING FIELDS (Enhanced) ==========
+    rating:
+      type: integer
+      minimum: 1
+      maximum: 100
+      description: "Overall quality rating (1-100)"
+      
+    comments:
+      type: string
+      description: "Human readable feedback comments"
+      
+    observations:
+      type: array
+      items:
+        type: object
+        required:
+          - what
+        properties:
+          what:
+            type: string
+            description: "What was observed"
+          impact:
+            type: string
+            description: "Impact of the observation"
+          priority:
+            type: string
+            enum: [critical, high, medium, low]
+            description: "Priority level of the observation"
+          category:
+            type: string
+            enum: [quality, performance, usability, maintainability, security, accessibility]
+            description: "Category of observation"
+            
+    suggestions:
+      type: array
+      items:
+        type: object
+        required:
+          - action
+        properties:
+          action:
+            type: string
+            description: "Suggested action to take"
+          priority:
+            type: string
+            enum: [critical, high, medium, low]
+            description: "Priority of the suggestion"
+          effort:
+            type: string
+            enum: [minimal, small, medium, large, extensive]
+            description: "Estimated effort required"
+          impact:
+            type: string
+            enum: [critical, high, medium, low]
+            description: "Expected impact of implementing suggestion"
+          assignee:
+            type: string
+            description: "Who should implement this suggestion"
+            
+    status:
+      type: object
+      required:
+        - value
+        - updated_by
+        - date
+      properties:
+        value:
+          type: string
+          enum: [draft, in_review, approved, needs_improvement, deprecated]
+          description: "Current document status"
+        updated_by:
+          type: string
+          description: "Who last updated the status"
+        date:
+          type: string
+          format: date
+          description: "Date of last status update"
+        validation:
+          type: string
+          enum: [passed, failed, pending, not_applicable]
+          description: "Validation status"
+        implementation:
+          type: string
+          enum: [complete, in_progress, planned, not_started]
+          description: "Implementation status"
+          
+    # ========== NEW ENHANCED FIELDS ==========
+    current_state:
+      type: object
+      required:
+        - quality_score
+        - completeness
+        - accuracy
+      properties:
+        quality_score:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "Current quality score (0-100)"
+        completeness:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "How complete the document is (0-100%)"
+        accuracy:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "Accuracy of information (0-100%)"
+        usability:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "How usable/clear the document is (0-100%)"
+        last_updated:
+          type: string
+          format: date-time
+          description: "When current state was last assessed"
+        assessed_by:
+          type: string
+          description: "Who or what performed the assessment (human/agent)"
+          
+    planned_state:
+      type: object
+      required:
+        - target_quality_score
+        - target_date
+        - planned_improvements
+      properties:
+        target_quality_score:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "Target quality score to achieve"
+        target_date:
+          type: string
+          format: date
+          description: "Target date for improvements"
+        planned_improvements:
+          type: array
+          items:
+            type: object
+            required:
+              - improvement
+              - expected_impact
+            properties:
+              improvement:
+                type: string
+                description: "Planned improvement"
+              expected_impact:
+                type: number
+                minimum: 0
+                maximum: 100
+                description: "Expected quality score improvement"
+              effort_estimate:
+                type: string
+                enum: [minimal, small, medium, large, extensive]
+              assigned_to:
+                type: string
+                description: "Who will implement this improvement"
+                
+    importance:
+      type: object
+      required:
+        - business_value
+        - technical_priority
+        - user_impact
+      properties:
+        business_value:
+          type: string
+          enum: [critical, high, medium, low]
+          description: "Business value of this document"
+        technical_priority:
+          type: string
+          enum: [critical, high, medium, low]
+          description: "Technical priority level"
+        user_impact:
+          type: string
+          enum: [critical, high, medium, low]
+          description: "Impact on users if this document is poor quality"
+        strategic_alignment:
+          type: string
+          enum: [high, medium, low]
+          description: "Alignment with strategic goals"
+        dependency_level:
+          type: string
+          enum: [blocker, high, medium, low, none]
+          description: "How much other work depends on this document"
+          
+    agent_assessment:
+      type: object
+      required:
+        - honest_thoughts
+        - automated_analysis
+        - recommendations
+      properties:
+        honest_thoughts:
+          type: object
+          required:
+            - overall_impression
+            - strengths
+            - weaknesses
+          properties:
+            overall_impression:
+              type: string
+              description: "AI agent's honest overall impression"
+            strengths:
+              type: array
+              items:
+                type: string
+              description: "What the agent thinks is strong about this document"
+            weaknesses:
+              type: array
+              items:
+                type: string
+              description: "What the agent thinks needs improvement"
+            confidence_level:
+              type: number
+              minimum: 0
+              maximum: 100
+              description: "Agent's confidence in its assessment (0-100%)"
+            assessment_timestamp:
+              type: string
+              format: date-time
+              description: "When the agent performed this assessment"
+              
+        automated_analysis:
+          type: object
+          properties:
+            readability_score:
+              type: number
+              minimum: 0
+              maximum: 100
+              description: "Automated readability assessment"
+            technical_accuracy:
+              type: number
+              minimum: 0
+              maximum: 100
+              description: "Technical accuracy assessment"
+            completeness_gaps:
+              type: array
+              items:
+                type: string
+              description: "Identified gaps in completeness"
+            consistency_issues:
+              type: array
+              items:
+                type: string
+              description: "Consistency issues found"
+            link_validation:
+              type: object
+              properties:
+                broken_links:
+                  type: integer
+                  description: "Number of broken links found"
+                external_links:
+                  type: integer
+                  description: "Number of external links"
+                internal_links:
+                  type: integer
+                  description: "Number of internal links"
+                  
+        recommendations:
+          type: object
+          required:
+            - immediate_actions
+            - long_term_improvements
+          properties:
+            immediate_actions:
+              type: array
+              items:
+                type: object
+                required:
+                  - action
+                  - reason
+                properties:
+                  action:
+                    type: string
+                    description: "Immediate action recommended"
+                  reason:
+                    type: string
+                    description: "Why this action is recommended"
+                  effort:
+                    type: string
+                    enum: [minimal, small, medium, large]
+                  expected_improvement:
+                    type: number
+                    minimum: 0
+                    maximum: 100
+                    description: "Expected quality improvement from this action"
+                    
+            long_term_improvements:
+              type: array
+              items:
+                type: object
+                required:
+                  - improvement
+                  - justification
+                properties:
+                  improvement:
+                    type: string
+                    description: "Long-term improvement suggestion"
+                  justification:
+                    type: string
+                    description: "Why this improvement would be valuable"
+                  estimated_effort:
+                    type: string
+                    enum: [small, medium, large, extensive]
+                  strategic_value:
+                    type: string
+                    enum: [critical, high, medium, low]
+                    
+    # ========== FLEXIBLE EXTENSION FIELDS ==========
+    performance_metrics:
+      type: object
+      description: "Additional performance metrics (flexible structure)"
+      properties:
+        response_time:
+          type: number
+          description: "Time to get feedback on this document"
+        usage_frequency:
+          type: number
+          description: "How often this document is accessed"
+        user_satisfaction:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "User satisfaction score"
+        maintenance_burden:
+          type: string
+          enum: [low, medium, high]
+          description: "How much effort is required to maintain this document"
+          
+    cross_document_analysis:
+      type: object
+      description: "Analysis in context of other documents"
+      properties:
+        related_documents:
+          type: array
+          items:
+            type: string
+          description: "List of related document IDs"
+        consistency_with_system:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "How consistent this document is with the overall system"
+        duplication_detected:
+          type: array
+          items:
+            type: object
+            properties:
+              document:
+                type: string
+                description: "Document that has duplicate content"
+              overlap_percentage:
+                type: number
+                minimum: 0
+                maximum: 100
+                description: "Percentage of content overlap"
+                
+    self_improvement_tracking:
+      type: object
+      description: "Track how feedback drives improvements"
+      properties:
+        improvement_cycles:
+          type: array
+          items:
+            type: object
+            required:
+              - cycle_start
+              - feedback_received
+              - actions_taken
+              - results
+            properties:
+              cycle_start:
+                type: string
+                format: date
+              feedback_received:
+                type: array
+                items:
+                  type: string
+                description: "Feedback that triggered this improvement cycle"
+              actions_taken:
+                type: array
+                items:
+                  type: string
+                description: "Actions taken in response to feedback"
+              results:
+                type: object
+                properties:
+                  quality_improvement:
+                    type: number
+                    description: "Measured quality improvement"
+                  user_satisfaction_change:
+                    type: number
+                    description: "Change in user satisfaction"
+                  completion_date:
+                    type: string
+                    format: date
+                    
+    # ========== RESEARCH-BASED EXTENSIONS ==========
+    experimental_features:
+      type: object
+      description: "Experimental feedback features based on ongoing research"
+      additionalProperties: true
+      properties:
+        ai_collaboration_score:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "How well this document facilitates AI-human collaboration"
+        knowledge_graph_connectivity:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "How well connected this document is in the knowledge graph"
+        predictive_maintenance:
+          type: object
+          properties:
+            predicted_staleness_date:
+              type: string
+              format: date
+              description: "When this document is predicted to become stale"
+            maintenance_recommendations:
+              type: array
+              items:
+                type: string
+              description: "Predictive maintenance recommendations"

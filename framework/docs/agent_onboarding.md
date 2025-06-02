@@ -4,14 +4,14 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "2.3.0"
+  version: "2.4.0"
   status: "Active"
   owner: "Documentation Team"
   title: "Agent Documentation System - Complete Guide"
-  description: "Comprehensive documentation system with AI feedback and self-improvement tracking"
+  description: "Comprehensive documentation system with enhanced metadata and AI feedback integration"
 content:
   overview: "Single source of truth for the agent documentation system with comprehensive feedback integration."
-  key_components: "Documentation Protocol, AI Feedback System, Validation Framework, Enhanced Schemas, Self-Improvement Tracking, Database Connectivity"
+  key_components: "Enhanced Metadata System, Documentation Protocol, AI Feedback System, Validation Framework, Self-Improvement Tracking, Database Connectivity"
   sections:
     - title: "Overview"
       content: "This document serves as THE PROTOCOL - the single source of truth for understanding the agent-doc-system framework."
@@ -32,8 +32,16 @@ content:
     - title: "Quickstart Checklist"
       content: "Setup agent name, database connection, announce arrival, create documentation, validate and improve"
     - title: "Changelog"
-      content: "2.3.0 (2025-06-02): Agent identity and database announcement requirements"
+      content: "2.4.0 (2025-06-03): Enhanced metadata system for dashboard integration"
   changelog:
+    - version: "2.4.0"
+      date: "2025-06-03"
+      changes:
+        - "Added enhanced metadata schema for comprehensive file metrics"
+        - "Implemented dashboard integration capabilities"
+        - "Added quality scores, validation status, and improvement tracking"
+        - "Created sample metadata structure with code metrics"
+        - "Enhanced agent collaboration and file health monitoring"
     - version: "2.3.0"
       date: "2025-06-02"
       changes:
@@ -106,9 +114,34 @@ feedback:
 
 ## Overview
 
-Comprehensive documentation system with AI feedback integration, automated quality assessment, and self-improvement tracking. This system provides structured documentation validation, enhanced feedback mechanisms, and professional development workflows.
+Comprehensive documentation system with enhanced metadata, AI feedback integration, and automated quality assessment. This system provides structured documentation validation, comprehensive file metrics, and professional development workflows.
 
-The system includes automated feedback agents, comprehensive quality scoring, and self-improvement tracking to ensure documentation maintains high standards and continuously improves over time.
+The system includes automated feedback agents, enhanced metadata schemas, and self-improvement tracking to ensure documentation maintains high standards and provides actionable metrics for dashboard visualization.
+
+## Enhanced Metadata System
+
+**Critical Requirement:** All files must include comprehensive machine-actionable metadata using the enhanced schema.
+
+### Purpose
+- Provides structured metrics for dashboard visualization
+- Enables automated quality assessment and tracking
+- Supports file health monitoring and agent collaboration
+- Maintains validation compliance across all agents
+
+### Key Features
+- Quality scores and validation status
+- Improvement velocity tracking
+- Code metrics for programming files
+- Agent activity and collaboration data
+- Relationship mapping between files
+- Real-time assessment capabilities
+
+### Schema Location
+- Enhanced schema: `framework/schemas/enhanced_metadata_schema.yml`
+- Sample implementation: `framework/schemas/sample_enhanced_metadata.yml`
+
+### Compliance Requirement
+Every file created or modified by any agent must include the enhanced metadata section. This is enforced through validation and is essential for dashboard functionality.
 
 ## Key Features
 
@@ -171,7 +204,6 @@ python3 framework/scripts/self_improvement_tracker.py report
   ├── framework/
   │   ├── agent_communication/
   │   │   ├── feedback_agent.py      # AI feedback analysis
-  │   │   ├── natural_agent.py       # File-based storage utilities
   │   │   ├── config/                # Configuration files
   │   │   └── history/               # File storage
   │   ├── docs/

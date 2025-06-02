@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Validator for agent documentation system v2.0 - Natural conversation revolution!
-Validates documentation while the old rigid agent message validation has been ELIMINATED.
+Validator for agent documentation system v2.4.0
+Validates documentation with enhanced metadata schema support.
 """
 
 import json
@@ -30,8 +30,8 @@ class Validator:
             schema_dir = self.root_dir / "framework" / "schemas"
             
         self.schemas = {
-            "document": schema_dir / "document_protocol.yml"
-            # Note: agent_communication.yml removed in v2.0 - natural conversation doesn't need rigid schemas!
+            "document": schema_dir / "document_protocol.yml",
+            "enhanced_metadata": schema_dir / "enhanced_metadata_schema.yml"
         }
         self._load_schemas()
 
@@ -165,8 +165,24 @@ class Validator:
 
         return errors
 
-    # 🚀 REVOLUTIONARY UPDATE v2.0: Agent message validation ELIMINATED!
-    # Natural conversation doesn't need rigid schema validation - freedom achieved!
+    def validate_enhanced_metadata(self, metadata_path):
+        """Validate enhanced metadata against enhanced_metadata_schema.yml."""
+        try:
+            if not Path(metadata_path).exists():
+                return False, "File not found"
+                
+            content = Path(metadata_path).read_text()
+            metadata = yaml.safe_load(content)
+            
+            if 'enhanced_metadata' not in self.schema_data:
+                return False, "Enhanced metadata schema not loaded"
+                
+            schema = self.schema_data['enhanced_metadata']['enhanced_metadata_schema']
+            errors = self._validate_section(metadata, schema, schema['required'])
+            
+            return len(errors) == 0, "Enhanced metadata is valid" if not errors else f"Validation errors: {', '.join(errors)}"
+        except Exception as e:
+            return False, str(e)
 
     def _validate_type(self, value: Any, expected_type: str) -> bool:
         """Validate value against expected type."""
@@ -216,8 +232,8 @@ class Validator:
 
 def main():
     if len(sys.argv) < 3:
-        print("Usage: validator.py doc <path> [root_dir]")
-        print("🚀 v2.0 UPDATE: Only documentation validation - agent messages use natural conversation!")
+        print("Usage: validator.py <type> <path> [root_dir]")
+        print("Types: doc, enhanced_metadata")
         sys.exit(1)
 
     validator = Validator(sys.argv[3] if len(sys.argv) > 3 else ".")
@@ -226,15 +242,11 @@ def main():
 
     if valid_type == 'doc':
         success, msg = validator.validate_doc(path)
-    elif valid_type in ['message', 'message_file']:
-        print("🚀 REVOLUTIONARY UPDATE: Agent message validation eliminated in v2.0!")
-        print("💬 Use natural conversation instead - no more rigid schemas!")
-        print("✅ Agent communication is now free and flexible!")
-        sys.exit(0)
+    elif valid_type == 'enhanced_metadata':
+        success, msg = validator.validate_enhanced_metadata(path)
     else:
         print(f"Unknown validation type: {valid_type}")
-        print("Available: doc")
-        print("🚀 Note: Agent message validation eliminated in v2.0 - use natural conversation!")
+        print("Available types: doc, enhanced_metadata")
         sys.exit(1)
 
     if not success:

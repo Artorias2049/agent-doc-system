@@ -4,14 +4,14 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "2.3.0"
+  version: "2.4.0"
   status: "Active"
   owner: "Documentation Team"
   title: "Agent Documentation System - Complete Guide"
-  description: "Comprehensive documentation system with AI feedback and self-improvement tracking"
+  description: "Comprehensive documentation system with enhanced metadata and AI feedback integration"
 content:
   overview: "Single source of truth for the agent documentation system with comprehensive feedback integration."
-  key_components: "Documentation Protocol, AI Feedback System, Validation Framework, Enhanced Schemas, Self-Improvement Tracking, Database Connectivity"
+  key_components: "Enhanced Metadata System, Documentation Protocol, AI Feedback System, Validation Framework, Self-Improvement Tracking, Database Connectivity"
   sections:
     - title: "Overview"
       content: "This document serves as THE PROTOCOL - the single source of truth for understanding the agent-doc-system framework."
@@ -32,8 +32,16 @@ content:
     - title: "Quickstart Checklist"
       content: "Setup agent name, database connection, announce arrival, create documentation, validate and improve"
     - title: "Changelog"
-      content: "2.3.0 (2025-06-02): Agent identity and database announcement requirements"
+      content: "2.4.0 (2025-06-03): Enhanced metadata system for dashboard integration"
   changelog:
+    - version: "2.4.0"
+      date: "2025-06-03"
+      changes:
+        - "Added enhanced metadata schema for comprehensive file metrics"
+        - "Implemented dashboard integration capabilities"
+        - "Added quality scores, validation status, and improvement tracking"
+        - "Created sample metadata structure with code metrics"
+        - "Enhanced agent collaboration and file health monitoring"
     - version: "2.3.0"
       date: "2025-06-02"
       changes:
@@ -106,9 +114,34 @@ feedback:
 
 ## Overview
 
-Comprehensive documentation system with AI feedback integration, automated quality assessment, and self-improvement tracking. This system provides structured documentation validation, enhanced feedback mechanisms, and professional development workflows.
+Comprehensive documentation system with enhanced metadata, AI feedback integration, and automated quality assessment. This system provides structured documentation validation, comprehensive file metrics, and professional development workflows.
 
-The system includes automated feedback agents, comprehensive quality scoring, and self-improvement tracking to ensure documentation maintains high standards and continuously improves over time.
+The system includes automated feedback agents, enhanced metadata schemas, and self-improvement tracking to ensure documentation maintains high standards and provides actionable metrics for dashboard visualization.
+
+## Enhanced Metadata System
+
+**Critical Requirement:** All files must include comprehensive machine-actionable metadata using the enhanced schema.
+
+### Purpose
+- Provides structured metrics for dashboard visualization
+- Enables automated quality assessment and tracking
+- Supports file health monitoring and agent collaboration
+- Maintains validation compliance across all agents
+
+### Key Features
+- Quality scores and validation status
+- Improvement velocity tracking
+- Code metrics for programming files
+- Agent activity and collaboration data
+- Relationship mapping between files
+- Real-time assessment capabilities
+
+### Schema Location
+- Enhanced schema: `framework/schemas/enhanced_metadata_schema.yml`
+- Sample implementation: `framework/schemas/sample_enhanced_metadata.yml`
+
+### Compliance Requirement
+Every file created or modified by any agent must include the enhanced metadata section. This is enforced through validation and is essential for dashboard functionality.
 
 ## Key Features
 
@@ -171,7 +204,6 @@ python3 framework/scripts/self_improvement_tracker.py report
   ├── framework/
   │   ├── agent_communication/
   │   │   ├── feedback_agent.py      # AI feedback analysis
-  │   │   ├── natural_agent.py       # File-based storage utilities
   │   │   ├── config/                # Configuration files
   │   │   └── history/               # File storage
   │   ├── docs/
@@ -191,13 +223,6 @@ python3 framework/scripts/self_improvement_tracker.py report
   ├── tests/                         # Test suite (validation tests)
   ├── CLAUDE.md                      # Claude Code configuration
   └── README.md                      # Project overview
-  ```
-  
-- **Alternative: Direct Usage Pattern (Legacy):**
-  ```
-  project_root/                      # Framework as project root
-  ├── framework/                     # Framework directory
-  └── project_docs/                  # Project documentation
   ```
 - **Feedback Integration:**
   - Automated quality scoring (1-100 scale)
@@ -270,12 +295,12 @@ python3 framework/scripts/self_improvement_tracker.py report
 
 ## Required Practices
 
-### Documentation Structure
-1. **Location Requirements:**
-   - Core documentation: `framework/docs/`
-   - Project documentation: `projects/{project_name}/docs/`
-   - Component documentation: `projects/{project_name}/{component_name}/docs/`
-   - Templates: `framework/docs/templates/`
+### Documentation Structure and Permissions
+1. **Location Requirements (CRITICAL):**
+   - **DocSystemAgent ONLY**: Can create in `framework/docs/`, `framework/docs/api/`, `framework/docs/components/`
+   - **ALL OTHER AGENTS**: MUST create documentation ONLY in `project_docs/` directory
+   - **Templates**: Available to read from `framework/docs/templates/`
+   - **Framework Directory**: READ-ONLY for all agents except DocSystemAgent
 
 2. **Required Sections:**
    - Title
@@ -292,10 +317,15 @@ Every documentation file must include a `## Machine-Actionable Metadata` section
 - `owner`
 
 ### Creating New Documentation
-1. Choose the appropriate template from `framework/docs/templates/`
-2. Copy the template to the correct location
-3. Update the metadata and content
-4. Run validation before committing
+1. **Use the automated creator (Recommended)**:
+   ```bash
+   ./framework/scripts/create_doc.sh <type> "<title>" --owner "<name>" --description "<desc>"
+   ```
+2. **Alternative: Manual template copy**:
+   - Choose template from `framework/docs/templates/`
+   - Copy to correct location
+   - Update metadata and content
+3. Run validation before committing
 
 ### Validation
 Run validation scripts before committing changes:
@@ -571,13 +601,28 @@ For complete database documentation and advanced operations, see the external [D
    announce_arrival()
    ```
 
-5. **Create Documentation:**
+5. **Create Documentation (Automated & Permission-Aware):**
    ```bash
-   # Copy template to local directory
-   cp framework/docs/templates/projects/overview.md ./my_document.md
+   # For ALL AGENTS - Creates in project_docs/
+   ./framework/scripts/create_doc.sh project "My Project Documentation" \
+     --owner "YourAgentName" \
+     --description "Brief description of the project documentation"
    
-   # Edit content and metadata
-   # Ensure proper YAML metadata section
+   ./framework/scripts/create_doc.sh general "User Guide" \
+     --owner "YourAgentName" \
+     --description "General documentation for users"
+   
+   # For DocSystemAgent ONLY - Creates in framework/
+   ./framework/scripts/create_doc.sh api "System API" \
+     --owner "DocSystemAgent" \
+     --description "Framework API documentation"
+   
+   ./framework/scripts/create_doc.sh component "Core Component" \
+     --owner "DocSystemAgent" \
+     --description "Framework component documentation"
+   
+   # ⚠️ IMPORTANT: Other agents attempting api/component types will get permission errors
+   # Edit the generated file to add detailed content
    ```
 
 6. **Validate and Get Feedback:**
@@ -658,10 +703,10 @@ For complete database documentation and advanced operations, see the external [D
   - Honest AI assessment with confidence levels and recommendations
   - Quality scoring with current state vs planned state tracking
 
-- **2.0.0** (2025-06-01): Enhanced agent communication
-  - Simplified validation and natural communication protocols
-  - Enhanced schema support and flexible message structures
-  - Improved performance and reduced validation constraints
+- **2.0.0** (2025-06-01): Enhanced documentation system
+  - Simplified validation and improved documentation workflows
+  - Enhanced schema support and structured metadata
+  - Improved performance and streamlined validation process
 
 - **1.1.1** (2025-01-31): Path detection improvements
 - **1.1.0** (2024-12-29): SQLite validation framework

@@ -258,6 +258,39 @@ spacetime subscribe overseer-system
 spacetime logs overseer-system
 ```
 
+### SpacetimeDB Agent Communication Tools
+
+The framework provides tools for direct SpacetimeDB interaction in `framework/agent_communication/`:
+
+**spacetime_operations.py** - Comprehensive database operations tool:
+```bash
+# Check system status
+python3 agent-doc-system/framework/agent_communication/spacetime_operations.py status
+
+# Register agent
+python3 agent-doc-system/framework/agent_communication/spacetime_operations.py register --type worker
+
+# Send announcement
+python3 agent-doc-system/framework/agent_communication/spacetime_operations.py announce --message "Your message"
+
+# Check logs
+python3 agent-doc-system/framework/agent_communication/spacetime_operations.py logs --lines 100
+```
+
+**verify_connection.py** - Connection verification and agent registration:
+```bash
+# Verify connection and register agent
+python3 agent-doc-system/framework/agent_communication/verify_connection.py
+```
+
+**check_messages.py** - Check system messages and events:
+```bash
+# Check for messages and notifications
+python3 agent-doc-system/framework/agent_communication/check_messages.py
+```
+
+These tools use the locked agent name from `.agent_config/agent_name.json` automatically.
+
 ## Enhanced Metadata System
 
 The framework uses an enhanced metadata schema for dashboard integration:

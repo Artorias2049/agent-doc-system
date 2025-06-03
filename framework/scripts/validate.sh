@@ -9,7 +9,7 @@ PROJECT_ROOT="$(pwd)"
 if [ -d "$PROJECT_ROOT/agent-doc-system/framework" ]; then
     # Nested usage: project_root/agent-doc-system/framework/
     FRAMEWORK_DIR="$PROJECT_ROOT/agent-doc-system/framework"
-    PROJECT_DOCS_DIR="$PROJECT_ROOT/project_docs"
+    PROJECT_DOCS_DIR="$PROJECT_ROOT/agent-doc-system/project_docs"
     echo "🔍 Detected nested usage pattern"
 elif [ -d "$PROJECT_ROOT/framework" ]; then
     # Direct usage: framework as project root

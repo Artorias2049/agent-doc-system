@@ -6,35 +6,45 @@ This CLAUDE.md file configures Claude Code for the agent-doc-system framework - 
 
 ### Core Project Structure
 
-**Direct Usage Pattern (Recommended):**
+**Nested Usage Pattern (Standard for all projects):**
 ```
-agent-doc-system/              # Project root
-├── framework/                 # Core framework components
-│   ├── agent_communication/   # Agent feedback and tracking
-│   │   ├── feedback_agent.py  # AI documentation analysis
-│   │   ├── config/           # Configuration settings
-│   │   └── history/          # Improvement tracking storage
-│   ├── docs/                 # Framework documentation
-│   │   ├── agent_onboarding.md  # THE PROTOCOL - single source of truth
-│   │   ├── documentation_protocol.md
-│   │   ├── api/              # API specifications
-│   │   ├── components/       # Component documentation
-│   │   └── templates/        # Documentation templates
-│   ├── schemas/              # YAML schema definitions
-│   │   ├── document_protocol.yml
-│   │   ├── enhanced_metadata_schema.yml
-│   │   └── sample_enhanced_metadata.yml
-│   ├── scripts/              # Validation and utility scripts
-│   │   ├── validate.sh       # Standard validation
-│   │   ├── enhanced_validate.sh  # Validation with AI feedback
-│   │   ├── self_improvement_tracker.py
-│   │   └── setup_agent_name.sh
-│   └── validators/           # Python validation framework
-│       └── validator.py
-├── tests/                    # Test suite
-├── README.md                 # Project overview
-└── pyproject.toml           # Poetry configuration
+your-project/                  # Your actual project root
+├── src/                      # Your project source code
+├── package.json             # Your project configuration
+└── agent-doc-system/        # The cloned framework
+    ├── framework/           # 🚫 READ-ONLY (managed by DocSystemAgent)
+    │   ├── agent_communication/   # Agent feedback and tracking
+    │   │   ├── feedback_agent.py  # AI documentation analysis
+    │   │   ├── config/           # Configuration settings
+    │   │   └── history/          # Improvement tracking storage
+    │   ├── docs/                 # Framework documentation
+    │   │   ├── agent_onboarding.md  # THE PROTOCOL - single source of truth
+    │   │   ├── api/              # API specifications
+    │   │   ├── components/       # Component documentation
+    │   │   └── templates/        # Documentation templates
+    │   ├── schemas/              # YAML schema definitions
+    │   │   ├── document_protocol.yml
+    │   │   ├── enhanced_metadata_schema.yml
+    │   │   └── sample_enhanced_metadata.yml
+    │   ├── scripts/              # Validation and utility scripts
+    │   │   ├── validate.sh       # Standard validation
+    │   │   ├── enhanced_validate.sh  # Validation with AI feedback
+    │   │   ├── self_improvement_tracker.py
+    │   │   └── setup_agent_name.sh
+    │   └── validators/           # Python validation framework
+    │       └── validator.py
+    ├── project_docs/            # ✅ YOUR documentation goes here
+    ├── tests/                    # Test suite
+    ├── README.md                 # Project overview
+    └── pyproject.toml           # Poetry configuration
 ```
+
+**Key Points:**
+- The framework is cloned as a subdirectory of your project
+- Create all documentation in `{project_root}/agent-doc-system/project_docs/`
+- The entire `agent-doc-system/framework/` directory is READ-ONLY for all agents except DocSystemAgent
+- Scripts automatically detect and handle the nested pattern
+- All documentation system files are under `agent-doc-system/` for easy discovery by UI searches
 
 ### Technology Stack
 - **Python 3.9+** with Poetry dependency management
@@ -106,24 +116,29 @@ feedback:
 ## Development Workflows
 
 ### Creating Documentation
-1. **Use Templates**: Copy from `framework/docs/templates/`
-2. **Add Metadata**: Include all required metadata fields
-3. **Validate**: Run `./framework/scripts/validate.sh`
-4. **Get AI Feedback**: Run `./framework/scripts/enhanced_validate.sh --feedback`
+1. **Use Templates**: Reference from `agent-doc-system/framework/docs/templates/`
+2. **Add Metadata**: Include all required metadata fields (especially feedback!)
+3. **Create in agent-doc-system/project_docs/**: All your documentation goes in `agent-doc-system/project_docs/`
+4. **Validate**: Run validation scripts from project root
 
-### Validation Commands
+### Validation Commands (from project root)
 ```bash
 # Standard validation
-./framework/scripts/validate.sh
+./agent-doc-system/framework/scripts/validate.sh
 
-# Validate framework documentation
-./framework/scripts/validate.sh --self_validate
+# Validate framework documentation (DocSystemAgent only)
+./agent-doc-system/framework/scripts/validate.sh --self_validate
 
 # Enhanced validation with AI feedback
-./framework/scripts/enhanced_validate.sh --feedback
+./agent-doc-system/framework/scripts/enhanced_validate.sh --feedback
 
 # Track improvements
-python3 framework/scripts/self_improvement_tracker.py report
+python3 agent-doc-system/framework/scripts/self_improvement_tracker.py report
+
+# Create new documentation
+./agent-doc-system/framework/scripts/create_doc.sh project "My Documentation" \
+  --owner "YourAgentName" \
+  --description "Project documentation"
 ```
 
 ### Database Operations

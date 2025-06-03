@@ -66,24 +66,22 @@ def register_agent(agent_type="worker"):
     try:
         result = subprocess.run([
             "spacetime", "call", "overseer-system", "register_agent",
-            "--agent_name", agent_name,
-            "--agent_type", agent_type,
-            "--capabilities", "documentation,validation",
-            "--status", "active"
+            f'"{agent_name}"', f'"{agent_type}"', f'"{agent_name}"', 'null'
         ], capture_output=True, text=True)
         
         if result.returncode == 0:
             print(f"✅ {agent_name} registered in overseer-system")
             
             # Send announcement
+            # Note: create_system_event may need similar syntax fixes
             announce_result = subprocess.run([
                 "spacetime", "call", "overseer-system", "create_system_event",
-                "--event_id", f"evt_{datetime.now().strftime('%Y%m%d%H%M%S')}",
-                "--event_type", "agent_arrival",
-                "--source_agent", agent_name,
-                "--target_agent", "all_agents",
-                "--data", json.dumps({"message": f"{agent_name} has joined the system"}),
-                "--priority", "2"
+                f'"evt_{datetime.now().strftime("%Y%m%d%H%M%S")}"',
+                '"agent_arrival"',
+                f'"{agent_name}"',
+                '"all_agents"',
+                f'"{json.dumps({"message": f"{agent_name} has joined the system"})}"',
+                '"2"'
             ], capture_output=True, text=True)
             
             if announce_result.returncode == 0:

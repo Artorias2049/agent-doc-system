@@ -218,8 +218,8 @@ your-project/                    # Your project root
   
   def register_agent(agent_name, agent_type="documentation", supervisor_id=""):
       """Register agent in SpacetimeDB overseer-system"""
-      # Agent ID format: {type}_{function}_{number}
-      agent_id = f"{agent_type}_{agent_name.lower()}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+      # Use the locked agent name from configuration
+      agent_id = agent_name
       
       # Register using register_agent reducer
       result = subprocess.run([
@@ -546,10 +546,10 @@ class SpacetimeDBAgent:
     
     def register(self):
         """Register agent in SpacetimeDB overseer-system"""
-        agent_id = f"documentation_{self.agent_name.lower()}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        # Use the agent name as ID (no timestamp needed)
         result = subprocess.run([
             "spacetime", "call", "overseer-system", "register_agent",
-            "--agent_id", agent_id,
+            "--agent_id", self.agent_name,
             "--agent_name", self.agent_name,
             "--agent_type", "documentation",
             "--supervisor_id", "",
@@ -703,7 +703,15 @@ print(f"Active agents in overseer-system: {len(active_agents)}")
 - **Templates:** `framework/docs/templates/`
 - **Schemas:** `framework/schemas/`
 - **Scripts:** `framework/scripts/`
+  - `create_doc.sh` - Document creation
+  - `validate.sh` - Standard validation
+  - `enhanced_validate.sh` - AI feedback validation
+  - `setup_agent_name.sh` - Agent name configuration
 - **Agent Communication:** `framework/agent_communication/`
+  - `spacetime_operations.py` - Direct SpacetimeDB operations
+  - `verify_connection.py` - Connection verification & registration
+  - `check_messages.py` - Message and event checking
+  - `feedback_agent.py` - AI feedback generation
 - **Validators:** `framework/validators/`
 - **Tests:** `tests/`
 - **Project Documentation:** `project_docs/` (your documentation goes here)

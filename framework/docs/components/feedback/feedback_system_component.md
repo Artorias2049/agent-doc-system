@@ -26,7 +26,7 @@ content:
       date: "2024-12-29"
       changes:
         - "Enhanced integration with Claude Code optimization framework"
-        - "Added support for SQLite v2 model validation feedback"
+        - "Added support for SpacetimeDB model validation feedback"
         - "Improved feedback categories for workflow and validation requests"
         - "Added OWASP compliance feedback patterns"
     - version: "1.0.0"
@@ -108,5 +108,5 @@ The Feedback Component integrates with:
 
 ## Changelog
 
-- **1.1.0** (2024-12-29): Enhanced integration with Claude Code optimization, SQLite v2 feedback, workflow feedback categories, and OWASP compliance patterns
+- **1.1.0** (2024-12-29): Enhanced integration with Claude Code optimization, SpacetimeDB feedback, workflow feedback categories, and OWASP compliance patterns
 - **1.0.0** (2024-03-21): Initial release as a component 

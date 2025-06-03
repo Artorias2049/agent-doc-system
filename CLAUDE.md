@@ -1,413 +1,377 @@
-# Claude Code Configuration for Agent Documentation System v2.0
+# Claude Code Configuration for Agent Documentation System v3.2
 
-🚀 **REVOLUTIONARY UPDATE v2.0:** This CLAUDE.md file configures Claude Code for the revolutionary agent-doc-system framework with natural conversation and MCP+Database backend - NO MORE RIGID SCHEMAS!
-
-**Welcome to the future of agent communication!** Natural conversation, flexible storage, real-time capabilities, and complete freedom from UUID tyranny.
+This CLAUDE.md file configures Claude Code for the SpacetimeDB-powered agent documentation system with real-time coordination and user supreme authority.
 
 ## Project Context and Architecture
 
 ### Core Project Structure
 
-**Nested Usage Pattern (Recommended for new projects):**
+**Nested Usage Pattern (Standard):**
 ```
-your_project/                   # Your project root (e.g., my_app/, web_service/, etc.)
-├── src/                       # Your project code
-├── requirements.txt           # Your dependencies
-├── project_docs/              # Your project documentation
-└── agent-doc-system/          # Cloned framework (git clone)
-    ├── framework/             # Core framework components
-    │   ├── agent_communication/ # Enhanced agent protocol
-    │   │   ├── core/          # Pydantic models and enhanced protocol
-    │   │   ├── config/        # Agent settings
-    │   │   └── history/       # Message storage
-    │   ├── docs/              # Framework documentation
-    │   │   ├── components/    # Component documentation
-    │   │   └── templates/     # Documentation templates
-    │   ├── schemas/           # YAML schema definitions
-    │   ├── scripts/           # Validation and utility scripts
-    │   └── validators/        # Python validation framework
-    ├── tests/                 # Comprehensive pytest suite
-    ├── project_docs/          # Framework-specific documentation
-    └── pyproject.toml         # Poetry configuration
+your-project/                   # Your project root
+├── src/                       # Your project source code
+├── package.json              # Your project dependencies
+└── agent-doc-system/         # The cloned framework
+    ├── framework/            # 🚫 READ-ONLY (managed by DocSystemAgent)
+    │   ├── docs/            # Framework documentation
+    │   │   ├── agent_onboarding.md  # THE PROTOCOL v3.0
+    │   │   ├── components/   # Component documentation
+    │   │   └── templates/    # Documentation templates
+    │   ├── schemas/         # YAML schema definitions
+    │   ├── scripts/         # Validation and utility scripts
+    │   └── validators/      # Python validation framework
+    ├── project_docs/        # ✅ YOUR documentation goes here
+    ├── tests/               # Test suite
+    └── README.md           # Framework overview
 ```
 
-**Direct Usage Pattern (Legacy):**
-```
-agent-doc-system/              # Framework as project root
-├── framework/                 # Core framework components
-├── tests/                     # Comprehensive pytest suite
-├── project_docs/              # Project-specific documentation
-└── pyproject.toml            # Poetry configuration
-```
+**Key Points:**
+- The framework is cloned as a subdirectory of your project
+- Create all documentation in `{project_root}/agent-doc-system/project_docs/`
+- The entire `agent-doc-system/framework/` directory is READ-ONLY for all agents except DocSystemAgent
+- Scripts automatically detect and handle the nested pattern
+- All documentation system files are under `agent-doc-system/` for easy discovery by UI searches
 
-### Revolutionary Technology Stack v2.0
-- **🗄️ PostgreSQL Database** with flexible JSONB storage (replaces file-based hell)
-- **🔗 MCP Server Integration** - Filesystem, Git, Memory, Database, Sandbox
-- **💬 Natural Conversation API** - `agent.say()` instead of rigid validation
-- **⚡ Real-time Subscriptions** - Event-driven communication
-- **🎯 Python 3.9+** with Poetry dependency management  
-- **🏆 NO MORE UUID TYRANNY** - Human-readable communication
-- **📈 Performance Optimized** - Database queries vs JSON file parsing
-- **🚀 1-line Communication** vs 12-line rigid system (REVOLUTIONARY!)
+### Technology Stack v3.2
+- SpacetimeDB Overseer-System - Real-time database
+- 15 MCP Tools - User authority (priority 255)
+- Real-time Coordination - Event sourcing and subscriptions
+- 6-Table Architecture - users, agents, workflows, user_overrides, system_events, user_notifications
+- Complete Audit Trail - All actions tracked
+- Emergency Halt Capability
+- WebAssembly Backend
 
-### Legacy Technology (DEPRECATED in v2.0)
-- ~~Pydantic v2 rigid validation~~ → Natural conversation
-- ~~Rich & Click CLI~~ → Simple natural interface  
-- ~~UUID constraints~~ → Human-readable names
-- ~~JSON file storage~~ → Database backend
+## SpacetimeDB Overseer-System Integration
 
-## 🚀 Revolutionary Agent Communication Protocol v2.0
+### Core Database Architecture
 
-**THE REVOLUTION IS COMPLETE!** No more rigid schemas, UUID tyranny, or validation hell. Welcome to natural agent conversation!
+SpacetimeDB overseer-system configuration:
 
-### Natural Communication Methods
-The new framework supports UNLIMITED flexible communication with MCP+Database backend:
+- **Database Name:** `overseer-system`
+- **Connection:** `http://localhost:3000` (local) / `spacetime publish overseer-system` (deployed)
+- **Authentication:** SpacetimeDB CLI (`spacetime identity`)
+- **Performance:** Sub-microsecond response times with WebAssembly backend
+- **Real-time:** Event sourcing and instant subscriptions
+- **Authority:** User supreme authority (priority 255)
 
-**🎯 Primary Methods (RECOMMENDED):**
-- `agent.say(message)` - Natural conversation  
-- `agent.listen()` - Get responses from other agents
-- `agent.share(data)` - Share complex data structures
-- `agent.ask(question)` - Ask questions and get answers
-- `agent.collaborate(task)` - Start collaborative workflows
+### Database Schema (6 Tables)
 
-**🗄️ Database-Powered Features:**
-- Conversation threading and context preservation
-- Real-time subscriptions and notifications  
-- Flexible JSONB storage for any message structure
-- Performance-optimized database queries
-- No schema constraints or validation requirements
+1. **users** - User management with authority levels
+2. **agents** - Agent registration and coordination
+3. **workflows** - Multi-agent workflow orchestration
+4. **user_overrides** - User supreme authority actions
+5. **system_events** - Real-time event tracking
+6. **user_notifications** - User notification system
 
-### Legacy Message Types (DEPRECATED)
-~~The old framework supported 7 rigid message types with Pydantic validation hell~~:
+### MCP Tools Integration
 
-1. **test_request** - Unit/integration/e2e/performance testing
-2. **test_result** - Test execution results with artifacts
-3. **status_update** - Agent state and progress tracking
-4. **context_update** - Context data management
-5. **workflow_request** - Multi-step agent workflows
-6. **validation_request** - Schema/doc validation requests
-7. **documentation_update** - Automated doc generation
+15 MCP Tools Available:
+- 5 User Authority Tools (priority 255)
+- 3 Agent Management Tools
+- 2 Workflow Tools 
+- 2 Communication Tools
+- 3 Resource Providers
 
-### 🚀 Revolutionary Usage Examples v2.0
+## Documentation System Overview
 
-**🎯 Natural Communication (RECOMMENDED):**
-```python
-# Welcome to the future of agent communication!
-from agent_doc_system.natural import Agent
+### Core Principles
+1. **SpacetimeDB Integration** - All agent operations via real-time database
+2. **User Supreme Authority** - Users have ultimate control (priority 255)
+3. **Real-time Coordination** - Instant agent synchronization
+4. **Complete Audit Trail** - Every action tracked and logged
+5. **Schema Validation** - All documentation must pass YAML schema validation
+6. **Machine-Actionable Metadata** - Every file includes structured metadata
+7. **AI Feedback** - Automated quality assessment and improvement tracking
 
-# Initialize natural agent with MCP+Database backend
-agent = Agent("my_project_agent")
+### Required Document Structure
+Every documentation file must include:
 
-# Natural conversation - NO MORE RIGID SCHEMAS!
-agent.say("Starting unit tests for the new feature!")
+```markdown
+# Document Title
 
-# Share complex data naturally
-agent.share({
-    "test_results": {
-        "passed": 25,
-        "failed": 0,
-        "coverage": "98%"
-    },
-    "performance": "excellent",
-    "ready_for_deployment": True
-})
-
-# Ask questions and collaborate
-response = agent.ask("Are all integration tests passing?")
-agent.collaborate("code_review", {"branch": "feature/natural-communication"})
-
-# Listen for responses from other agents
-updates = agent.listen()
-print(f"🎉 Got {len(updates)} natural responses!")
-```
-
-**🗄️ Database Operations:**
-```bash
-# Start the MCP+Database backend
-./agent-doc-system/framework/scripts/start_mcp_bridge.sh
-
-# Monitor natural conversations in real-time
-./agent-doc-system/framework/scripts/monitor_conversations.sh
-
-# Query conversation history
-./agent-doc-system/framework/scripts/query_conversations.sh --agent my_project_agent
-```
-
-### Legacy Usage (DEPRECATED - DO NOT USE)
-~~Old rigid Pydantic validation system - replaced by natural conversation~~
-
-```bash
-# Validate your project documentation from project root
-./agent-doc-system/framework/scripts/validate.sh
-
-# Validate framework itself
-./agent-doc-system/framework/scripts/validate.sh --self_validate
-
-# Validate using Python validator
-python agent-doc-system/framework/validators/validator.py --target messages
+## Machine-Actionable Metadata
+```yaml
+metadata:
+  schema: "https://schema.org/TechnicalDocument"
+  version: "1.0.0"
+  status: "Active"
+  owner: "YourName"
+  title: "Document Title"
+  description: "Brief description"
+content:
+  overview: "Document overview"
+  key_components: "Component1, Component2"
+  sections:
+    - title: "Section Title"
+      content: "Section description"
+  changelog:
+    - version: "1.0.0"
+      date: "2025-06-03"
+      changes:
+        - "Initial release"
+feedback:
+  rating: 90
+  comments: "Overall feedback"
+  observations:
+    - what: "Observation"
+      impact: "Impact description"
+      priority: "low"
+      category: "quality"
+  suggestions:
+    - action: "Suggested improvement"
+      priority: "medium"
+      effort: "small"
+      impact: "medium"
+      assignee: "team_member"
+  status:
+    value: "approved"
+    updated_by: "YourName"
+    date: "2025-06-03"
+    validation: "passed"
+    implementation: "complete"
 ```
 
-**Direct Usage Pattern (Legacy):**
-```python
-# Example using the enhanced protocol with Pydantic models
-from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
-
-protocol = EnhancedAgentProtocol()
-
-# Send test request using type-safe Pydantic models
-message = protocol.create_test_request(
-    test_type="unit",
-    test_file="tests/test_models.py",
-    parameters={
-        "environment": "development",
-        "verbose": True
-    },
-    sender="agent1"
-)
-
-# Validate messages
-python framework/validators/validator.py --target messages
-
-# Run validation script
-./framework/scripts/validate.sh
+## Content sections...
 ```
 
 ## Development Workflows
 
-### Test-Driven Development Protocol
-1. **Red Phase**: Create failing tests using pytest with type hints
-2. **Green Phase**: Implement minimal code with Pydantic models
-3. **Refactor**: Optimize with full type safety
-4. **Validate**: Run comprehensive test suite
+### SpacetimeDB Agent Registration
+1. **Install SpacetimeDB CLI**: `curl -sSL https://spacetime.com/install | bash`
+2. **Create Identity**: `spacetime identity new`
+3. **Connect to Overseer-System**: `spacetime subscribe overseer-system`
+4. **Register Agent**: Use SpacetimeDB reducers for agent registration
 
+### Creating Documentation
+1. **Use Templates**: Reference from `agent-doc-system/framework/docs/templates/`
+2. **Add Metadata**: Include all required metadata fields (especially feedback!)
+3. **Create in agent-doc-system/project_docs/**: All your documentation goes in `agent-doc-system/project_docs/`
+4. **Validate**: Run validation scripts from project root
+
+### SpacetimeDB Operations (from project root)
 ```bash
-# TDD workflow example
-pytest tests/test_models.py::TestAgentMessage::test_message_creation_valid -v
-# Implement feature
-pytest tests/ --cov=framework --cov-fail-under=90
-mypy framework/agent_communication/core/ --strict
+# Test SpacetimeDB connection
+spacetime logs overseer-system
+
+# Register agent in overseer-system
+spacetime call overseer-system register_agent YourAgentName documentation active
+
+# Create workflow
+spacetime call overseer-system create_workflow doc_review
+
+# Standard validation
+./agent-doc-system/framework/scripts/validate.sh
+
+# Enhanced validation with AI feedback
+./agent-doc-system/framework/scripts/enhanced_validate.sh --feedback
+
+# Track improvements
+python3 agent-doc-system/framework/scripts/self_improvement_tracker.py report
+
+# Create new documentation
+./agent-doc-system/framework/scripts/create_doc.sh project "My Documentation" \
+  --owner "YourAgentName" \
+  --description "Project documentation"
 ```
 
-### Pre-commit Quality Gates
-All code changes are validated through:
-- **Black** formatting (line length 100)
-- **MyPy** strict type checking
-- **Ruff** linting with performance optimizations
-- **Bandit** security scanning
-- **Pytest** with 90% coverage requirement
-- **Schema validation** for YAML files
-- **Documentation validation** using enhanced validator
-
-## Development Commands
-
-### Testing and Validation
-```bash
-# Run full test suite with coverage
-pytest tests/ --cov=framework --cov-report=html --cov-report=term-missing
-
-# Run specific test categories
-pytest tests/test_models.py -v                    # Pydantic model tests
-pytest tests/test_enhanced_protocol.py -v        # Protocol integration tests
-
-# Type checking
-mypy framework/agent_communication/core/ --strict
-
-# Linting and formatting
-black framework/ tests/
-ruff check framework/ tests/
-
-# Security scanning
-bandit -r framework/
-
-# Schema validation
-python framework/validators/validator.py --target schemas
-```
-
-### Agent Communication Operations
+### SpacetimeDB Integration
 ```python
-# Use the enhanced protocol directly with Python
-from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+import subprocess
+import json
+from datetime import datetime
 
-protocol = EnhancedAgentProtocol()
+# Connect to SpacetimeDB overseer-system
+def connect_to_overseer_system():
+    """Connect to SpacetimeDB overseer-system"""
+    result = subprocess.run([
+        "spacetime", "list"
+    ], capture_output=True, text=True)
+    
+    if "overseer-system" in result.stdout:
+        print("✅ Connected to SpacetimeDB overseer-system")
+        return True
+    else:
+        print("❌ SpacetimeDB overseer-system not accessible")
+        return False
 
-# Send messages using Pydantic models
-message = protocol.create_test_request(
-    test_type="unit",
-    test_file="tests/test_example.py",
-    parameters={"environment": "development", "verbose": True},
-    sender="agent1"
-)
+# Register agent
+def register_agent(agent_name):
+    """Register agent in SpacetimeDB overseer-system"""
+    result = subprocess.run([
+        "spacetime", "call", "overseer-system", "register_agent",
+        agent_name, "documentation", "active"
+    ], capture_output=True, text=True)
+    
+    if result.returncode == 0:
+        print(f"✅ {agent_name} registered in overseer-system")
+        return True
+    else:
+        print(f"❌ Registration failed: {result.stderr}")
+        return False
 
-# Read messages
-messages = protocol.read_messages()
-
-# Cleanup old messages
-protocol.cleanup_old_messages(days=7)
+# Send system event
+def send_event(agent_name, event_type, target_agent, data):
+    """Send system event via SpacetimeDB"""
+    event_data = {
+        "event_type": event_type,
+        "source_agent": agent_name,
+        "target_agent": target_agent,
+        "timestamp": datetime.now().isoformat(),
+        "data": json.dumps(data),
+        "priority": 1
+    }
+    
+    result = subprocess.run([
+        "spacetime", "call", "overseer-system", "create_system_event",
+        json.dumps(event_data)
+    ], capture_output=True, text=True)
+    
+    return result.returncode == 0
 ```
 
+## Agent Setup
+
+### One-Time Agent Name Configuration
 ```bash
-# Validate all components
-./framework/scripts/validate.sh
+# Check current agent name
+./agent-doc-system/framework/scripts/setup_agent_name.sh check
+
+# Set agent name (one-time only)
+./agent-doc-system/framework/scripts/setup_agent_name.sh setup YourAgentName
+
+# Activate environment
+./agent-doc-system/framework/scripts/setup_agent_name.sh activate
 ```
 
-## Type Safety and Validation
+### SpacetimeDB Connection Setup
+```bash
+# Install SpacetimeDB CLI
+curl -sSL https://spacetime.com/install | bash
 
-### Pydantic Model Integration
-All agent messages use Pydantic v2 for:
-- **Runtime validation** with detailed error messages
-- **Type coercion** and automatic serialization
-- **Performance optimization**
-- **IDE integration** with full autocomplete support
+# Create SpacetimeDB identity
+spacetime identity new
 
-### Validation Levels
-- **Basic**: Syntax and type validation
-- **Enhanced**: Cross-reference and consistency checks (default)
-- **Strict**: Security compliance and best practices
+# Connect to overseer-system
+spacetime subscribe overseer-system
+
+# Verify connection
+spacetime logs overseer-system
+```
+
+## Enhanced Metadata System
+
+The framework uses an enhanced metadata schema for dashboard integration:
+
+- **Quality Scores**: 1-100 rating for each file
+- **Validation Status**: passed/failed/warning/pending
+- **Improvement Tracking**: Velocity and trend analysis
+- **Code Metrics**: For Python/JS/TS files (when implemented)
+- **Agent Activity**: Collaboration and review tracking
+- **SpacetimeDB Integration**: Real-time updates and event sourcing
+
+See `framework/schemas/enhanced_metadata_schema.yml` for full specification.
+
+## API Documentation
+
+The framework provides comprehensive API documentation for integration:
+
+- **API Specification**: `framework/docs/api/enhanced_metadata_api.md`
+- **Implementation Guide**: `framework/docs/api/implementation_guide.md`
+- **Sample Responses**: `framework/docs/api/sample_responses.md`
+- **SpacetimeDB Integration**: Real-time database operations
+
+## Best Practices
+
+1. **Always Connect to SpacetimeDB**: Verify overseer-system connection before operations
+2. **Register Properly**: Use proper agent registration in overseer-system
+3. **Respect User Authority**: Users have supreme authority (priority 255)
+4. **Use Templates**: Start from templates for consistency
+5. **Track Improvements**: Use the self-improvement tracker
+6. **Document Changes**: Update changelog in metadata
+7. **Get Feedback**: Use enhanced validation for AI insights
+8. **Monitor Events**: Subscribe to real-time events for coordination
 
 ## Testing Framework
 
-### Test Categories
-- **Unit Tests**: Pydantic model validation
-- **Integration Tests**: End-to-end protocol communication
-- **Performance Tests**: Message creation and validation benchmarks
-- **Security Tests**: Input validation and injection prevention
+### Running Tests
+```bash
+# Run all tests
+pytest tests/
 
-### Coverage Requirements
-- Minimum 90% test coverage for all framework code
-- All public methods must have corresponding tests
-- Integration tests for agent communication workflows
+# Run with coverage
+pytest tests/ --cov=framework --cov-report=html
 
-## Security and Compliance
+# Type checking
+mypy framework/ --strict
 
-### Security Features
-- **Input validation** prevents injection attacks
-- **Secret detection** in pre-commit hooks
-- **Dependency scanning** with safety checks
-- **Access control** through permission configuration
-- **Audit logging** for all agent operations
-
-### Permission System
-```json
-{
-  "permissions": {
-    "allow": [
-      "Bash(poetry*)", "Bash(pytest*)", "Bash(mypy*)",
-      "Edit(framework/**/*.py)", "Edit(tests/**/*.py)"
-    ],
-    "deny": [
-      "Bash(rm -rf*)", "Edit(*/secrets.py)"
-    ],
-    "restricted": [
-      "Edit(framework/schemas/*): require_validation"
-    ]
-  }
-}
+# Linting
+ruff check framework/ tests/
+black framework/ tests/
 ```
 
-## Troubleshooting and Debugging
+## Troubleshooting
 
-### Common Resolution Patterns
-| Issue | Command | Expected Outcome |
-|-------|---------|------------------|
-| Type errors | `mypy framework/ --strict` | Zero type errors |
-| Test failures | `pytest tests/ -x -v` | Detailed failure info |
-| Schema issues | `python framework/validators/validator.py --target schemas` | Validation report |
-| Linting issues | `ruff check framework/ --fix` | Auto-fixed issues |
+### Common Issues
 
-### Debug Mode
+**SpacetimeDB Connection Issues**:
+- Check SpacetimeDB CLI installation: `spacetime --version`
+- Verify identity setup: `spacetime identity list`
+- Test connection: `spacetime logs overseer-system`
+- Re-register agent if needed
+
+**Validation Failures**:
+- Check metadata format (must be in YAML code block)
+- Ensure all required fields are present
+- Verify category values match schema
+
+**Database Connection**:
+- Verify SpacetimeDB overseer-system is running and accessible
+- Check authentication setup
+- Ensure agent is registered in overseer-system
+
+**Script Execution**:
+- Make scripts executable: `chmod +x framework/scripts/*.sh`
+- Run from project root directory
+- Check Python dependencies: `poetry install`
+
+## Security Considerations
+
+- Never commit sensitive data to documentation
+- Use environment variables for credentials
+- Follow least privilege principles
+- Respect user supreme authority (priority 255)
+- Maintain complete audit trail
+- Regular security scanning with bandit
+
+## User Authority System
+
+### User Supreme Authority (Priority 255)
+
+Users have ultimate control in the SpacetimeDB overseer-system:
+
+- **Override Capability**: Users can override any agent action
+- **Emergency Halt**: System-wide emergency stop functionality
+- **Complete Audit Trail**: All authority actions are logged
+- **Real-time Control**: Instant user intervention capabilities
+
+### User Override Example
 ```python
-# Enable verbose debugging for agent communication using enhanced protocol
-from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
+def user_override(user_id, target_id, action, reason):
+    """Execute user override with supreme authority"""
+    result = subprocess.run([
+        "spacetime", "call", "overseer-system", "user_override",
+        user_id, target_id, action, reason, "255"  # Priority 255
+    ], capture_output=True, text=True)
+    
+    return result.returncode == 0
 
-protocol = EnhancedAgentProtocol()
-message = protocol.create_test_request(
-    test_type="unit",
-    test_file="tests/test_example.py", 
-    parameters={"environment": "development", "verbose": True},
-    sender="agent1"
+# Example: Emergency halt
+user_override(
+    "admin_user", 
+    "system_wide", 
+    "emergency_halt", 
+    "Critical security issue detected"
 )
 ```
 
-```bash
-# Validate with detailed output
-python framework/validators/validator.py --target messages --verbose
-```
-
-## Integration Examples
-
-### Complete Development Workflow
-```bash
-# 1. Start development (from your project root)
-git checkout -b feature/new-message-type
-
-# 2. Create tests first (TDD)
-pytest agent-doc-system/tests/test_new_feature.py --create-missing
-
-# 3. Implement feature with validation
-# Edit agent-doc-system/framework/agent_communication/core/models.py
-# Add new message type with Pydantic validation
-
-# 4. Run validation and tests
-./agent-doc-system/framework/scripts/validate.sh
-pytest agent-doc-system/tests/ --cov=agent-doc-system/framework --cov-fail-under=90
-mypy agent-doc-system/framework/ --strict
-
-# 5. Create pull request
-git add . && git commit -m "feat: add new message type with validation"
-git push origin feature/new-message-type
-```
-
-### Message Processing Pipeline
-```python
-# Send workflow request using enhanced protocol (nested usage)
-import sys
-sys.path.append('agent-doc-system')
-from framework.agent_communication.core.enhanced_protocol import EnhancedAgentProtocol
-
-protocol = EnhancedAgentProtocol(agent_id="workflow_coordinator")
-
-# Send workflow request
-workflow_msg = protocol.create_workflow_request(
-    workflow_name="process_documentation",
-    steps=[
-        {"name": "validate_syntax", "action": "validate"},
-        {"name": "check_links", "action": "verify"},
-        {"name": "update_metadata", "action": "update"}
-    ]
-)
-
-# Monitor messages
-messages = protocol.read_messages()
-```
-
-## Environment Configuration
-
-### Development Environment
-```bash
-# Install dependencies
-poetry install
-
-# Set up pre-commit hooks
-pre-commit install
-
-# Run initial validation
-./framework/scripts/validate.sh
-```
-
-### Production Environment
-```bash
-# Install production dependencies only
-poetry install --no-dev
-
-# Run comprehensive validation
-python framework/validators/validator.py --target all --validation_level strict
-```
-
-This configuration optimizes Claude Code for Python development with:
-1. **Type-safe development** with Pydantic models
-2. **Comprehensive testing** with pytest and coverage requirements
-3. **Code quality** through automated linting and formatting
-4. **Security** with automated scanning and validation
-5. **Clear workflows** for development and deployment
-
-The framework provides a solid foundation for agent communication systems with full validation, testing, and documentation capabilities.
+This configuration ensures consistent, high-quality documentation with automated validation, real-time coordination, and continuous improvement tracking through the SpacetimeDB overseer-system architecture.

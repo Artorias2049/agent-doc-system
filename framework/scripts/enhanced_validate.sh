@@ -10,7 +10,7 @@ PROJECT_ROOT="$(pwd)"
 # Detect usage pattern and set appropriate paths
 if [ -d "$PROJECT_ROOT/agent-doc-system/framework" ]; then
     FRAMEWORK_DIR="$PROJECT_ROOT/agent-doc-system/framework"
-    PROJECT_DOCS_DIR="$PROJECT_ROOT/project_docs"
+    PROJECT_DOCS_DIR="$PROJECT_ROOT/agent-doc-system/project_docs"
     echo "🔍 Detected nested usage pattern"
 elif [ -d "$PROJECT_ROOT/framework" ]; then
     FRAMEWORK_DIR="$PROJECT_ROOT/framework"

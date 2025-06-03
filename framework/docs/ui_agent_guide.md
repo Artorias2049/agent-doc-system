@@ -90,12 +90,12 @@ Great user interfaces need great documentation. This system ensures:
 your-project/
 ├── src/                    # Your UI code goes here
 ├── package.json           # Your dependencies
-├── project_docs/          # ✅ YOU CREATE DOCUMENTATION HERE
 └── agent-doc-system/      # 🚫 READ-ONLY FRAMEWORK (hands off!)
-    └── framework/         # This belongs to DocSystemAgent only
+    ├── framework/         # This belongs to DocSystemAgent only
+    └── project_docs/      # ✅ YOU CREATE DOCUMENTATION HERE
 ```
 
-**🔑 Key Rule**: You can only create documentation in `project_docs/`. The `agent-doc-system/framework/` directory is managed by DocSystemAgent.
+**🔑 Key Rule**: You can only create documentation in `agent-doc-system/project_docs/`. The `agent-doc-system/framework/` directory is managed by DocSystemAgent.
 
 ### Step 2: Create Your First Document
 ```bash

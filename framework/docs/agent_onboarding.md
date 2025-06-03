@@ -4,7 +4,7 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "2.4.0"
+  version: "2.5.0"
   status: "Active"
   owner: "Documentation Team"
   title: "Agent Documentation System - Complete Guide"
@@ -32,8 +32,21 @@ content:
     - title: "Quickstart Checklist"
       content: "Setup agent name, database connection, announce arrival, create documentation, validate and improve"
     - title: "Changelog"
-      content: "2.4.0 (2025-06-03): Enhanced metadata system for dashboard integration"
+      content: "2.5.0 (2025-06-03): Corrected project_docs location and eliminated file redundancy"
   changelog:
+    - version: "2.5.0"
+      date: "2025-06-03"
+      changes:
+        - "Updated project_docs location to be inside agent-doc-system directory"
+        - "Fixed all script paths and command examples for nested usage pattern"
+        - "Added explicit 'Why Feedback Matters' section to emphasize self-improvement philosophy"
+        - "Updated validation scripts to correctly detect project_docs location"
+        - "Enhanced create_documentation.py for proper path handling"
+        - "Updated all documentation to reflect correct directory structure"
+        - "Eliminated file redundancy: removed duplicate documentation_protocol.md"
+        - "Renamed all overview.md files to descriptive names for agent clarity"
+        - "Consolidated templates with agent-friendly naming convention"
+        - "Updated all internal references to reflect new file structure"
     - version: "2.4.0"
       date: "2025-06-03"
       changes:
@@ -107,7 +120,7 @@ feedback:
   status:
     value: "approved"
     updated_by: "DocSystemAgent"
-    date: "2025-06-02"
+    date: "2025-06-03"
     validation: "passed"
     implementation: "complete"
 ```
@@ -117,6 +130,36 @@ feedback:
 Comprehensive documentation system with enhanced metadata, AI feedback integration, and automated quality assessment. This system provides structured documentation validation, comprehensive file metrics, and professional development workflows.
 
 The system includes automated feedback agents, enhanced metadata schemas, and self-improvement tracking to ensure documentation maintains high standards and provides actionable metrics for dashboard visualization.
+
+## Framework Usage Pattern
+
+**IMPORTANT**: This framework is designed to be cloned into your projects as a subdirectory.
+
+### Nested Usage Pattern (Standard)
+When you clone this framework into your project, the structure will be:
+```
+your-project/                    # Your project root
+├── src/                        # Your project source code
+├── package.json               # Your project dependencies
+└── agent-doc-system/          # The cloned framework
+    ├── framework/             # 🚫 READ-ONLY (managed by DocSystemAgent)
+    │   ├── docs/             # Framework documentation
+    │   ├── schemas/          # Validation schemas
+    │   ├── scripts/          # Utility scripts
+    │   └── validators/       # Validation tools
+    ├── project_docs/         # ✅ YOUR documentation goes here
+    └── README.md            # Framework overview
+```
+
+### Key Points:
+1. **Documentation Location**: Create all your documentation in `{project_root}/agent-doc-system/project_docs/`
+2. **Framework is READ-ONLY**: The `agent-doc-system/framework/` directory should never be modified
+3. **Scripts Usage**: Run scripts from your project root:
+   ```bash
+   ./agent-doc-system/framework/scripts/create_doc.sh project "My Doc" --owner "YourAgent"
+   ```
+4. **Validation**: Scripts auto-detect the nested pattern and validate accordingly
+5. **Search-Friendly**: All documentation system files are under `agent-doc-system/` for easy discovery
 
 ## Enhanced Metadata System
 
@@ -169,13 +212,13 @@ Every file created or modified by any agent must include the enhanced metadata s
 **Example Workflow:**
 ```bash
 # Validate with AI feedback
-./framework/scripts/enhanced_validate.sh --feedback
+./agent-doc-system/framework/scripts/enhanced_validate.sh --feedback
 
 # Generate improvement report
-python3 framework/scripts/self_improvement_tracker.py report
+python3 agent-doc-system/framework/scripts/self_improvement_tracker.py report
 
 # Standard validation
-./framework/scripts/validate.sh
+./agent-doc-system/framework/scripts/validate.sh
 ```
 
 ## Key Components
@@ -183,7 +226,6 @@ python3 framework/scripts/self_improvement_tracker.py report
 ### 1. Documentation Protocol
 - **Purpose:** Structured documentation with comprehensive metadata validation
 - **Key Files:**
-  - [Documentation Protocol](documentation_protocol.md)
   - [Document Protocol Schema](../schemas/document_protocol.yml)
   - [Enhanced Feedback Schema](../schemas/enhanced_feedback_schema.yml)
 
@@ -208,7 +250,6 @@ python3 framework/scripts/self_improvement_tracker.py report
   │   │   └── history/               # File storage
   │   ├── docs/
   │   │   ├── agent_onboarding.md    # This document (single source of truth)
-  │   │   ├── documentation_protocol.md
   │   │   ├── components/            # Component documentation
   │   │   └── templates/             # Documentation templates
   │   ├── schemas/
@@ -246,19 +287,19 @@ python3 framework/scripts/self_improvement_tracker.py report
 - **Usage Examples:**
   ```bash
   # Standard validation
-  ./framework/scripts/validate.sh
+  ./agent-doc-system/framework/scripts/validate.sh
   
   # Enhanced validation with AI feedback
-  ./framework/scripts/enhanced_validate.sh --feedback
+  ./agent-doc-system/framework/scripts/enhanced_validate.sh --feedback
   
   # Generate AI feedback for specific document
-  python3 framework/agent_communication/feedback_agent.py docs/example.md
+  python3 agent-doc-system/framework/agent_communication/feedback_agent.py agent-doc-system/project_docs/example.md
   
   # Track improvement cycles
-  python3 framework/scripts/self_improvement_tracker.py analyze
+  python3 agent-doc-system/framework/scripts/self_improvement_tracker.py analyze
   
   # Generate improvement report
-  python3 framework/scripts/self_improvement_tracker.py report
+  python3 agent-doc-system/framework/scripts/self_improvement_tracker.py report
   ```
 
 ### 4. Self-Improvement Tracking
@@ -282,32 +323,34 @@ python3 framework/scripts/self_improvement_tracker.py report
 - **Purpose:** Standardized templates for consistent documentation creation
 - **Location:** `framework/docs/templates/`
 - **Available Templates:**
-  - Project Templates: `overview.md`, `setup.md`
-  - Component Templates: `overview.md`, `api.md`
+  - Project Templates: `project_template.md`, `project_setup_template.md`
+  - Component Templates: `component_template.md`, `api_template.md`
 
 ### 7. Core Components
 - **Purpose:** Reusable system components with standardized documentation
 - **Location:** `framework/docs/components/`
 - **Available Components:**
-  - [Database Operations](components/agent_communication/overview.md)
-  - [Feedback System](components/feedback/overview.md)
-  - [Git Workflow](components/git/overview.md)
+  - [Database Operations](components/agent_communication/database_operations_component.md)
+  - [Feedback System](components/feedback/feedback_system_component.md)
+  - [Git Workflow](components/git/git_workflow_component.md)
 
 ## Required Practices
 
 ### Documentation Structure and Permissions
 1. **Location Requirements (CRITICAL):**
    - **DocSystemAgent ONLY**: Can create in `framework/docs/`, `framework/docs/api/`, `framework/docs/components/`
-   - **ALL OTHER AGENTS**: MUST create documentation ONLY in `project_docs/` directory
+   - **ALL OTHER AGENTS**: MUST create documentation ONLY in `agent-doc-system/project_docs/` directory
    - **Templates**: Available to read from `framework/docs/templates/`
    - **Framework Directory**: READ-ONLY for all agents except DocSystemAgent
 
 2. **Required Sections:**
    - Title
-   - Machine-Actionable Metadata
+   - Machine-Actionable Metadata (with complete feedback section)
    - Overview
    - Main Content
    - Changelog
+   
+   **Note**: The feedback section within the metadata is CRITICAL - it drives our entire self-improvement system.
 
 ### Metadata
 Every documentation file must include a `## Machine-Actionable Metadata` section with a YAML code block containing:
@@ -319,18 +362,36 @@ Every documentation file must include a `## Machine-Actionable Metadata` section
 ### Creating New Documentation
 1. **Use the automated creator (Recommended)**:
    ```bash
-   ./framework/scripts/create_doc.sh <type> "<title>" --owner "<name>" --description "<desc>"
+   ./agent-doc-system/framework/scripts/create_doc.sh <type> "<title>" --owner "<name>" --description "<desc>"
    ```
 2. **Alternative: Manual template copy**:
-   - Choose template from `framework/docs/templates/`
-   - Copy to correct location
+   - Choose template from `agent-doc-system/framework/docs/templates/`
+   - Copy to correct location (`agent-doc-system/project_docs/`)
    - Update metadata and content
 3. Run validation before committing
 
 ### Validation
 Run validation scripts before committing changes:
-- `./framework/scripts/validate.sh` - Standard validation
-- `./framework/scripts/enhanced_validate.sh --feedback` - Enhanced validation with AI feedback
+- `./agent-doc-system/framework/scripts/validate.sh` - Standard validation
+- `./agent-doc-system/framework/scripts/enhanced_validate.sh --feedback` - Enhanced validation with AI feedback
+
+## Why Feedback Matters
+
+**The feedback section is the cornerstone of our continuous improvement philosophy.**
+
+Every documentation file requires a feedback section because:
+
+1. **Self-Improvement Tracking**: The feedback drives our improvement velocity metrics. Without honest feedback, we can't measure progress.
+
+2. **Quality Evolution**: Your rating (1-100) and observations help track documentation quality over time. This data powers dashboard visualizations showing improvement trends.
+
+3. **Actionable Insights**: Suggestions with effort estimates help prioritize improvements. The system tracks which improvements are most effective.
+
+4. **Team Learning**: Feedback is shared across agents, helping everyone learn from successes and challenges.
+
+5. **Automated Analysis**: AI agents analyze feedback patterns to identify systemic issues and recommend framework improvements.
+
+**Remember**: The feedback section isn't bureaucracy - it's the engine of continuous improvement. Your honest assessment today shapes better documentation tomorrow.
 
 ## AI Feedback System
 
@@ -544,13 +605,13 @@ For complete database documentation and advanced operations, see the external [D
 2. **Check Agent Name:**
    ```bash
    # Check if agent has a name set
-   ./framework/scripts/setup_agent_name.sh check
+   ./agent-doc-system/framework/scripts/setup_agent_name.sh check
    
    # If no name is set, create one
-   ./framework/scripts/setup_agent_name.sh setup YourAgentName
+   ./agent-doc-system/framework/scripts/setup_agent_name.sh setup YourAgentName
    
    # Activate agent environment
-   ./framework/scripts/setup_agent_name.sh activate
+   ./agent-doc-system/framework/scripts/setup_agent_name.sh activate
    ```
 
 3. **Test Database Connection:**
@@ -603,21 +664,21 @@ For complete database documentation and advanced operations, see the external [D
 
 5. **Create Documentation (Automated & Permission-Aware):**
    ```bash
-   # For ALL AGENTS - Creates in project_docs/
-   ./framework/scripts/create_doc.sh project "My Project Documentation" \
+   # For ALL AGENTS - Creates in agent-doc-system/project_docs/
+   ./agent-doc-system/framework/scripts/create_doc.sh project "My Project Documentation" \
      --owner "YourAgentName" \
      --description "Brief description of the project documentation"
    
-   ./framework/scripts/create_doc.sh general "User Guide" \
+   ./agent-doc-system/framework/scripts/create_doc.sh general "User Guide" \
      --owner "YourAgentName" \
      --description "General documentation for users"
    
    # For DocSystemAgent ONLY - Creates in framework/
-   ./framework/scripts/create_doc.sh api "System API" \
+   ./agent-doc-system/framework/scripts/create_doc.sh api "System API" \
      --owner "DocSystemAgent" \
      --description "Framework API documentation"
    
-   ./framework/scripts/create_doc.sh component "Core Component" \
+   ./agent-doc-system/framework/scripts/create_doc.sh component "Core Component" \
      --owner "DocSystemAgent" \
      --description "Framework component documentation"
    
@@ -628,31 +689,31 @@ For complete database documentation and advanced operations, see the external [D
 6. **Validate and Get Feedback:**
    ```bash
    # Standard validation
-   ./framework/scripts/validate.sh
+   ./agent-doc-system/framework/scripts/validate.sh
    
    # Enhanced validation with AI feedback
-   ./framework/scripts/enhanced_validate.sh --feedback
+   ./agent-doc-system/framework/scripts/enhanced_validate.sh --feedback
    
    # Generate specific document feedback
-   python3 framework/agent_communication/feedback_agent.py ./my_document.md
+   python3 agent-doc-system/framework/agent_communication/feedback_agent.py ./agent-doc-system/project_docs/my_document.md
    ```
 
 7. **Track Improvements:**
    ```bash
    # Generate improvement report
-   python3 framework/scripts/self_improvement_tracker.py report
+   python3 agent-doc-system/framework/scripts/self_improvement_tracker.py report
    
    # Analyze improvement trends
-   python3 framework/scripts/self_improvement_tracker.py analyze
+   python3 agent-doc-system/framework/scripts/self_improvement_tracker.py analyze
    ```
 
 ### Complete Workflow
 
-1. Check agent name setup using `./framework/scripts/setup_agent_name.sh check`
+1. Check agent name setup using `./agent-doc-system/framework/scripts/setup_agent_name.sh check`
 2. Test database connectivity using the provided connection code
 3. Announce arrival to the system database
-4. Review templates in `framework/docs/templates/`
-5. Create documentation with proper metadata
+4. Review templates in `agent-doc-system/framework/docs/templates/`
+5. Create documentation with proper metadata in `agent-doc-system/project_docs/`
 6. Run validation and AI feedback
 7. Implement suggested improvements
 8. Track improvement cycles
@@ -662,24 +723,41 @@ For complete database documentation and advanced operations, see the external [D
 
 ### Setup:
 - [ ] Install dependencies: `poetry install` or `pip install pyyaml rich click`
-- [ ] Check agent name: `./framework/scripts/setup_agent_name.sh check`
-- [ ] Set agent name if needed: `./framework/scripts/setup_agent_name.sh setup YourAgentName`
-- [ ] Activate agent environment: `./framework/scripts/setup_agent_name.sh activate`
+- [ ] Check agent name: `./agent-doc-system/framework/scripts/setup_agent_name.sh check`
+- [ ] Set agent name if needed: `./agent-doc-system/framework/scripts/setup_agent_name.sh setup YourAgentName`
+- [ ] Activate agent environment: `./agent-doc-system/framework/scripts/setup_agent_name.sh activate`
 - [ ] Test database connection to `~/.claude/mcp-global-hub/database/agent_communication.db`
 - [ ] Announce arrival to system database
-- [ ] Choose template from `framework/docs/templates/`
-- [ ] Create documentation with proper YAML metadata
+- [ ] Choose template from `agent-doc-system/framework/docs/templates/`
+- [ ] Create documentation with proper YAML metadata in `agent-doc-system/project_docs/`
 - [ ] Include required sections: title, metadata, overview, changelog
 - [ ] Add feedback section for AI assessment
 
 ### Validation and Improvement:
-- [ ] Run standard validation: `./framework/scripts/validate.sh`
-- [ ] Generate AI feedback: `./framework/scripts/enhanced_validate.sh --feedback`
+- [ ] Run standard validation: `./agent-doc-system/framework/scripts/validate.sh`
+- [ ] Generate AI feedback: `./agent-doc-system/framework/scripts/enhanced_validate.sh --feedback`
 - [ ] Implement improvement suggestions
 - [ ] Track improvement cycles
 - [ ] Generate quality reports
 
 ## Changelog
+
+- **2.5.0** (2025-06-03): Corrected project_docs location and eliminated file redundancy
+  - Updated project_docs location to be inside agent-doc-system directory for better UI search integration
+  - Fixed all script paths and command examples throughout the documentation
+  - Added explicit "Why Feedback Matters" section to emphasize the self-improvement philosophy
+  - Updated validation scripts to correctly detect project_docs location in nested usage pattern
+  - Enhanced create_documentation.py for proper path handling in all usage scenarios
+  - Eliminated file redundancy: removed duplicate documentation_protocol.md
+  - Renamed all overview.md files to descriptive names (database_operations_component.md, feedback_system_component.md, etc.)
+  - Consolidated templates with agent-friendly naming convention
+  - Updated all internal references to reflect new clean file structure
+
+- **2.4.0** (2025-06-03): Enhanced metadata system for dashboard integration
+  - Added enhanced metadata schema for comprehensive file metrics
+  - Implemented dashboard integration capabilities with quality scores and validation status
+  - Created sample metadata structure with code metrics for programming files
+  - Enhanced agent collaboration and file health monitoring capabilities
 
 - **2.3.0** (2025-06-02): Agent identity and database announcement requirements
   - Added mandatory agent name setup using `./framework/scripts/setup_agent_name.sh`

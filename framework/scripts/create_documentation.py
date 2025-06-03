@@ -19,13 +19,23 @@ class DocumentationCreator:
     def __init__(self, framework_dir: str = None):
         if framework_dir:
             self.framework_dir = Path(framework_dir)
+            # When framework_dir is provided, set project_docs relative to it
+            self.project_docs_dir = self.framework_dir.parent / "project_docs"
         else:
-            # Auto-detect framework directory
+            # Auto-detect framework directory and usage pattern
             current_dir = Path.cwd()
-            if (current_dir / "framework").exists():
+            if (current_dir / "agent-doc-system" / "framework").exists():
+                # Nested usage: project_root/agent-doc-system/framework/
+                self.framework_dir = current_dir / "agent-doc-system" / "framework"
+                self.project_docs_dir = current_dir / "agent-doc-system" / "project_docs"
+            elif (current_dir / "framework").exists():
+                # Direct usage: framework as project root
                 self.framework_dir = current_dir / "framework"
+                self.project_docs_dir = current_dir / "project_docs"
             else:
+                # Running from within framework directory
                 self.framework_dir = current_dir
+                self.project_docs_dir = current_dir.parent / "project_docs"
                 
         self.templates_dir = self.framework_dir / "docs" / "templates"
         self.api_dir = self.framework_dir / "docs" / "api"
@@ -89,21 +99,21 @@ class DocumentationCreator:
         if owner == "DocSystemAgent":
             # DocSystemAgent can create anywhere
             if doc_type == "api":
-                template_file = self.templates_dir / "components" / "api.md"
+                template_file = self.templates_dir / "api_template.md"
                 default_location = self.api_dir
             elif doc_type == "component":
-                template_file = self.templates_dir / "components" / "overview.md"
+                template_file = self.templates_dir / "component_template.md"
                 default_location = self.components_dir
             elif doc_type == "project":
-                template_file = self.templates_dir / "projects" / "overview.md"
-                default_location = Path.cwd() / "project_docs"
+                template_file = self.templates_dir / "project_template.md"
+                default_location = self.project_docs_dir
             else:
-                template_file = self.templates_dir / "projects" / "overview.md"
-                default_location = Path.cwd() / "project_docs"
+                template_file = self.templates_dir / "project_template.md"
+                default_location = self.project_docs_dir
         else:
             # Other agents restricted to project_docs
-            template_file = self.templates_dir / "projects" / "overview.md"
-            default_location = Path.cwd() / "project_docs"
+            template_file = self.templates_dir / "project_template.md"
+            default_location = self.project_docs_dir
             
         # Use provided location or default
         target_dir = Path(location) if location else default_location
@@ -464,8 +474,8 @@ Permission Notes:
                 owner=args.owner
             )
             print(f"✅ Created component structure at: {component_dir}")
-            print(f"   - overview.md")
-            print(f"   - api.md")
+            print(f"   - {args.title.lower().replace(' ', '_')}_component.md")
+            print(f"   - {args.title.lower().replace(' ', '_')}_api.md")
         else:
             # Create single document
             file_path = creator.create_document(

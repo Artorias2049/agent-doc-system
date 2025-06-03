@@ -130,6 +130,9 @@ coverage/
 # MacOS
 .DS_Store
 
+# Agent configuration (local only)
+.agent_config/
+
 # Agent communication history files
 framework/agent_communication/history/
 

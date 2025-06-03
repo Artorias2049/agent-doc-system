@@ -131,7 +131,7 @@ Based on analysis of agent interactions with the documentation system, several p
 # Create component structure (creates overview.md AND api.md)
 ./framework/scripts/create_doc.sh component "Database Handler" \
   --owner "Jane Smith" \
-  --description "SQLite database operations"
+  --description "SpacetimeDB database operations"
 
 # Create project documentation
 ./framework/scripts/create_doc.sh project "My Project" \

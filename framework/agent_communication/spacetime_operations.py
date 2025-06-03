@@ -89,10 +89,7 @@ class SpacetimeDB:
         """Register this agent in overseer-system."""
         args = [
             "call", self.database, "register_agent",
-            "--agent_name", self.agent_name,
-            "--agent_type", agent_type,
-            "--capabilities", capabilities or "general",
-            "--status", "active"
+            f'"{self.agent_name}"', f'"{agent_type}"', f'"{self.agent_name}"', 'null'
         ]
         
         result = self._run_spacetime_cmd(args)
@@ -107,8 +104,7 @@ class SpacetimeDB:
         """Update agent status (active/inactive/busy)."""
         args = [
             "call", self.database, "update_agent_status",
-            "--agent_name", self.agent_name,
-            "--status", status
+            f'"{self.agent_name}"', f'"{status}"'
         ]
         
         result = self._run_spacetime_cmd(args)
@@ -118,7 +114,7 @@ class SpacetimeDB:
         """Send heartbeat to maintain agent connection."""
         args = [
             "call", self.database, "agent_heartbeat",
-            "--agent_name", self.agent_name
+            f'"{self.agent_name}"'
         ]
         
         result = self._run_spacetime_cmd(args)
@@ -218,11 +214,7 @@ class SpacetimeDB:
         
         args = [
             "call", self.database, "create_task",
-            "--task_id", task_id,
-            "--agent_id", self.agent_name,
-            "--task_type", task_type,
-            "--priority", str(priority),
-            "--payload", json.dumps(payload)
+            f'"{task_id}"', f'"{self.agent_name}"', f'"{task_type}"', f'"{priority}"', f'"{json.dumps(payload)}"'
         ]
         
         result = self._run_spacetime_cmd(args)

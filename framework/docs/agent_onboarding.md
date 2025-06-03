@@ -4,7 +4,7 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "3.3.0"
+  version: "3.3.1"
   status: "Active"
   owner: "DocSystemAgent"
   title: "Agent Documentation System - THE PROTOCOL v3.3"
@@ -224,11 +224,7 @@ your-project/                    # Your project root
       # Register using register_agent reducer
       result = subprocess.run([
           "spacetime", "call", "overseer-system", "register_agent",
-          "--agent_id", agent_id,
-          "--agent_name", agent_name,
-          "--agent_type", agent_type,
-          "--supervisor_id", supervisor_id,
-          "--status", "active"
+          f'"{agent_id}"', f'"{agent_type}"', f'"{agent_name}"', f'"{supervisor_id}"'
       ], capture_output=True, text=True)
       
       if result.returncode == 0:
@@ -427,7 +423,7 @@ your-project/                    # Your project root
        """Announce agent arrival to overseer-system"""
        result = subprocess.run([
            "spacetime", "call", "overseer-system", "register_agent",
-           "--agent_name", agent_name, "--agent_type", "documentation", "--status", "active"
+           f'"{agent_name}"', '"documentation"', f'"{agent_name}"', 'null'
        ], capture_output=True, text=True)
        
        if result.returncode == 0:
@@ -549,11 +545,7 @@ class SpacetimeDBAgent:
         # Use the agent name as ID (no timestamp needed)
         result = subprocess.run([
             "spacetime", "call", "overseer-system", "register_agent",
-            "--agent_id", self.agent_name,
-            "--agent_name", self.agent_name,
-            "--agent_type", "documentation",
-            "--supervisor_id", "",
-            "--status", "active"
+            f'"{self.agent_name}"', '"documentation"', f'"{self.agent_name}"', 'null'
         ], capture_output=True, text=True)
         
         if result.returncode == 0:
@@ -791,7 +783,7 @@ print(f"Active agents in overseer-system: {len(active_agents)}")
        
        result = subprocess.run([
            "spacetime", "call", "overseer-system", "register_agent",
-           "--agent_name", agent_name, "--agent_type", "documentation", "--status", "active"
+           f'"{agent_name}"', '"documentation"', f'"{agent_name}"', 'null'
        ], capture_output=True, text=True)
        
        if result.returncode == 0:

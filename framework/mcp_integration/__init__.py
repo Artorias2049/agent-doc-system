@@ -6,7 +6,7 @@ coordination system. All agents in the ecosystem use these clients to
 communicate and coordinate without controlling the underlying database.
 """
 
-__version__ = "1.0.0"
+__version__ = "4.0.0"
 __author__ = "Agent Documentation System"
 
 from .agora_client import AgoraClient

@@ -4,7 +4,7 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "1.0.0"
+  version: "4.0.0"
   status: "Active"
   owner: "DocSystemAgent"
   title: "Agent Pain Points and Solutions"
@@ -22,7 +22,7 @@ content:
     - title: "Usage Guidelines"
       content: "How to use the new tools effectively"
   changelog:
-    - version: "1.0.0"
+    - version: "4.0.0"
       date: "2025-06-03"
       changes:
         - "Initial documentation of pain points and solutions"

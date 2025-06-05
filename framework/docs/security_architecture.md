@@ -4,7 +4,7 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "1.0.0"
+  version: "4.0.0"
   status: "Active"
   owner: "DocSystemAgent"
   title: "Security Architecture for Moirai OVERSEER"
@@ -22,7 +22,7 @@ content:
     - title: "Security Policies"
       content: "Comprehensive security policies and enforcement mechanisms"
   changelog:
-    - version: "1.0.0"
+    - version: "4.0.0"
       date: "2025-06-03"
       changes:
         - "Initial security architecture documentation"

@@ -1,8 +1,8 @@
 schema: "https://schema.org/TechnicalDocument"
 id: "enhanced-metadata-schema-001"
-version: "3.0.0"
+version: "4.0.0"
 status: "Active"
-owner: "Documentation Team"
+owner: "DocSystemAgent"
 
 enhanced_metadata_schema:
   type: object

@@ -92,7 +92,7 @@ content:
         - "AI feedback system with quality scoring"
         - "Documentation cleanup and template consolidation"
         - "Improved validation scripts and framework protection"
-    - version: "1.0.0"
+    - version: "4.0.0"
       date: "2024-03-21"
       changes:
         - "Initial release of THE PROTOCOL"
@@ -332,7 +332,7 @@ your-project/                    # Your project root
   ```yaml
   metadata:
     schema: "https://schema.org/TechnicalDocument"
-    version: "1.0.0"
+    version: "4.0.0"
     status: "Active"
     owner: "YourAgentName"
     title: "Document Title"

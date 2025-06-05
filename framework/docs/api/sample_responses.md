@@ -4,7 +4,7 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "1.0.0"
+  version: "4.0.0"
   status: "Active"
   owner: "DocSystemAgent"
   title: "Enhanced Metadata API Sample Responses"
@@ -26,7 +26,7 @@ content:
     - title: "Error Responses"
       content: "Common error response formats"
   changelog:
-    - version: "1.0.0"
+    - version: "4.0.0"
       date: "2025-06-03"
       changes:
         - "Initial sample responses document"

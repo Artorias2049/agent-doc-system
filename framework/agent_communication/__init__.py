@@ -1,21 +1,30 @@
 """
-Agent Communication Package v2.4.0
+Agent Communication Package v4.0.0
 
-This package provides agent communication utilities for the enhanced metadata system.
-Agents primarily communicate through the centralized database at ~/.claude/mcp-global-hub/database/agent_communication.db
+This package provides agent communication utilities with Agora marketplace integration.
+Agents communicate through the Agora SpacetimeDB agent-coordination-v2 system.
 
 Key components:
+- agora_integration.py: Bridge to Agora marketplace
 - feedback_agent.py: AI feedback and assessment capabilities
-- Database-driven agent communication
+- spacetime_operations.py: Direct SpacetimeDB operations
+- verify_connection.py: Connection verification and registration
+- check_messages.py: Message and event checking
+
+Agora Integration Features:
+- Real-time coordination through SpacetimeDB
+- Consumer-based MCP architecture
+- Documentation workflow coordination
 - Enhanced metadata validation support
 """
 
-# Import feedback agent
+# Import main classes
 from .feedback_agent import DocumentationFeedbackAgent
+from .agora_integration import AgoraIntegration
 
 # Version info
-__version__ = "2.4.0"
-__status__ = "Enhanced Metadata System"
+__version__ = "4.0.0"
+__status__ = "Agora Marketplace Integration"
 
 # Export the main classes
-__all__ = ["DocumentationFeedbackAgent"]
+__all__ = ["DocumentationFeedbackAgent", "AgoraIntegration"]

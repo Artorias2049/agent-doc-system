@@ -12,12 +12,21 @@ import sys
 import os
 
 # Add framework to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+framework_dir = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, framework_dir)
 
-from mcp_integration.agora_client import AgoraClient
-from mcp_integration.documentation_agora_client import DocumentationAgoraClient
-from moirai_core.overseer import MoiraiOverseer
-from agent_communication.agora_integration import AgoraIntegration
+# Change to framework directory to fix relative imports
+os.chdir(framework_dir)
+
+try:
+    from mcp_integration.agora_client import AgoraClient
+    from mcp_integration.documentation_agora_client import DocumentationAgoraClient
+    from moirai_core.overseer import MoiraiOverseer
+    from agent_communication.agora_integration import AgoraIntegration
+except ImportError as e:
+    print(f"❌ Import error: {e}")
+    print("💡 Try running with: python3 -m framework.scripts.test_agora_moirai from project root")
+    sys.exit(1)
 
 
 async def test_agora_connection():

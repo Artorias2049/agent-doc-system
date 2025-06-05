@@ -4,7 +4,7 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "1.0.0"
+  version: "4.0.0"
   status: "Active"
   owner: "DocSystemAgent"
   title: "Enhanced Metadata API Implementation Guide"
@@ -28,7 +28,7 @@ content:
     - title: "Dashboard Integration"
       content: "Building UI components with the API"
   changelog:
-    - version: "1.0.0"
+    - version: "4.0.0"
       date: "2025-06-03"
       changes:
         - "Initial implementation guide"

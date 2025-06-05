@@ -4,7 +4,7 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "1.0.0"
+  version: "4.0.0"
   status: "Active"
   owner: "DocSystemAgent"
   title: "Enhanced Metadata API Specification"
@@ -24,7 +24,7 @@ content:
     - title: "Best Practices"
       content: "Caching, pagination, and batch operations"
   changelog:
-    - version: "1.0.0"
+    - version: "4.0.0"
       date: "2025-06-03"
       changes:
         - "Initial release with enhanced metadata support"

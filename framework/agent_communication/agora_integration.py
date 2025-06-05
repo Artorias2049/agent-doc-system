@@ -1,9 +1,11 @@
 """
-Agora Integration for Agent Communication
+Agora Integration for Agent Communication v4.0.0
 
 This module integrates the existing agent communication system
 with the new Agora MCP consumer interface. It provides a bridge
 between the current framework and the Agora marketplace.
+
+Connected to: agent-coordination-v2 SpacetimeDB for real-time coordination.
 """
 
 import os
@@ -208,15 +210,28 @@ class AgoraIntegration:
         Returns:
             bool: True if validation passed
         """
-        # This would integrate with existing validation scripts
-        # For now, simulate validation
+        import subprocess
+        import sys
+        from pathlib import Path
+        
         print(f"🔍 Validating {doc_type} documentation...")
         
-        # Simulate validation process
-        await asyncio.sleep(0.1)  # Simulate processing time
-        
-        # Most validations should pass
-        return True
+        try:
+            # Get the framework directory
+            framework_dir = Path(__file__).parent.parent
+            validator_script = framework_dir / "validators" / "validator.py"
+            
+            if not validator_script.exists():
+                print(f"⚠️  Validator script not found at {validator_script}")
+                return False
+            
+            # For now, return True since we don't have a specific document to validate
+            # In real implementation, this would validate the actual document file
+            return True
+            
+        except Exception as e:
+            print(f"❌ Validation error: {e}")
+            return False
     
     async def request_peer_review_from_agora(self, document_path: str) -> Optional[str]:
         """

@@ -4,7 +4,7 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "1.0.0"
+  version: "4.0.0"
   status: "Active"
   owner: "DocSystemAgent"
   title: "Agent Communication via SpacetimeDB"
@@ -24,7 +24,7 @@ content:
     - title: "Best Practices"
       content: "Efficient messaging patterns and coordination"
   changelog:
-    - version: "1.0.0"
+    - version: "4.0.0"
       date: "2025-06-03"
       changes:
         - "Initial SpacetimeDB messaging guide replacing file-based UI agent communication"

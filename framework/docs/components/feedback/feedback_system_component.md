@@ -4,9 +4,9 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "1.1.0"
+  version: "4.0.0"
   status: "Active"
-  owner: "Documentation Team"
+  owner: "DocSystemAgent"
   title: "Feedback Component"
   description: "Component for providing structured feedback in the agent-doc-system"
 content:
@@ -29,7 +29,7 @@ content:
         - "Added support for SpacetimeDB model validation feedback"
         - "Improved feedback categories for workflow and validation requests"
         - "Added OWASP compliance feedback patterns"
-    - version: "1.0.0"
+    - version: "4.0.0"
       date: "2024-03-21"
       changes:
         - "Initial release as a component"

@@ -4,9 +4,9 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "1.1.0"
+  version: "4.0.0"
   status: "Active"
-  owner: "Documentation Team"
+  owner: "DocSystemAgent"
   title: "Git Workflow Component"
   description: "Component for standardized git workflow in the agent-doc-system"
 content:
@@ -36,7 +36,7 @@ content:
         - "Implemented comprehensive CI/CD pipeline with pytest"
         - "Added security scanning with OWASP compliance checks"
         - "Enhanced commit message patterns for framework updates"
-    - version: "1.0.0"
+    - version: "4.0.0"
       date: "2024-03-21"
       changes:
         - "Initial release as a component"

@@ -19,16 +19,18 @@ print_usage() {
     echo -e "Usage: $0 [COMMAND] [AGENT_NAME]"
     echo
     echo "Commands:"
-    echo "  setup <name>    Set agent name (one-time only)"
+    echo "  setup <name>    Set agent name (🔒 PERMANENT - cannot be changed)"
     echo "  check           Check current agent name"
     echo "  status          Show detailed status"
     echo "  activate        Source environment variables"
     echo "  help            Show this help"
     echo
     echo "Examples:"
-    echo "  $0 setup MyProjectAgent    # Set agent name"
+    echo "  $0 setup MyProjectAgent    # Set agent name (permanent lock)"
     echo "  $0 check                   # Check current name"
     echo "  $0 activate                # Load environment variables"
+    echo
+    echo "🔒 SECURITY NOTE: Agent names are permanently locked once set to prevent spoofing."
 }
 
 check_python() {
@@ -71,11 +73,13 @@ main() {
             fi
             
             echo -e "${BLUE}🤖 Setting up agent name: $2${NC}"
+            echo -e "${YELLOW}🔒 WARNING: This will permanently lock the agent name. It cannot be changed once set.${NC}"
             python3 "$PYTHON_SCRIPT" "$2"
             
             if [[ $? -eq 0 ]]; then
                 echo
                 echo -e "${GREEN}🎉 Setup complete!${NC}"
+                echo -e "${GREEN}🔒 Agent name permanently locked for security${NC}"
                 echo -e "${YELLOW}💡 Run '$0 activate' to load environment variables${NC}"
             fi
             ;;

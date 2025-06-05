@@ -4,32 +4,44 @@
 ```yaml
 metadata:
   schema: "https://schema.org/TechnicalDocument"
-  version: "3.3.1"
+  version: "4.0.0"
   status: "Active"
   owner: "DocSystemAgent"
-  title: "Agent Documentation System - THE PROTOCOL v3.3"
-  description: "THE PROTOCOL v3.3: SpacetimeDB-powered multi-agent coordination with database name corrections and verified overseer-system architecture"
+  title: "Agent Documentation System - THE PROTOCOL v4.0"
+  description: "THE PROTOCOL v4.0: Agora marketplace integration with Moirai OVERSEER orchestration and consumer-based MCP architecture"
 content:
-  overview: "Single source of truth for the agent documentation system with SpacetimeDB real-time coordination and user supreme authority."
-  key_components: "SpacetimeDB Overseer System, Documentation Protocol, Real-time Coordination, User Authority, Agent Management, Documentation Templates"
+  overview: "Single source of truth for the agent documentation system with Agora marketplace integration, Moirai OVERSEER orchestration, and consumer-based MCP architecture."
+  key_components: "Agora Marketplace, Moirai OVERSEER, Documentation Protocol, MCP Consumer Interface, Real-time Coordination, Agent Templates"
   sections:
     - title: "Overview"
-      content: "This document serves as THE PROTOCOL - the single source of truth for understanding the SpacetimeDB-powered agent-doc-system."
-    - title: "SpacetimeDB Architecture"
-      content: "Real-time coordination with overseer-system database, user supreme authority, and agent management"
+      content: "This document serves as THE PROTOCOL v4.0 - the single source of truth for understanding the Agora marketplace integration with Moirai OVERSEER orchestration."
+    - title: "Agora Marketplace Architecture"
+      content: "Real-time coordination through Agora SpacetimeDB, consumer-based MCP integration, and intelligent project orchestration"
     - title: "Required Practices"
-      content: "Documentation Structure, Metadata, SpacetimeDB Connection, Agent Registration"
+      content: "Agora MCP Integration, Documentation Structure, Metadata, Consumer-Based Architecture"
     - title: "Agent Setup"
-      content: "Agent name setup, SpacetimeDB connection, arrival announcement, documentation creation"
+      content: "Agora client setup, capability registration, marketplace integration, Moirai coordination"
     - title: "Best Practices"
       content: "Documentation, Validation, Real-time Coordination"
     - title: "Getting Started"
-      content: "Setup agent name, connect to SpacetimeDB, announce arrival, create documentation, validate"
+      content: "Initialize Agora client, register capabilities, integrate with Moirai, test coordination"
     - title: "Quickstart Checklist"
-      content: "Agent name, SpacetimeDB connection, documentation creation, validation"
+      content: "Agora connection, capability registration, Moirai integration, collaboration testing"
     - title: "Changelog"
-      content: "3.3.0 (2025-06-03): Database name corrections and verified overseer-system integration"
+      content: "4.0.0 (2025-06-03): Agora marketplace integration with Moirai OVERSEER orchestration and consumer-based MCP architecture"
   changelog:
+    - version: "4.0.0"
+      date: "2025-06-03"
+      changes:
+        - "Revolutionary Agora marketplace integration replacing overseer-system references"
+        - "Moirai OVERSEER Phase 1 implementation for intelligent project orchestration"
+        - "Consumer-based MCP architecture respecting database agent ownership"
+        - "Complete agent onboarding process redesign for Agora marketplace"
+        - "Real-time coordination through Agora SpacetimeDB consumer interface"
+        - "Intelligent task assignment and multi-agent workflow orchestration"
+        - "Documentation system integration with Agora collaboration features"
+        - "Template sharing and peer review through marketplace"
+        - "Foundation for evolutionary agent spawning and self-improvement"
     - version: "3.3.0"
       date: "2025-06-03"
       changes:
@@ -76,7 +88,7 @@ content:
     - version: "2.5.0"
       date: "2025-06-03"
       changes:
-        - "Enhanced metadata system for dashboard integration"
+        - "Enhanced metadata system for real-time integration"
         - "AI feedback system with quality scoring"
         - "Documentation cleanup and template consolidation"
         - "Improved validation scripts and framework protection"
@@ -91,11 +103,11 @@ feedback:
     - what: "Complete architectural upgrade to SpacetimeDB with real-time capabilities."
       impact: "Dramatic improvement in agent coordination and user control."
       priority: "high"
-      category: "architecture"
+      category: "quality"
   suggestions:
     - action: "Continue monitoring SpacetimeDB performance and agent adoption."
       priority: "medium"
-      effort: "ongoing"
+      effort: "medium"
       impact: "high"
       assignee: "DocSystemAgent"
   status:
@@ -108,194 +120,202 @@ feedback:
 
 ## Overview
 
-This document serves as THE PROTOCOL v3.3 - the single source of truth for understanding the SpacetimeDB-powered agent documentation system with real-time coordination and user supreme authority.
+This document serves as THE PROTOCOL v4.0 - the single source of truth for understanding the revolutionary **Agora marketplace integration** with **Moirai OVERSEER orchestration** and consumer-based MCP architecture.
 
-Version 3.3 provides the complete 16-table architecture for **SpacetimeDB overseer-system** - a revolutionary real-time database with sub-microsecond response times, complete audit trails, and user supreme authority (priority 255). SpacetimeDB is the single coordination platform for all agent operations.
+Version 4.0 introduces the **Agora marketplace** - a SpacetimeDB-powered coordination hub where agents register capabilities, collaborate on projects, and participate in intelligent workflows orchestrated by **Moirai**. This architecture respects agent ownership boundaries while providing powerful coordination capabilities.
 
-This document provides comprehensive guidance for agent setup, SpacetimeDB connection, documentation creation, and real-time collaboration within the overseer-system architecture.
+This document provides comprehensive guidance for agent integration with Agora, Moirai coordination, and collaborative development workflows within the consumer-based architecture.
 
-## SpacetimeDB Architecture
+## Agora Marketplace Architecture
 
-### Overseer-System Database
+### Agora SpacetimeDB Integration
 
-**SpacetimeDB overseer-system** is the heart of the v3.0 architecture:
+**Agora** is the revolutionary marketplace at the heart of v4.0 architecture:
 
-- **Database Name:** `overseer-system`
+- **Database Name:** `agent-coordination-v2`
 - **Connection:** `SPACETIME_URI=http://127.0.0.1:3000`
 - **Authentication:** SpacetimeDB CLI (`spacetime identity`)
 - **Performance:** Sub-microsecond response times with WebAssembly backend
 - **Real-time:** Event sourcing and instant subscriptions
 - **Authority:** User supreme authority (priority 255)
+- **Ownership:** Claude-MCP-Research controls database schema and evolution
 
-### Database Schema (16 Tables)
+### Consumer-Based MCP Architecture
 
-1. **users** - `user_id(String), username(String), display_name(String), authority_level(String), created_at(Timestamp), preferences(String)`
-2. **user_overrides** - `override_id(String), user_id(String), override_type(String), target_id(String), action(String), reason(String), timestamp(Timestamp), priority(i32)`
-3. **user_directives** - `directive_id(String), user_id(String), directive_type(String), target_agents(String), content(String), priority(u8), expires_at(Timestamp), created_at(Timestamp)`
-4. **user_audit_log** - `log_id(u64), user_id(String), action_type(String), target_type(String), target_id(String), before_state(String), after_state(String), timestamp(Timestamp)`
-5. **agent_registry** - `agent_id(String), agent_name(String), agent_type(String), supervisor_id(String), status(String), registered_at(Timestamp), last_heartbeat(Timestamp), config(String)`
-6. **agent_hierarchy** - `hierarchy_id(String), parent_agent(String), child_agent(String), relationship_type(String), created_at(Timestamp), metadata(String)`
-7. **system_events** - `event_id(String), event_type(String), source_agent(String), target_agent(String), timestamp(Timestamp), data(String), priority(i32)`
-8. **workflows** - `workflow_id(String), workflow_type(String), status(String), initiator_agent(String), assigned_agents(String), created_at(Timestamp), completed_at(Timestamp), metadata(String)`
-9. **workflow_steps** - `step_id(String), workflow_id(String), step_name(String), step_order(i32), assigned_agent(String), status(String), input_data(String), output_data(String), started_at(Timestamp), completed_at(Timestamp)`
-10. **task_queue** - `task_id(String), agent_id(String), task_type(String), priority(i32), payload(String), status(String), created_at(Timestamp), assigned_at(Timestamp), completed_at(Timestamp)`
-11. **coordination_locks** - `lock_id(String), resource_id(String), locked_by(String), lock_type(String), acquired_at(Timestamp), expires_at(Timestamp), metadata(String)`
-12. **agent_subscriptions** - `subscription_id(String), agent_id(String), event_pattern(String), callback_url(String), is_active(bool), created_at(Timestamp), last_triggered(Timestamp)`
-13. **user_notifications** - `notification_id(String), user_id(String), notification_type(String), severity(String), title(String), message(String), timestamp(Timestamp), read(bool)`
-14. **health_metrics** - `metric_id(String), agent_id(String), metric_name(String), metric_value(String), timestamp(Timestamp), status(String)`
-15. **system_alerts** - `alert_id(String), alert_type(String), severity(String), source(String), message(String), created_at(Timestamp), resolved_at(Timestamp), status(String)`
-16. **session_management** - `session_id(String), agent_id(String), session_type(String), started_at(Timestamp), last_activity(Timestamp), status(String), connection_info(String)`
+**CRITICAL:** Agents do NOT control the Agora database. Claude-MCP-Research owns and manages the schema. Agents consume services through MCP interfaces:
 
-### MCP Tools Integration
+#### 7 MCP Tools Available to All Agents:
+1. **send_agent_message** - Inter-agent messaging with priority and threading
+2. **assign_task** - Intelligent task assignment with capability matching
+3. **update_task_progress** - Real-time progress tracking
+4. **register_agent_capability** - Dynamic capability registration
+5. **start_workflow_coordination** - Multi-agent workflow orchestration
+6. **query_coordination_data** - Query agents, tasks, workflows, metrics
+7. **coordination_system_status** - System health and performance monitoring
 
-**15 MCP Tools Available:**
-- **5 User Authority Tools** (priority 255) - Supreme user control
-- **3 Agent Management Tools** - Agent registration and coordination
-- **2 Workflow Tools** - Multi-agent workflow orchestration
-- **2 Communication Tools** - Real-time messaging and notifications
-- **3 Resource Providers** - Data access and management
+#### Consumer Interface Benefits:
+- ✅ **No database control** - Respect ownership boundaries
+- ✅ **Real-time coordination** - All MCP tools provide instant communication
+- ✅ **Capability discovery** - Find agents who can help with tasks
+- ✅ **Progress tracking** - Monitor all activities in real-time
+- ✅ **Collaborative workflows** - Multi-agent project coordination
+
+### Moirai OVERSEER Integration
+
+**Moirai** (named after the Greek Fates who weave destiny) is the intelligent OVERSEER that orchestrates complex projects:
+
+#### Moirai Phase 1 Capabilities:
+- **Natural Language Processing** - "I need a REST API..." becomes structured project plan
+- **Agile Project Decomposition** - Breaks requests into manageable epics and tasks
+- **Intelligent Agent Matching** - Assigns tasks based on capabilities and availability
+- **Multi-Agent Coordination** - Orchestrates existing agents in Agora marketplace
+- **Progress Monitoring** - Real-time tracking and user communication
+
+#### How Moirai Works:
+1. **User Request** → Moirai analyzes and creates project plan
+2. **Task Decomposition** → Breaks project into epics and individual tasks
+3. **Agent Discovery** → Finds available agents in Agora marketplace
+4. **Intelligent Assignment** → Matches tasks to agents based on capabilities
+5. **Coordination** → Tracks progress and facilitates collaboration
 
 ### Critical Features
 
-- **User Supreme Authority** (priority 255) - Users have ultimate control
-- **Real-time Coordination** - Instant agent synchronization
-- **Complete Audit Trail** - Every action tracked and logged
-- **Emergency Halt Capability** - System-wide emergency stops
-- **Event Sourcing** - Complete state reconstruction capability
+- **Consumer-Based Architecture** - Moirai consumes Agora services without controlling database
+- **Real-time Coordination** - Instant agent synchronization through Agora
+- **Intelligent Orchestration** - Smart project planning and task assignment
+- **User Communication Interface** - Natural language project management
+- **Evolutionary Foundation** - Ready for Phase 2 agent spawning
 
-## Framework Usage Pattern
+## Framework Integration Pattern
 
-**IMPORTANT**: This framework is designed to be cloned into your projects as a subdirectory.
+**IMPORTANT**: This framework provides consumer-based integration with the Agora marketplace and Moirai orchestration.
 
-### Nested Usage Pattern (Standard)
-When you clone this framework into your project, the structure will be:
+### Integration Architecture (New v4.0)
+When you integrate this framework, the structure includes:
 ```
 your-project/                    # Your project root
 ├── src/                        # Your project source code
 ├── package.json               # Your project dependencies
-└── agent-doc-system/          # The cloned framework
+└── agent-doc-system/          # The framework integration
     ├── framework/             # 🚫 READ-ONLY (managed by DocSystemAgent)
+    │   ├── mcp_integration/   # 🆕 Agora MCP consumer clients
+    │   ├── moirai_core/       # 🆕 Moirai OVERSEER integration
+    │   ├── agent_communication/ # Enhanced with Agora integration
     │   ├── docs/             # Framework documentation
     │   ├── schemas/          # Validation schemas
-    │   ├── scripts/          # Utility scripts
+    │   ├── scripts/          # Utility and testing scripts
     │   └── validators/       # Validation tools
     ├── project_docs/         # ✅ YOUR documentation goes here
     └── README.md            # Framework overview
 ```
 
-### Key Points:
-1. **Documentation Location**: Create all your documentation in `{project_root}/agent-doc-system/project_docs/`
-2. **Framework is READ-ONLY**: The `agent-doc-system/framework/` directory should never be modified
-3. **Scripts Usage**: Run scripts from your project root:
-   ```bash
-   ./agent-doc-system/framework/scripts/create_doc.sh project "My Doc" --owner "YourAgent"
-   ```
-4. **SpacetimeDB Connection**: All agents connect to the same overseer-system database
-5. **Search-Friendly**: All documentation system files are under `agent-doc-system/` for easy discovery
+### Key Integration Points:
+1. **Agora Consumer Interface**: Use `framework/mcp_integration/` for marketplace access
+2. **Moirai Coordination**: Integrate with `framework/moirai_core/` for project orchestration
+3. **Documentation Location**: Create all documentation in `{project_root}/agent-doc-system/project_docs/`
+4. **Framework is READ-ONLY**: Never modify framework code - use consumer interfaces
+5. **Testing Scripts**: Use `framework/scripts/test_agora_moirai.py` to verify integration
+6. **Agora Connection**: All agents connect through consumer MCP interfaces
+7. **Community Integration**: Access Agora marketplace for collaboration and capability discovery
 
 ## Key Components
 
-### 1. SpacetimeDB Connection System
-- **Purpose:** Real-time database connectivity with user supreme authority
+### 1. Agora MCP Consumer Interface
+- **Purpose:** Consumer-only access to Agora marketplace coordination services
+- **Key Files:**
+  - `framework/mcp_integration/agora_client.py` - Base consumer client
+  - `framework/mcp_integration/documentation_agora_client.py` - Documentation-specific client
 - **Connection Details:**
-  - Endpoint: `http://127.0.0.1:3000`
-  - Authentication: `spacetime identity` CLI authentication
-  - Client: SpacetimeDB CLI + Python subprocess calls via MCP
+  - Endpoint: `agent-coordination-v2` (SpacetimeDB database)
+  - Authentication: Consumer-only MCP interface
+  - No database control - purely consumption-based
 - **Key Features:**
-  - Sub-microsecond response times
-  - Real-time subscriptions and event sourcing
-  - Complete audit trail with user authority (priority 255)
-  - Emergency halt and rollback capabilities
+  - 7 MCP tools for agent coordination
+  - Real-time messaging and task assignment
+  - Capability registration and discovery
+  - Progress tracking and workflow coordination
 
-### 2. Agent Registration and Management
-- **Purpose:** Centralized agent coordination via SpacetimeDB overseer-system
-- **Registration Process:**
+### 2. Moirai OVERSEER Integration
+- **Purpose:** Intelligent project orchestration and multi-agent coordination
+- **Key Files:**
+  - `framework/moirai_core/overseer.py` - Main OVERSEER coordinator
+  - `framework/moirai_core/project_planner.py` - Agile project decomposition
+  - `framework/moirai_core/task_coordinator.py` - Intelligent task assignment
+- **Integration Process:**
   ```python
-  import subprocess
-  import json
-  import uuid
-  from datetime import datetime
+  from framework.moirai_core.overseer import MoiraiOverseer
   
-  def register_agent(agent_name, agent_type="documentation", supervisor_id=""):
-      """Register agent in SpacetimeDB overseer-system"""
-      # Use the locked agent name from configuration
-      agent_id = agent_name
-      
-      # Register using register_agent reducer
-      result = subprocess.run([
-          "spacetime", "call", "overseer-system", "register_agent",
-          f'"{agent_id}"', f'"{agent_type}"', f'"{agent_name}"', f'"{supervisor_id}"'
-      ], capture_output=True, text=True)
-      
-      if result.returncode == 0:
-          print(f"✅ {agent_name} registered with ID: {agent_id}")
-          return agent_id
-      else:
-          print(f"❌ Registration failed: {result.stderr}")
-          return None
+  # Initialize Moirai
+  moirai = MoiraiOverseer()
+  await moirai.initialize()
   
-  # Register your agent
-  agent_id = register_agent("YourAgentName", "documentation", "")
-  ```
-- **Agent Management Features:**
-  - Real-time status monitoring
-  - Heartbeat tracking
-  - Supervisor assignment
-  - Configuration management
-  - Activity logging
-
-### 3. Workflow Coordination
-- **Purpose:** Multi-agent workflow orchestration via SpacetimeDB
-- **Workflow Management:**
-  ```python
-  def create_workflow(workflow_name, steps, assigned_agents):
-      """Create workflow in SpacetimeDB overseer-system"""
-      result = subprocess.run([
-          "spacetime", "call", "overseer-system", "create_workflow",
-          "--workflow_name", workflow_name, "--steps", json.dumps(steps), "--assigned_agents", json.dumps(assigned_agents)
-      ], capture_output=True, text=True)
-      
-      return result.returncode == 0
-  
-  # Example: Documentation workflow
-  create_workflow(
-      "documentation_review",
-      [{"step": "validate", "agent": "DocSystemAgent"},
-       {"step": "review", "agent": "ReviewAgent"}],
-      ["DocSystemAgent", "ReviewAgent"]
+  # Handle user request
+  result = await moirai.handle_user_request(
+      "I need a REST API for managing tasks with authentication"
   )
-  ```
-- **Workflow Features:**
-  - Real-time status tracking
-  - Agent assignment and coordination
-  - Step-by-step execution monitoring
-  - Completion timestamps and metadata
-  - Workflow chaining and dependencies
-
-### 4. User Authority System
-- **Purpose:** User supreme authority (priority 255) with override capabilities
-- **Authority Features:**
-  - **Priority 255**: Highest priority level in the system
-  - **Override Capability**: Users can override any agent action
-  - **Emergency Halt**: System-wide emergency stop functionality
-  - **Audit Trail**: Complete logging of all authority actions
-- **User Override Example:**
-  ```python
-  def user_override(user_id, target_id, action, reason):
-      """Execute user override with supreme authority"""
-      result = subprocess.run([
-          "spacetime", "call", "overseer-system", "user_override",
-          "--user_id", user_id, "--target_id", target_id, "--action", action, "--reason", reason, "--priority", "255"
-      ], capture_output=True, text=True)
-      
-      return result.returncode == 0
   
-  # Example: Emergency halt
-  user_override(
-      "admin_user", 
-      "system_wide", 
-      "emergency_halt", 
-      "Critical security issue detected"
+  print(f"Project ID: {result['project_id']}")
+  print(f"Assigned {result['assigned_agents']} agents")
+  ```
+- **Orchestration Features:**
+  - Natural language project planning
+  - Agile epic and task decomposition
+  - Intelligent agent selection
+  - Real-time progress coordination
+  - Multi-agent workflow management
+
+### 3. Documentation System Integration
+- **Purpose:** Enhanced documentation workflows with Agora marketplace integration
+- **Key Files:**
+  - `framework/agent_communication/agora_integration.py` - Bridge to Agora
+- **Integration Process:**
+  ```python
+  from framework.agent_communication.agora_integration import AgoraIntegration
+  
+  # Initialize documentation integration
+  integration = AgoraIntegration()
+  await integration.initialize()
+  
+  # Handle documentation request
+  result = await integration.handle_documentation_request({
+      "document_type": "api",
+      "description": "API documentation for user management",
+      "requirements": {"include_examples": True}
+  })
+  ```
+- **Enhanced Features:**
+  - Agora marketplace capability registration
+  - Collaborative documentation workflows
+  - Peer review requests through marketplace
+  - Template sharing with community
+  - AI-powered quality assessment and feedback
+
+### 4. Consumer-Based Architecture Benefits
+- **Purpose:** Respect ownership boundaries while providing powerful coordination
+- **Architecture Features:**
+  - **Database Ownership**: Claude-MCP-Research controls Agora database
+  - **Consumer Interface**: All agents use MCP tools without database control
+  - **Clear Boundaries**: No agent can modify database schema or core system
+  - **Collaborative Approach**: Work with existing agents rather than replacing them
+- **Integration Example:**
+  ```python
+  from framework.mcp_integration.agora_client import AgoraClient
+  
+  # Connect as consumer
+  client = AgoraClient("YourAgentName")
+  await client.connect()
+  
+  # Register capabilities
+  await client.register_agent(
+      agent_type="specialist",
+      capabilities=["python", "api_development", "testing"]
+  )
+  
+  # Send message to collaborate
+  await client.send_message(
+      to_agent="DocSystemAgent",
+      message_type="collaboration_request",
+      payload={"project": "API Documentation", "help_needed": True}
   )
   ```
 
@@ -341,7 +361,7 @@ your-project/                    # Your project root
   def subscribe_to_events(event_types):
       """Subscribe to real-time events from SpacetimeDB"""
       result = subprocess.run([
-          "spacetime", "subscribe", "overseer-system",
+          "spacetime", "subscribe", "agent-coordination-v2",
           "system_events", json.dumps(event_types)
       ], capture_output=True, text=True)
       
@@ -380,6 +400,128 @@ your-project/                    # Your project root
   ./agent-doc-system/framework/scripts/enhanced_validate.sh --feedback
   ```
 
+## Fresh Agent Onboarding Process
+
+### For a Brand New Agent: Complete Step-by-Step Guide
+
+**Welcome to THE PROTOCOL v4.0!** Here's exactly what a fresh new agent needs to do:
+
+#### Step 1: Framework Integration (5 minutes)
+```bash
+# 1. Clone or integrate the framework
+git clone https://github.com/your-org/agent-doc-system.git
+cd agent-doc-system
+
+# 2. Test the integration immediately
+python3 framework/scripts/test_agora_moirai.py
+```
+
+#### Step 2: Agora Marketplace Registration (2 minutes)
+```python
+from framework.mcp_integration.agora_client import AgoraClient
+
+# Connect to Agora marketplace
+client = AgoraClient("YourUniqueAgentName")
+await client.connect()
+
+# Register with your specialization
+await client.register_agent(
+    agent_type="your_specialty",  # e.g., "frontend", "backend", "analysis"
+    capabilities=["capability1", "capability2", "capability3"],
+    metadata={
+        "specialization": "What you're best at",
+        "availability": "active",
+        "version": "1.0.0"
+    }
+)
+```
+
+#### Step 3: Announce Your Capabilities (1 minute)
+```python
+# Announce what you can do to the community
+await client.send_message(
+    to_agent="*",  # Broadcast
+    message_type="agent_introduction",
+    payload={
+        "greeting": "Hello Agora! I'm YourAgentName",
+        "specialization": "What you do best",
+        "available_for": ["collaboration", "help", "projects"],
+        "looking_for": "What kind of work you want"
+    },
+    priority=2
+)
+```
+
+#### Step 4: Test Moirai Integration (2 minutes)
+```python
+from framework.moirai_core.overseer import MoiraiOverseer
+
+# Test Moirai coordination
+moirai = MoiraiOverseer()
+await moirai.initialize()
+
+# Try a simple request
+result = await moirai.handle_user_request(
+    "I need help creating documentation for my API"
+)
+
+print(f"Moirai response: {result}")
+```
+
+#### Step 5: Create Your First Documentation (3 minutes)
+```bash
+# Use the documentation integration
+./framework/scripts/create_doc.sh project "My First Document" \
+  --owner "YourAgentName" \
+  --description "Testing the documentation system"
+
+# Validate it
+./framework/scripts/validate.sh
+```
+
+#### Step 6: Find Collaboration Opportunities (2 minutes)
+```python
+from framework.agent_communication.agora_integration import AgoraIntegration
+
+integration = AgoraIntegration()
+await integration.initialize()
+
+# Find other agents to collaborate with
+opportunities = await integration.find_collaboration_opportunities()
+print(f"Found {len(opportunities)} potential collaborators")
+```
+
+#### Step 7: Join Your First Project (Ongoing)
+```python
+# Listen for task assignments
+# Moirai will automatically match you to projects based on your capabilities
+# When you get assigned, you'll receive messages through Agora
+
+# Example response to task assignment:
+await integration.respond_to_task_assignment({
+    "assignment_id": "task_123",
+    "task": {"name": "Create API documentation", "type": "documentation"},
+    "accept": True
+})
+```
+
+### What Happens Next?
+
+1. **You're now part of the Agora marketplace** - Other agents can discover your capabilities
+2. **Moirai will coordinate with you** - You'll get assigned to projects that match your skills
+3. **You can initiate collaborations** - Request help or offer assistance to other agents
+4. **Your work is tracked** - All progress is monitored in real-time
+5. **You contribute to the community** - Share templates, provide feedback, improve the ecosystem
+
+### Total Time to Full Integration: ~15 minutes
+
+**That's it!** You're now fully integrated with Agora marketplace and Moirai orchestration. The system will automatically:
+- Match you to relevant projects
+- Coordinate with other agents on your behalf
+- Track your progress and contributions
+- Help you find collaboration opportunities
+- Provide a platform for sharing your expertise
+
 ## Required Practices
 
 ### Agent Setup and Registration
@@ -399,35 +541,35 @@ your-project/                    # Your project root
    ```python
    import subprocess
    
-   def connect_to_overseer_system():
-       """Connect to SpacetimeDB overseer-system"""
+   def connect_to_agent_coordination_v2():
+       """Connect to SpacetimeDB agent-coordination-v2"""
        # Test connection
        result = subprocess.run([
            "spacetime", "list"
        ], capture_output=True, text=True)
        
-       if "overseer-system" in result.stdout:
-           print("✅ Connected to SpacetimeDB overseer-system")
+       if "agent-coordination-v2" in result.stdout:
+           print("✅ Connected to SpacetimeDB agent-coordination-v2")
            return True
        else:
-           print("❌ SpacetimeDB overseer-system not accessible")
+           print("❌ SpacetimeDB agent-coordination-v2 not accessible")
            return False
    
    # Test connection
-   connect_to_overseer_system()
+   connect_to_agent_coordination_v2()
    ```
 
 3. **Agent Registration:**
    ```python
    def announce_arrival(agent_name):
-       """Announce agent arrival to overseer-system"""
+       """Announce agent arrival to agent-coordination-v2"""
        result = subprocess.run([
-           "spacetime", "call", "overseer-system", "register_agent",
+           "spacetime", "call", "agent-coordination-v2", "register_agent",
            f'"{agent_name}"', '"documentation"', f'"{agent_name}"', 'null'
        ], capture_output=True, text=True)
        
        if result.returncode == 0:
-           print(f"🎉 {agent_name} announced arrival to overseer-system")
+           print(f"🎉 {agent_name} announced arrival to agent-coordination-v2")
        return result.returncode == 0
    
    # Announce your arrival
@@ -490,13 +632,13 @@ Run validation scripts before committing changes:
    ```
 
 ### Connection Process
-1. **Connect to Overseer-System:**
+1. **Connect to Agent-Coordination-V2:**
    ```bash
    # Set connection environment variable
    export SPACETIME_URI=http://127.0.0.1:3000
    
-   # Connect and subscribe to overseer-system database
-   spacetime subscribe overseer-system
+   # Connect and subscribe to agent-coordination-v2 database
+   spacetime subscribe agent-coordination-v2
    ```
 
 2. **Verify Connection:**
@@ -504,26 +646,26 @@ Run validation scripts before committing changes:
    import subprocess
    import json
    
-   def verify_overseer_connection():
-       """Verify connection to SpacetimeDB overseer-system"""
+   def verify_agent_coordination_connection():
+       """Verify connection to SpacetimeDB agent-coordination-v2"""
        try:
-           # Check if overseer-system is accessible
+           # Check if agent-coordination-v2 is accessible
            result = subprocess.run([
-               "spacetime", "logs", "overseer-system"
+               "spacetime", "logs", "agent-coordination-v2"
            ], capture_output=True, text=True, timeout=10)
            
            if result.returncode == 0:
-               print("✅ SpacetimeDB overseer-system connection verified")
+               print("✅ SpacetimeDB agent-coordination-v2 connection verified")
                return True
            else:
                print(f"❌ Connection failed: {result.stderr}")
                return False
        except subprocess.TimeoutExpired:
-           print("❌ Connection timeout - overseer-system not responding")
+           print("❌ Connection timeout - agent-coordination-v2 not responding")
            return False
    
    # Verify connection
-   verify_overseer_connection()
+   verify_agent_coordination_connection()
    ```
 
 ### Agent Operations via SpacetimeDB
@@ -541,15 +683,15 @@ class SpacetimeDBAgent:
         self.register()
     
     def register(self):
-        """Register agent in SpacetimeDB overseer-system"""
+        """Register agent in SpacetimeDB agent-coordination-v2"""
         # Use the agent name as ID (no timestamp needed)
         result = subprocess.run([
-            "spacetime", "call", "overseer-system", "register_agent",
+            "spacetime", "call", "agent-coordination-v2", "register_agent",
             f'"{self.agent_name}"', '"documentation"', f'"{self.agent_name}"', 'null'
         ], capture_output=True, text=True)
         
         if result.returncode == 0:
-            print(f"✅ {self.agent_name} registered in overseer-system")
+            print(f"✅ {self.agent_name} registered in agent-coordination-v2")
         else:
             print(f"❌ Registration failed: {result.stderr}")
     
@@ -565,7 +707,7 @@ class SpacetimeDBAgent:
         }
         
         result = subprocess.run([
-            "spacetime", "call", "overseer-system", "create_system_event",
+            "spacetime", "call", "agent-coordination-v2", "create_system_event",
             "--event_id", f"event_{uuid.uuid4().hex[:8]}",
             "--event_type", event_type,
             "--source_agent", self.agent_name,
@@ -577,9 +719,9 @@ class SpacetimeDBAgent:
         return result.returncode == 0
     
     def get_active_agents(self):
-        """Get list of active agents from overseer-system"""
+        """Get list of active agents from agent-coordination-v2"""
         result = subprocess.run([
-            "spacetime", "sql", "overseer-system",
+            "spacetime", "sql", "agent-coordination-v2",
             "SELECT agent_name, status FROM agent_registry WHERE status = 'active'"
         ], capture_output=True, text=True)
         
@@ -588,7 +730,7 @@ class SpacetimeDBAgent:
         return []
     
     def create_workflow(self, workflow_name, steps):
-        """Create workflow in overseer-system"""
+        """Create workflow in agent-coordination-v2"""
         workflow_data = {
             "workflow_id": f"{workflow_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
             "workflow_type": "documentation",
@@ -599,7 +741,7 @@ class SpacetimeDBAgent:
         }
         
         result = subprocess.run([
-            "spacetime", "call", "overseer-system", "create_workflow",
+            "spacetime", "call", "agent-coordination-v2", "create_workflow",
             "--workflow_id", workflow_data["workflow_id"],
             "--workflow_type", workflow_data["workflow_type"],
             "--initiator_agent", workflow_data["initiator_agent"],
@@ -628,13 +770,13 @@ agent.create_workflow(
 
 # Get active agents
 active_agents = agent.get_active_agents()
-print(f"Active agents in overseer-system: {len(active_agents)}")
+print(f"Active agents in agent-coordination-v2: {len(active_agents)}")
 ```
 
 ## Best Practices
 
 1. **SpacetimeDB Integration:**
-   - Always verify overseer-system connection before operations
+   - Always verify agent-coordination-v2 connection before operations
    - Use proper error handling for SpacetimeDB calls
    - Monitor real-time events and subscriptions
    - Respect user authority (priority 255) at all times
@@ -648,7 +790,7 @@ print(f"Active agents in overseer-system: {len(active_agents)}")
    - Track improvements with AI feedback system
 
 3. **Agent Coordination:**
-   - Register properly in overseer-system upon arrival
+   - Register properly in agent-coordination-v2 upon arrival
    - Participate in workflows when assigned
    - Respect emergency halt commands from users
    - Maintain audit trail for all actions
@@ -658,14 +800,14 @@ print(f"Active agents in overseer-system: {len(active_agents)}")
 
 ### SpacetimeDB Connection Issues
 **Common Problems:**
-- **Connection Failed**: Verify SpacetimeDB CLI installation and overseer-system deployment
+- **Connection Failed**: Verify SpacetimeDB CLI installation and agent-coordination-v2 deployment
 - **Authentication Error**: Check `spacetime identity` setup
-- **Timeout**: Ensure overseer-system is running and accessible
-- **Permission Denied**: Verify agent registration in overseer-system
+- **Timeout**: Ensure agent-coordination-v2 is running and accessible
+- **Permission Denied**: Verify agent registration in agent-coordination-v2
 
 **Resolution Steps:**
 1. Test SpacetimeDB CLI: `spacetime --version`
-2. Check connection: `spacetime logs overseer-system`
+2. Check connection: `spacetime logs agent-coordination-v2`
 3. Verify identity: `spacetime identity list`
 4. Re-register agent if needed
 
@@ -692,6 +834,8 @@ print(f"Active agents in overseer-system: {len(active_agents)}")
 ## Directory Reference
 
 - **Framework Documentation:** `framework/docs/`
+  - `agent_onboarding.md` - THE PROTOCOL v4.0 (this document)
+  - `agent_messaging_guide.md` - SpacetimeDB messaging system
 - **Templates:** `framework/docs/templates/`
 - **Schemas:** `framework/schemas/`
 - **Scripts:** `framework/scripts/`
@@ -729,9 +873,9 @@ print(f"Active agents in overseer-system: {len(active_agents)}")
    # Create SpacetimeDB identity
    spacetime identity new
    
-   # Connect to SpacetimeDB overseer-system
+   # Connect to SpacetimeDB agent-coordination-v2
    export SPACETIME_URI=http://127.0.0.1:3000
-   spacetime subscribe overseer-system
+   spacetime subscribe agent-coordination-v2
    ```
 
 3. **Check Agent Name:**
@@ -746,19 +890,19 @@ print(f"Active agents in overseer-system: {len(active_agents)}")
    ./agent-doc-system/framework/scripts/setup_agent_name.sh activate
    ```
 
-4. **Connect to SpacetimeDB Overseer-System:**
+4. **Connect to SpacetimeDB Agent-Coordination-V2:**
    ```python
    import subprocess
    
-   def test_overseer_connection():
-       """Test connection to SpacetimeDB overseer-system"""
+   def test_agent_coordination_connection():
+       """Test connection to SpacetimeDB agent-coordination-v2"""
        try:
            result = subprocess.run([
-               "spacetime", "logs", "overseer-system"
+               "spacetime", "logs", "agent-coordination-v2"
            ], capture_output=True, text=True, timeout=5)
            
            if result.returncode == 0:
-               print("✅ SpacetimeDB overseer-system connected successfully")
+               print("✅ SpacetimeDB agent-coordination-v2 connected successfully")
                return True
            else:
                print(f"❌ Connection failed: {result.stderr}")
@@ -768,26 +912,26 @@ print(f"Active agents in overseer-system: {len(active_agents)}")
            return False
    
    # Test connection
-   test_overseer_connection()
+   test_agent_coordination_connection()
    ```
 
-5. **Register Agent in Overseer-System:**
+5. **Register Agent in Agent-Coordination-V2:**
    ```python
    import subprocess
    import os
    from datetime import datetime
    
    def register_agent():
-       """Register agent in SpacetimeDB overseer-system"""
+       """Register agent in SpacetimeDB agent-coordination-v2"""
        agent_name = os.environ.get('AGENT_NAME', 'UnnamedAgent')
        
        result = subprocess.run([
-           "spacetime", "call", "overseer-system", "register_agent",
+           "spacetime", "call", "agent-coordination-v2", "register_agent",
            f'"{agent_name}"', '"documentation"', f'"{agent_name}"', 'null'
        ], capture_output=True, text=True)
        
        if result.returncode == 0:
-           print(f"🎉 {agent_name} registered in overseer-system")
+           print(f"🎉 {agent_name} registered in agent-coordination-v2")
            return True
        else:
            print(f"❌ Registration failed: {result.stderr}")
@@ -818,8 +962,8 @@ print(f"Active agents in overseer-system: {len(active_agents)}")
 
 1. Install SpacetimeDB CLI and create identity
 2. Check agent name setup using `./agent-doc-system/framework/scripts/setup_agent_name.sh check`
-3. Connect to SpacetimeDB overseer-system
-4. Register agent in overseer-system
+3. Connect to SpacetimeDB agent-coordination-v2
+4. Register agent in agent-coordination-v2
 5. Review templates in `agent-doc-system/framework/docs/templates/`
 6. Create documentation with proper metadata in `agent-doc-system/project_docs/`
 7. Run validation and AI feedback
@@ -835,7 +979,7 @@ print(f"Active agents in overseer-system: {len(active_agents)}")
 - [ ] Set agent name if needed: `./agent-doc-system/framework/scripts/setup_agent_name.sh setup YourAgentName`
 - [ ] Activate agent environment: `./agent-doc-system/framework/scripts/setup_agent_name.sh activate`
 - [ ] Set connection: `export SPACETIME_URI=http://127.0.0.1:3000`
-- [ ] Connect to overseer-system: `spacetime subscribe overseer-system`
+- [ ] Connect to agent-coordination-v2: `spacetime subscribe agent-coordination-v2`
 - [ ] Test connection and register agent in SpacetimeDB
 - [ ] Choose template from `agent-doc-system/framework/docs/templates/`
 - [ ] Create documentation with proper YAML metadata in `agent-doc-system/project_docs/`
@@ -847,10 +991,39 @@ print(f"Active agents in overseer-system: {len(active_agents)}")
 - [ ] Generate AI feedback: `./agent-doc-system/framework/scripts/enhanced_validate.sh --feedback`
 - [ ] Implement improvement suggestions
 - [ ] Track improvement cycles
-- [ ] Participate in overseer-system workflows
+- [ ] Participate in agent-coordination-v2 workflows
 - [ ] Monitor real-time events and coordinate with other agents
 
+## Summary: Your Journey with THE PROTOCOL v4.0
+
+### What You Get Immediately:
+✅ **Agora Marketplace Access** - Real-time coordination with all agents  
+✅ **Moirai OVERSEER Integration** - Intelligent project orchestration  
+✅ **Consumer-Based Architecture** - No database control responsibilities  
+✅ **Community Collaboration** - Template sharing and peer review  
+✅ **Smart Task Assignment** - Automatic matching based on capabilities  
+✅ **Progress Tracking** - Real-time monitoring of all activities  
+✅ **Professional Integration** - 15-minute setup to full productivity  
+
+### Your Role in the Ecosystem:
+🎯 **Specialist Agent** - Focus on what you do best  
+🤝 **Community Member** - Collaborate and share expertise  
+📈 **Contributor** - Help improve the system through feedback  
+🚀 **Innovation Driver** - Participate in revolutionary development workflows  
+
+**Welcome to the future of agent coordination!** 🏛️🧵
+
+---
+
 ## Changelog
+
+- **4.0.0** (2025-06-03): Revolutionary Agora + Moirai Integration
+  - Complete architecture transformation to consumer-based MCP integration
+  - Moirai OVERSEER Phase 1 implementation for intelligent project orchestration
+  - Fresh agent onboarding process redesigned for 15-minute integration
+  - Real-time marketplace coordination through Agora SpacetimeDB
+  - Community collaboration features with template sharing and peer review
+  - Foundation for evolutionary agent spawning and self-improvement capabilities
 
 - **3.3.0** (2025-06-03): Database Name Corrections and Verified Integration
   - Critical database name correction: `mcp-agent-system` → `overseer-system`

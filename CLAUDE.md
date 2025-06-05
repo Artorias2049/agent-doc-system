@@ -33,7 +33,7 @@ your-project/                   # Your project root
 - All documentation system files are under `agent-doc-system/` for easy discovery by UI searches
 
 ### Technology Stack v3.2
-- SpacetimeDB Overseer-System - Real-time database
+- SpacetimeDB Agent-Coordination-V2 - Real-time database
 - 15 MCP Tools - User authority (priority 255)
 - Real-time Coordination - Event sourcing and subscriptions
 - 6-Table Architecture - users, agents, workflows, user_overrides, system_events, user_notifications
@@ -41,14 +41,14 @@ your-project/                   # Your project root
 - Emergency Halt Capability
 - WebAssembly Backend
 
-## SpacetimeDB Overseer-System Integration
+## SpacetimeDB Agent-Coordination-V2 Integration
 
 ### Core Database Architecture
 
-SpacetimeDB overseer-system configuration:
+SpacetimeDB agent-coordination-v2 configuration:
 
-- **Database Name:** `overseer-system`
-- **Connection:** `http://localhost:3000` (local) / `spacetime publish overseer-system` (deployed)
+- **Database Name:** `agent-coordination-v2`
+- **Connection:** `http://localhost:3000` (local) / `spacetime publish agent-coordination-v2` (deployed)
 - **Authentication:** SpacetimeDB CLI (`spacetime identity`)
 - **Performance:** Sub-microsecond response times with WebAssembly backend
 - **Real-time:** Event sourcing and instant subscriptions
@@ -139,7 +139,7 @@ feedback:
 ### SpacetimeDB Agent Registration
 1. **Install SpacetimeDB CLI**: `curl -sSL https://spacetime.com/install | bash`
 2. **Create Identity**: `spacetime identity new`
-3. **Connect to Overseer-System**: `spacetime subscribe overseer-system`
+3. **Connect to Agent-Coordination-V2**: `spacetime subscribe agent-coordination-v2`
 4. **Register Agent**: Use SpacetimeDB reducers for agent registration
 
 ### Creating Documentation
@@ -151,13 +151,13 @@ feedback:
 ### SpacetimeDB Operations (from project root)
 ```bash
 # Test SpacetimeDB connection
-spacetime logs overseer-system
+spacetime logs agent-coordination-v2
 
-# Register agent in overseer-system
-spacetime call overseer-system register_agent YourAgentName documentation active
+# Register agent in agent-coordination-v2
+spacetime call agent-coordination-v2 register_agent YourAgentName documentation active
 
 # Create workflow
-spacetime call overseer-system create_workflow doc_review
+spacetime call agent-coordination-v2 create_workflow doc_review
 
 # Standard validation
 ./agent-doc-system/framework/scripts/validate.sh
@@ -180,30 +180,30 @@ import subprocess
 import json
 from datetime import datetime
 
-# Connect to SpacetimeDB overseer-system
-def connect_to_overseer_system():
-    """Connect to SpacetimeDB overseer-system"""
+# Connect to SpacetimeDB agent-coordination-v2
+def connect_to_agent_coordination_v2():
+    """Connect to SpacetimeDB agent-coordination-v2"""
     result = subprocess.run([
         "spacetime", "list"
     ], capture_output=True, text=True)
     
-    if "overseer-system" in result.stdout:
-        print("✅ Connected to SpacetimeDB overseer-system")
+    if "agent-coordination-v2" in result.stdout:
+        print("✅ Connected to SpacetimeDB agent-coordination-v2")
         return True
     else:
-        print("❌ SpacetimeDB overseer-system not accessible")
+        print("❌ SpacetimeDB agent-coordination-v2 not accessible")
         return False
 
 # Register agent
 def register_agent(agent_name):
-    """Register agent in SpacetimeDB overseer-system"""
+    """Register agent in SpacetimeDB agent-coordination-v2"""
     result = subprocess.run([
-        "spacetime", "call", "overseer-system", "register_agent",
+        "spacetime", "call", "agent-coordination-v2", "register_agent",
         agent_name, "documentation", "active"
     ], capture_output=True, text=True)
     
     if result.returncode == 0:
-        print(f"✅ {agent_name} registered in overseer-system")
+        print(f"✅ {agent_name} registered in agent-coordination-v2")
         return True
     else:
         print(f"❌ Registration failed: {result.stderr}")
@@ -222,7 +222,7 @@ def send_event(agent_name, event_type, target_agent, data):
     }
     
     result = subprocess.run([
-        "spacetime", "call", "overseer-system", "create_system_event",
+        "spacetime", "call", "agent-coordination-v2", "create_system_event",
         json.dumps(event_data)
     ], capture_output=True, text=True)
     
@@ -251,11 +251,11 @@ curl -sSL https://spacetime.com/install | bash
 # Create SpacetimeDB identity
 spacetime identity new
 
-# Connect to overseer-system
-spacetime subscribe overseer-system
+# Connect to agent-coordination-v2
+spacetime subscribe agent-coordination-v2
 
 # Verify connection
-spacetime logs overseer-system
+spacetime logs agent-coordination-v2
 ```
 
 ### SpacetimeDB Agent Communication Tools
@@ -315,8 +315,8 @@ The framework provides comprehensive API documentation for integration:
 
 ## Best Practices
 
-1. **Always Connect to SpacetimeDB**: Verify overseer-system connection before operations
-2. **Register Properly**: Use proper agent registration in overseer-system
+1. **Always Connect to SpacetimeDB**: Verify agent-coordination-v2 connection before operations
+2. **Register Properly**: Use proper agent registration in agent-coordination-v2
 3. **Respect User Authority**: Users have supreme authority (priority 255)
 4. **Use Templates**: Start from templates for consistency
 5. **Track Improvements**: Use the self-improvement tracker
@@ -349,7 +349,7 @@ black framework/ tests/
 **SpacetimeDB Connection Issues**:
 - Check SpacetimeDB CLI installation: `spacetime --version`
 - Verify identity setup: `spacetime identity list`
-- Test connection: `spacetime logs overseer-system`
+- Test connection: `spacetime logs agent-coordination-v2`
 - Re-register agent if needed
 
 **Validation Failures**:
@@ -358,9 +358,9 @@ black framework/ tests/
 - Verify category values match schema
 
 **Database Connection**:
-- Verify SpacetimeDB overseer-system is running and accessible
+- Verify SpacetimeDB agent-coordination-v2 is running and accessible
 - Check authentication setup
-- Ensure agent is registered in overseer-system
+- Ensure agent is registered in agent-coordination-v2
 
 **Script Execution**:
 - Make scripts executable: `chmod +x framework/scripts/*.sh`
@@ -380,7 +380,7 @@ black framework/ tests/
 
 ### User Supreme Authority (Priority 255)
 
-Users have ultimate control in the SpacetimeDB overseer-system:
+Users have ultimate control in the SpacetimeDB agent-coordination-v2:
 
 - **Override Capability**: Users can override any agent action
 - **Emergency Halt**: System-wide emergency stop functionality
@@ -392,7 +392,7 @@ Users have ultimate control in the SpacetimeDB overseer-system:
 def user_override(user_id, target_id, action, reason):
     """Execute user override with supreme authority"""
     result = subprocess.run([
-        "spacetime", "call", "overseer-system", "user_override",
+        "spacetime", "call", "agent-coordination-v2", "user_override",
         user_id, target_id, action, reason, "255"  # Priority 255
     ], capture_output=True, text=True)
     
@@ -407,4 +407,4 @@ user_override(
 )
 ```
 
-This configuration ensures consistent, high-quality documentation with automated validation, real-time coordination, and continuous improvement tracking through the SpacetimeDB overseer-system architecture.
+This configuration ensures consistent, high-quality documentation with automated validation, real-time coordination, and continuous improvement tracking through the SpacetimeDB agent-coordination-v2 architecture.

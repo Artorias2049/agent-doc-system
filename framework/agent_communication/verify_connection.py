@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Verify SpacetimeDB overseer-system connection and register agent.
+Verify SpacetimeDB agent-coordination-v2 connection and register agent.
 
 This script:
-1. Checks connection to SpacetimeDB overseer-system
+1. Checks connection to SpacetimeDB agent-coordination-v2
 2. Reads agent name from .agent_config/agent_name.json or AGENT_NAME env var
 3. Provides actual database registration (not simulation)
 
@@ -16,22 +16,22 @@ import os
 from datetime import datetime
 
 
-def verify_overseer_connection():
-    """Verify connection to SpacetimeDB overseer-system"""
+def verify_agent_coordination_connection():
+    """Verify connection to SpacetimeDB agent-coordination-v2"""
     try:
-        # Check if overseer-system is accessible
+        # Check if agent-coordination-v2 is accessible
         result = subprocess.run([
-            "spacetime", "logs", "overseer-system"
+            "spacetime", "logs", "agent-coordination-v2"
         ], capture_output=True, text=True, timeout=10)
         
         if result.returncode == 0:
-            print("✅ SpacetimeDB overseer-system connection verified")
+            print("✅ SpacetimeDB agent-coordination-v2 connection verified")
             return True
         else:
             print(f"❌ Connection failed: {result.stderr}")
             return False
     except subprocess.TimeoutExpired:
-        print("❌ Connection timeout - overseer-system not responding")
+        print("❌ Connection timeout - agent-coordination-v2 not responding")
         return False
     except Exception as e:
         print(f"❌ Error: {e}")
@@ -56,7 +56,7 @@ def get_agent_name():
 
 
 def register_agent(agent_type="worker"):
-    """Register agent in SpacetimeDB overseer-system"""
+    """Register agent in SpacetimeDB agent-coordination-v2"""
     agent_name = get_agent_name()
     
     print(f"\n📝 Registering agent: {agent_name}")
@@ -65,17 +65,17 @@ def register_agent(agent_type="worker"):
     # Actual registration using SpacetimeDB
     try:
         result = subprocess.run([
-            "spacetime", "call", "overseer-system", "register_agent",
+            "spacetime", "call", "agent-coordination-v2", "register_agent",
             f'"{agent_name}"', f'"{agent_type}"', f'"{agent_name}"', 'null'
         ], capture_output=True, text=True)
         
         if result.returncode == 0:
-            print(f"✅ {agent_name} registered in overseer-system")
+            print(f"✅ {agent_name} registered in agent-coordination-v2")
             
             # Send announcement
             # Note: create_system_event may need similar syntax fixes
             announce_result = subprocess.run([
-                "spacetime", "call", "overseer-system", "create_system_event",
+                "spacetime", "call", "agent-coordination-v2", "create_system_event",
                 f'"evt_{datetime.now().strftime("%Y%m%d%H%M%S")}"',
                 '"agent_arrival"',
                 f'"{agent_name}"',
@@ -103,10 +103,10 @@ def register_agent(agent_type="worker"):
 
 def main():
     """Main verification and registration process"""
-    print("🔍 Checking SpacetimeDB overseer-system connection...\n")
+    print("🔍 Checking SpacetimeDB agent-coordination-v2 connection...\n")
     
     # Verify connection
-    if verify_overseer_connection():
+    if verify_agent_coordination_connection():
         print("\n✅ Connection successful!")
         
         # Show current agent name
@@ -125,7 +125,7 @@ def main():
         print("\n❌ Connection failed!")
         print("\nTroubleshooting:")
         print("1. Ensure SpacetimeDB is running")
-        print("2. Check if overseer-system database exists")
+        print("2. Check if agent-coordination-v2 database exists")
         print("3. Verify SpacetimeDB CLI is installed: spacetime --version")
 
 

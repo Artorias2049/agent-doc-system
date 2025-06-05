@@ -2,11 +2,11 @@
 """
 SpacetimeDB Operations - Direct database interaction tool for agents.
 
-This script provides actual database operations for the overseer-system.
+This script provides actual database operations for the agent-coordination-v2.
 Designed to be used as a tool by AI agents for database interaction.
 
-Database: overseer-system
-Tables: 16 tables as defined in THE PROTOCOL v3.3.0
+Database: agent-coordination-v2
+Tables: 16 tables as defined in THE PROTOCOL v4.0
 """
 
 import subprocess
@@ -18,10 +18,10 @@ from typing import Dict, List, Optional, Any
 
 
 class SpacetimeDB:
-    """Direct interface to SpacetimeDB overseer-system."""
+    """Direct interface to SpacetimeDB agent-coordination-v2."""
     
     def __init__(self):
-        self.database = "overseer-system"
+        self.database = "agent-coordination-v2"
         self.agent_name = self._get_agent_name()
         
     def _get_agent_name(self) -> str:
@@ -72,12 +72,12 @@ class SpacetimeDB:
     # ===== Connection Operations =====
     
     def verify_connection(self) -> bool:
-        """Verify connection to overseer-system."""
+        """Verify connection to agent-coordination-v2."""
         result = self._run_spacetime_cmd(["logs", self.database, "--num-lines", "1"])
         return result["success"]
     
     def get_logs(self, lines: int = 50) -> str:
-        """Get recent logs from overseer-system."""
+        """Get recent logs from agent-coordination-v2."""
         result = self._run_spacetime_cmd(["logs", self.database, "--num-lines", str(lines)])
         if result["success"]:
             return result["stdout"]
@@ -86,7 +86,7 @@ class SpacetimeDB:
     # ===== Agent Operations =====
     
     def register_agent(self, agent_type: str = "worker", capabilities: str = "") -> bool:
-        """Register this agent in overseer-system."""
+        """Register this agent in agent-coordination-v2."""
         args = [
             "call", self.database, "register_agent",
             f'"{self.agent_name}"', f'"{agent_type}"', f'"{self.agent_name}"', 'null'

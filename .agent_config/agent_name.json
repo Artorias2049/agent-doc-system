@@ -1,7 +1,7 @@
 {
-  "agent_name": "AgentDocSystem",
+  "agent_name": "DocSystemAgent",
   "project_directory": "/Users/gaanauser003/Documents/GitHub/agent-doc-system",
-  "locked_at": "2025-06-03T19:37:29.276927",
+  "locked_at": "2025-06-05T15:19:31.678417",
   "locked": true,
   "version": "1.0"
 }

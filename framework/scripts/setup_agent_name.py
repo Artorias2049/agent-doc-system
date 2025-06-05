@@ -60,15 +60,15 @@ class AgentNameSetup:
         
         return True
     
-    def set_agent_name(self, name, force=False):
-        """Set agent name with locking mechanism."""
+    def set_agent_name(self, name):
+        """Set agent name with permanent locking mechanism."""
         # Check if already set
         existing_name, locked_at = self.check_existing_name()
         
-        if existing_name and not force:
+        if existing_name:
             raise ValueError(
-                f"Agent name already set to '{existing_name}' at {locked_at}. "
-                f"Cannot overwrite. Use --force to override (not recommended)."
+                f"🔒 SECURITY: Agent name permanently locked to '{existing_name}' at {locked_at}. "
+                f"Cannot be changed for security reasons. This prevents agent identity spoofing."
             )
         
         # Validate new name
@@ -140,10 +140,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python setup_agent_name.py "MyProjectAgent"    # Set agent name
+  python setup_agent_name.py "MyProjectAgent"    # Set agent name (one-time only)
   python setup_agent_name.py --check             # Check current name
   python setup_agent_name.py --status            # Detailed status
-  python setup_agent_name.py --force "NewName"   # Force override (careful!)
         """
     )
     
@@ -161,11 +160,6 @@ Examples:
         '--status', 
         action='store_true', 
         help='Show detailed status information'
-    )
-    parser.add_argument(
-        '--force', 
-        action='store_true', 
-        help='Force override existing name (use with caution)'
     )
     parser.add_argument(
         '--project-dir', 
@@ -205,7 +199,7 @@ Examples:
         
         elif args.name:
             # Set the agent name
-            name, config = setup.set_agent_name(args.name, force=args.force)
+            name, config = setup.set_agent_name(args.name)
             
             print("🎉 Agent name configured successfully!")
             print("=" * 40)

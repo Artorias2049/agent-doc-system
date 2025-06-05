@@ -12,6 +12,9 @@ from datetime import datetime
 import yaml
 import re
 
+# Import agent identity verification
+from agent_identity_verifier import verify_agent_for_framework_access
+
 
 class DocumentationCreator:
     """Creates documentation files with proper structure and metadata."""
@@ -71,33 +74,59 @@ class DocumentationCreator:
         """
         Create a new documentation file with proper structure.
         
-        IMPORTANT: Only DocSystemAgent can create files in framework/.
-        Other agents are restricted to project_docs/ directory.
+        SECURITY: Uses locked agent identity verification to prevent spoofing.
+        Only verified privileged agents can create files in framework/.
         
         Args:
             doc_type: Type of document (api, component, project, general)
             title: Document title
-            owner: Document owner name
+            owner: Document owner name (will be verified against locked agent identity)
             description: Brief description
-            location: Optional custom location (must be within project_docs/ for other agents)
+            location: Optional custom location (must be within project_docs/ for non-privileged agents)
             
         Returns:
             Path to created file
         """
-        # Check agent permissions
-        if owner != "DocSystemAgent":
-            # Other agents can only create in project_docs/
-            if doc_type in ["api", "component"]:
-                raise PermissionError(f"Only DocSystemAgent can create {doc_type} documentation in framework/. "
-                                    f"Other agents must use 'project' or 'general' type in project_docs/.")
-            
-            # Force location to project_docs for other agents
-            if location and not str(location).startswith("project_docs"):
-                raise PermissionError("Other agents can only create documentation in project_docs/ directory.")
+        # 🛡️ SECURITY: Verify agent identity and framework access
+        access_granted, verified_agent, verification_details = verify_agent_for_framework_access(
+            requested_owner=owner, 
+            project_root=str(self.framework_dir.parent)
+        )
         
-        # Determine template and location based on agent permissions
-        if owner == "DocSystemAgent":
-            # DocSystemAgent can create anywhere
+        # Log security details for audit trail
+        if verification_details.get("security_violation"):
+            error_msg = (
+                f"🚨 SECURITY VIOLATION: {verification_details['reason']}\n"
+                f"   Requested: '{owner}'\n"
+                f"   Verified: '{verified_agent}'\n"
+                f"   Verification: {verification_details['verification']}"
+            )
+            raise PermissionError(error_msg)
+        
+        # Use verified agent name instead of claimed owner
+        actual_owner = verified_agent
+        
+        # Check framework access for sensitive document types
+        if doc_type in ["api", "component"] and not access_granted:
+            raise PermissionError(
+                f"🚫 Framework access denied for {doc_type} documentation.\n"
+                f"   Agent: '{actual_owner}'\n"
+                f"   Reason: {verification_details['reason']}\n"
+                f"   Use 'project' or 'general' types in project_docs/ instead."
+            )
+        
+        # Additional location security for non-privileged agents
+        if not access_granted:
+            if location and not str(location).startswith("project_docs"):
+                raise PermissionError(
+                    f"🚫 Access denied: Non-privileged agents can only create in project_docs/.\n"
+                    f"   Agent: '{actual_owner}'\n"
+                    f"   Attempted location: '{location}'"
+                )
+        
+        # Determine template and location based on verified agent permissions
+        if access_granted:
+            # Privileged agents can create in framework directories
             if doc_type == "api":
                 template_file = self.templates_dir / "api_template.md"
                 default_location = self.api_dir
@@ -111,16 +140,20 @@ class DocumentationCreator:
                 template_file = self.templates_dir / "project_template.md"
                 default_location = self.project_docs_dir
         else:
-            # Other agents restricted to project_docs
+            # Non-privileged agents restricted to project_docs
             template_file = self.templates_dir / "project_template.md"
             default_location = self.project_docs_dir
             
         # Use provided location or default
         target_dir = Path(location) if location else default_location
         
-        # Final permission check for other agents
-        if owner != "DocSystemAgent" and not str(target_dir.resolve()).endswith("project_docs"):
-            raise PermissionError("Other agents can only create documentation in project_docs/ directory.")
+        # Final security check for target directory
+        if not access_granted and not str(target_dir.resolve()).endswith("project_docs"):
+            raise PermissionError(
+                f"🚫 Security violation: Non-privileged agents can only create in project_docs/.\n"
+                f"   Agent: '{actual_owner}'\n"
+                f"   Target: '{target_dir}'"
+            )
             
         target_dir.mkdir(parents=True, exist_ok=True)
         
@@ -138,8 +171,8 @@ class DocumentationCreator:
             
         template_content = template_file.read_text()
         
-        # Create schema-driven metadata
-        metadata = self._create_schema_compliant_metadata(title, description, owner)
+        # Create schema-driven metadata using verified agent identity
+        metadata = self._create_schema_compliant_metadata(title, description, actual_owner)
         
         # Generate YAML metadata
         yaml_metadata = yaml.dump(metadata, default_flow_style=False, sort_keys=False)
@@ -218,7 +251,7 @@ Document common usage patterns and best practices.
 
 ---
 
-*Document created by {owner} using the Agent Documentation System*
+*Document created by {actual_owner} using the Agent Documentation System*
 """
         
         # Write file
@@ -230,20 +263,41 @@ Document common usage patterns and best practices.
         """
         Create a complete component documentation structure.
         
-        IMPORTANT: Only DocSystemAgent can create component structures in framework/.
-        Other agents are restricted to project_docs/ directory.
+        SECURITY: Uses locked agent identity verification to prevent spoofing.
+        Only verified privileged agents can create component structures in framework/.
         
         Args:
             component_name: Name of the component
-            owner: Component owner
+            owner: Component owner (will be verified against locked agent identity)
             
         Returns:
             Path to component directory
         """
-        # Check permissions
-        if owner != "DocSystemAgent":
-            raise PermissionError("Only DocSystemAgent can create component structures in framework/. "
-                                "Other agents must use 'project' type in project_docs/.")
+        # 🛡️ SECURITY: Verify agent identity and framework access
+        access_granted, verified_agent, verification_details = verify_agent_for_framework_access(
+            requested_owner=owner, 
+            project_root=str(self.framework_dir.parent)
+        )
+        
+        if verification_details.get("security_violation"):
+            error_msg = (
+                f"🚨 SECURITY VIOLATION: {verification_details['reason']}\n"
+                f"   Requested: '{owner}'\n"
+                f"   Verified: '{verified_agent}'\n"
+                f"   Operation: Component structure creation"
+            )
+            raise PermissionError(error_msg)
+        
+        if not access_granted:
+            raise PermissionError(
+                f"🚫 Component structure creation requires framework privileges.\n"
+                f"   Agent: '{verified_agent}'\n"
+                f"   Reason: {verification_details['reason']}\n"
+                f"   Use 'project' type in project_docs/ instead."
+            )
+        
+        # Use verified agent name
+        actual_owner = verified_agent
         
         # Sanitize component name for directory
         safe_name = re.sub(r'[^\w\s-]', '', component_name.lower())
@@ -253,11 +307,11 @@ Document common usage patterns and best practices.
         component_dir = self.components_dir / safe_name
         component_dir.mkdir(parents=True, exist_ok=True)
         
-        # Create overview
+        # Create overview using verified agent identity
         self.create_document(
             doc_type="component",
             title=f"{component_name} Component Overview",
-            owner=owner,
+            owner=actual_owner,
             description=f"Overview of the {component_name} component",
             location=str(component_dir)
         )
@@ -268,7 +322,7 @@ Document common usage patterns and best practices.
             self.create_document(
                 doc_type="api",
                 title=f"{component_name} API",
-                owner=owner,
+                owner=actual_owner,
                 description=f"API documentation for the {component_name} component",
                 location=str(component_dir)
             )

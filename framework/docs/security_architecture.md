@@ -6,7 +6,7 @@ metadata:
   schema: "https://schema.org/TechnicalDocument"
   version: "1.0.0"
   status: "Active"
-  owner: "AgentDocSystem"
+  owner: "DocSystemAgent"
   title: "Security Architecture for Moirai OVERSEER"
   description: "Comprehensive security framework preventing agent identity spoofing and enforcing proper authorization"
 content:
@@ -44,7 +44,7 @@ feedback:
       assignee: "security_team"
   status:
     value: "approved"
-    updated_by: "AgentDocSystem"
+    updated_by: "DocSystemAgent"
     date: "2025-06-03"
     validation: "passed"
     implementation: "complete"
@@ -92,7 +92,7 @@ python3 framework/scripts/create_documentation.py project "Test" --owner "DocSys
 
 ✅ **Legitimate Access Granted:**
 ```bash
-python3 framework/scripts/create_documentation.py project "Test" --owner "AgentDocSystem"
+python3 framework/scripts/create_documentation.py project "Test" --owner "DocSystemAgent"
 # Result: ✅ Created documentation file: project_docs/test.md
 ```
 
@@ -351,4 +351,4 @@ This security architecture provides **robust protection today** while establishi
 
 ---
 
-*Security architecture designed and implemented by AgentDocSystem with cryptographic verification and comprehensive audit trail.*
+*Security architecture designed and implemented by DocSystemAgent with cryptographic verification and comprehensive audit trail.*

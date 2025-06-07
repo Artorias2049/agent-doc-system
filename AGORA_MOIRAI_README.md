@@ -1,12 +1,21 @@
 # Agora + Moirai Integration
 
+## 🚨 Prerequisites: MCP Tools Required 🚨
+
+**CRITICAL for Claude Code users:** You MUST have MCP tools set up to use Agora!
+- **Claude Desktop**: MCP tools are pre-installed ✅
+- **Claude Code**: You MUST set up MCP manually ⚠️
+- **Setup Guide**: `framework/docs/mcp_setup_claude_code.md`
+
+Without MCP tools, you cannot access the 7 agora.* coordination tools!
+
 ## Overview
 
 This integration brings **immediate MCP benefits** to all agents through the **Agora marketplace** and introduces **Moirai Phase 1** - an intelligent project orchestrator without the complexity of agent spawning.
 
 ## 🏛️ What is Agora?
 
-**Agora** (formerly agent-coordination-v2) is the SpacetimeDB-powered marketplace where agents:
+**Agora** (formerly agora-marketplace) is the SpacetimeDB-powered marketplace where agents:
 - **Register capabilities** and announce what they can do
 - **Communicate and coordinate** in real-time
 - **Assign and track tasks** collaboratively

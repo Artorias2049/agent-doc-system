@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Verify SpacetimeDB agent-coordination-v2 connection and register agent.
+Verify SpacetimeDB agora-marketplace connection and register agent.
 
 This script:
-1. Checks connection to SpacetimeDB agent-coordination-v2
+1. Checks connection to SpacetimeDB agora-marketplace
 2. Reads agent name from .agent_config/agent_name.json or AGENT_NAME env var
 3. Provides actual database registration (not simulation)
 
@@ -17,21 +17,21 @@ from datetime import datetime
 
 
 def verify_agent_coordination_connection():
-    """Verify connection to SpacetimeDB agent-coordination-v2"""
+    """Verify connection to SpacetimeDB agora-marketplace"""
     try:
-        # Check if agent-coordination-v2 is accessible
+        # Check if agora-marketplace is accessible
         result = subprocess.run([
-            "spacetime", "logs", "agent-coordination-v2"
+            "spacetime", "logs", "agora-marketplace"
         ], capture_output=True, text=True, timeout=10)
         
         if result.returncode == 0:
-            print("✅ SpacetimeDB agent-coordination-v2 connection verified")
+            print("✅ SpacetimeDB agora-marketplace connection verified")
             return True
         else:
             print(f"❌ Connection failed: {result.stderr}")
             return False
     except subprocess.TimeoutExpired:
-        print("❌ Connection timeout - agent-coordination-v2 not responding")
+        print("❌ Connection timeout - agora-marketplace not responding")
         return False
     except Exception as e:
         print(f"❌ Error: {e}")
@@ -56,7 +56,7 @@ def get_agent_name():
 
 
 def register_agent(agent_type="worker"):
-    """Register agent in SpacetimeDB agent-coordination-v2"""
+    """Register agent in SpacetimeDB agora-marketplace"""
     agent_name = get_agent_name()
     
     print(f"\n📝 Registering agent: {agent_name}")
@@ -65,17 +65,17 @@ def register_agent(agent_type="worker"):
     # Actual registration using SpacetimeDB
     try:
         result = subprocess.run([
-            "spacetime", "call", "agent-coordination-v2", "register_agent",
+            "spacetime", "call", "agora-marketplace", "register_agent_capability",
             f'"{agent_name}"', f'"{agent_type}"', f'"{agent_name}"', 'null'
         ], capture_output=True, text=True)
         
         if result.returncode == 0:
-            print(f"✅ {agent_name} registered in agent-coordination-v2")
+            print(f"✅ {agent_name} registered in agora-marketplace")
             
             # Send announcement
             # Note: create_system_event may need similar syntax fixes
             announce_result = subprocess.run([
-                "spacetime", "call", "agent-coordination-v2", "create_system_event",
+                "spacetime", "call", "agora-marketplace", "create_system_event",
                 f'"evt_{datetime.now().strftime("%Y%m%d%H%M%S")}"',
                 '"agent_arrival"',
                 f'"{agent_name}"',
@@ -103,7 +103,7 @@ def register_agent(agent_type="worker"):
 
 def main():
     """Main verification and registration process"""
-    print("🔍 Checking SpacetimeDB agent-coordination-v2 connection...\n")
+    print("🔍 Checking SpacetimeDB agora-marketplace connection...\n")
     
     # Verify connection
     if verify_agent_coordination_connection():
@@ -125,7 +125,7 @@ def main():
         print("\n❌ Connection failed!")
         print("\nTroubleshooting:")
         print("1. Ensure SpacetimeDB is running")
-        print("2. Check if agent-coordination-v2 database exists")
+        print("2. Check if agora-marketplace database exists")
         print("3. Verify SpacetimeDB CLI is installed: spacetime --version")
 
 

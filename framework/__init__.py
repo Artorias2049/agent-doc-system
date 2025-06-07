@@ -1,11 +1,13 @@
 """
-Agent Documentation System Framework v4.0.0
+Agent Documentation System Framework v5.0.0
 
-Revolutionary agent coordination framework with:
-- Agora marketplace integration for real-time coordination
+Production-ready agent coordination framework with:
+- Unified Agora marketplace with fixed UUID generation
+- Stable database operations without fatal errors
+- Proven 5-minute agent onboarding process
 - Moirai OVERSEER Phase 1 for intelligent project orchestration  
 - Consumer-based MCP architecture respecting database ownership
-- SpacetimeDB agent-coordination-v2 backend
+- SpacetimeDB agora-marketplace backend
 - Documentation system with enhanced metadata validation
 
 This framework enables agents to collaborate effectively through the Agora
@@ -13,7 +15,7 @@ marketplace while maintaining clear ownership boundaries and providing
 powerful coordination capabilities.
 """
 
-__version__ = "4.0.0"
+__version__ = "5.0.0"
 __author__ = "DocSystemAgent"
 
 # Import main components

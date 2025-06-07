@@ -1,8 +1,8 @@
 """
-Agent Communication Package v4.0.0
+Agent Communication Package v5.0.0
 
-This package provides agent communication utilities with Agora marketplace integration.
-Agents communicate through the Agora SpacetimeDB agent-coordination-v2 system.
+This package provides agent communication utilities with unified Agora marketplace integration.
+Agents communicate through the Agora SpacetimeDB agora-marketplace system.
 
 Key components:
 - agora_integration.py: Bridge to Agora marketplace
@@ -23,7 +23,7 @@ from .feedback_agent import DocumentationFeedbackAgent
 from .agora_integration import AgoraIntegration
 
 # Version info
-__version__ = "4.0.0"
+__version__ = "5.0.0"
 __status__ = "Agora Marketplace Integration"
 
 # Export the main classes

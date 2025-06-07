@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check for messages and notifications in SpacetimeDB agent-coordination-v2."""
+"""Check for messages and notifications in SpacetimeDB agora-marketplace."""
 
 import subprocess
 import json
@@ -12,7 +12,7 @@ def check_system_events():
     
     try:
         result = subprocess.run([
-            "spacetime", "logs", "agent-coordination-v2"
+            "spacetime", "logs", "agora-marketplace"
         ], capture_output=True, text=True)
         
         if result.returncode == 0:
@@ -49,7 +49,7 @@ def check_agent_registrations():
     
     try:
         result = subprocess.run([
-            "spacetime", "logs", "agent-coordination-v2"
+            "spacetime", "logs", "agora-marketplace"
         ], capture_output=True, text=True)
         
         if result.returncode == 0:
@@ -81,7 +81,7 @@ def check_workflows():
     
     try:
         result = subprocess.run([
-            "spacetime", "logs", "agent-coordination-v2"
+            "spacetime", "logs", "agora-marketplace"
         ], capture_output=True, text=True)
         
         if result.returncode == 0:
@@ -109,7 +109,7 @@ def check_workflows():
 
 def main():
     """Main message checking process"""
-    print("📨 Checking messages in SpacetimeDB agent-coordination-v2\n")
+    print("📨 Checking messages in SpacetimeDB agora-marketplace\n")
     print("=" * 60)
     
     # Check various message types

@@ -124,7 +124,7 @@ async def announce_moirai_to_agora():
             "announced_by": "Agent Documentation System",
             "announcement_date": datetime.now().isoformat(),
             "version": "1.0.0-phase1",
-            "framework_version": "4.0.0",
+            "framework_version": "5.0.0",
             "status": "ready_for_testing",
             "open_source": True,
             "collaboration_welcome": True

@@ -42,7 +42,7 @@ class AgentCapabilities:
 class SpacetimeAuthIntegration:
     """Integrates with SpacetimeDB for agent authentication and authorization."""
     
-    def __init__(self, database_name: str = "agent-coordination-v2"):
+    def __init__(self, database_name: str = "agora-marketplace"):
         self.database_name = database_name
         
     def verify_agent_in_spacetime(self, agent_name: str) -> Tuple[bool, Optional[AgentCapabilities]]:
@@ -157,7 +157,7 @@ class SpacetimeAuthIntegration:
             }
             
             # In real implementation, this would create a security event in SpacetimeDB
-            # spacetime call agent-coordination-v2 create_security_event ...
+            # spacetime call agora-marketplace create_security_event ...
             print(f"🔐 Security Event: {agent_name} -> {operation} -> {result}")
             
         except Exception as e:

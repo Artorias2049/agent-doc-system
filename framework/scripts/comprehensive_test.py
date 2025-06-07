@@ -2,7 +2,7 @@
 """
 Comprehensive Framework Test Suite
 
-This script performs a complete validation of the Agent Documentation System v4.0.0
+This script performs a complete validation of the Agent Documentation System v5.0.0
 framework including structure, documentation, schemas, and basic functionality.
 """
 
@@ -46,7 +46,7 @@ def test_version_consistency():
     print("🧪 Testing Version Consistency...")
     
     framework_dir = Path(__file__).parent.parent
-    expected_version = "4.0.0"
+    expected_version = "5.0.0"
     
     # Check __init__.py files
     init_files = [
@@ -157,7 +157,7 @@ def test_agora_client_structure():
         return False
     
     # Check for correct database reference
-    if "agent-coordination-v2" not in content:
+    if "agora-marketplace" not in content:
         print("❌ Wrong database reference in AgoraClient")
         return False
     
@@ -296,12 +296,12 @@ def test_integration_consistency():
             content = component_path.read_text()
             
             # Check for correct database reference
-            if "agent-coordination-v2" not in content:
+            if "agora-marketplace" not in content:
                 inconsistencies.append(f"{component} - wrong database reference")
             
             # Check for correct framework version
-            if "4.0.0" not in content:
-                inconsistencies.append(f"{component} - missing v4.0.0 reference")
+            if "5.0.0" not in content:
+                inconsistencies.append(f"{component} - missing v5.0.0 reference")
     
     if inconsistencies:
         print(f"❌ Integration inconsistencies: {inconsistencies}")
@@ -311,8 +311,8 @@ def test_integration_consistency():
     return True
 
 def test_the_protocol_compliance():
-    """Test compliance with THE PROTOCOL v4.0."""
-    print("🧪 Testing THE PROTOCOL v4.0 Compliance...")
+    """Test compliance with THE PROTOCOL v5.0."""
+    print("🧪 Testing THE PROTOCOL v5.0 Compliance...")
     
     framework_dir = Path(__file__).parent.parent
     protocol_path = framework_dir / "docs" / "agent_onboarding.md"
@@ -323,12 +323,12 @@ def test_the_protocol_compliance():
     
     content = protocol_path.read_text()
     
-    # Check for v4.0.0 references
+    # Check for v5.0.0 references
     compliance_checks = [
         ("version: \"4.0.0\"", "Document version"),
         ("Agora marketplace", "Agora integration"),
         ("Moirai OVERSEER", "Moirai orchestration"),
-        ("agent-coordination-v2", "Database reference"),
+        ("agora-marketplace", "Database reference"),
         ("Consumer-Based MCP", "MCP architecture")
     ]
     
@@ -341,12 +341,12 @@ def test_the_protocol_compliance():
         print(f"❌ Protocol compliance issues: {failed_checks}")
         return False
     
-    print("✅ THE PROTOCOL v4.0 compliance verified")
+    print("✅ THE PROTOCOL v5.0 compliance verified")
     return True
 
 def main():
     """Run comprehensive framework test suite."""
-    print("🚀 Agent Documentation System v4.0.0 - Comprehensive Test Suite")
+    print("🚀 Agent Documentation System v5.0.0 - Comprehensive Test Suite")
     print("=" * 70)
     
     tests = [
@@ -393,7 +393,7 @@ def main():
     
     if failed == 0:
         print("\n🎉 ALL TESTS PASSED!")
-        print("🏛️ Agent Documentation System v4.0.0 is ready for deployment!")
+        print("🏛️ Agent Documentation System v5.0.0 is ready for deployment!")
         print("🧵 Moirai OVERSEER + Agora marketplace integration verified!")
         return True
     else:

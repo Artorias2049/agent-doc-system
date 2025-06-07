@@ -41,8 +41,8 @@ class DocumentationAgoraClient(AgoraClient):
         """
         metadata = {
             "domain": "documentation",
-            "framework_version": "4.0.0",
-            "protocol_compliance": "THE_PROTOCOL_v4.0",
+            "framework_version": "5.0.0",
+            "protocol_compliance": "THE_PROTOCOL_v5.0",
             "specialization": "documentation_system",
             "template_support": True,
             "validation_support": True,
@@ -227,7 +227,7 @@ class DocumentationAgoraClient(AgoraClient):
                 "template_type": template_type,
                 "description": description,
                 "shared_by": self.agent_id,
-                "framework_version": "4.0.0"
+                "framework_version": "5.0.0"
             },
             priority=1
         )

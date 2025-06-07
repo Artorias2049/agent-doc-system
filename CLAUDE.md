@@ -1,6 +1,13 @@
-# Claude Code Configuration for Agent Documentation System v3.2
+# Claude Code Configuration for Agent Documentation System v5.0
 
-This CLAUDE.md file configures Claude Code for the SpacetimeDB-powered agent documentation system with real-time coordination and user supreme authority.
+## 🚨 CRITICAL: MCP Setup Required for Claude Code 🚨
+
+**agent-doc-system is a BOOTLOADER for AI agents in the Agora swarm. Every spawned agent receives this framework and MUST:**
+1. **Read THE PROTOCOL first** (`framework/docs/agent_onboarding.md`)
+2. **Set up MCP tools immediately** if using Claude Code (see `framework/docs/mcp_setup_claude_code.md`)
+3. **Without MCP tools, agents CANNOT participate in the Agora marketplace**
+
+This CLAUDE.md file configures Claude Code for the unified Agora marketplace system with fixed UUID generation, stable database operations, and proven 5-minute agent onboarding.
 
 ## Project Context and Architecture
 
@@ -14,7 +21,7 @@ your-project/                   # Your project root
 └── agent-doc-system/         # The cloned framework
     ├── framework/            # 🚫 READ-ONLY (managed by DocSystemAgent)
     │   ├── docs/            # Framework documentation
-    │   │   ├── agent_onboarding.md  # THE PROTOCOL v3.0
+    │   │   ├── agent_onboarding.md  # THE PROTOCOL v5.0
     │   │   ├── components/   # Component documentation
     │   │   └── templates/    # Documentation templates
     │   ├── schemas/         # YAML schema definitions
@@ -32,45 +39,48 @@ your-project/                   # Your project root
 - Scripts automatically detect and handle the nested pattern
 - All documentation system files are under `agent-doc-system/` for easy discovery by UI searches
 
-### Technology Stack v3.2
-- SpacetimeDB Agent-Coordination-V2 - Real-time database
-- 15 MCP Tools - User authority (priority 255)
-- Real-time Coordination - Event sourcing and subscriptions
-- 6-Table Architecture - users, agents, workflows, user_overrides, system_events, user_notifications
+### Technology Stack v5.0
+- SpacetimeDB Agora-Marketplace - Unified real-time database
+- 7 MCP Tools - Stable consumer interface with `agora.*` namespace
+- Fixed UUID Generation - No more duplicate key violations
+- Stable Reducer Operations - No more Wasm fatal errors
+- Proven 5-Minute Onboarding - Agents can join immediately
 - Complete Audit Trail - All actions tracked
 - Emergency Halt Capability
 - WebAssembly Backend
 
-## SpacetimeDB Agent-Coordination-V2 Integration
+## SpacetimeDB Agora-Marketplace Integration
 
 ### Core Database Architecture
 
-SpacetimeDB agent-coordination-v2 configuration:
+SpacetimeDB agora-marketplace configuration:
 
-- **Database Name:** `agent-coordination-v2`
-- **Connection:** `http://localhost:3000` (local) / `spacetime publish agent-coordination-v2` (deployed)
+- **Database Name:** `agora-marketplace` (renamed in v5.0)
+- **Connection:** `http://localhost:3000` (local) / `spacetime publish agora-marketplace` (deployed)
 - **Authentication:** SpacetimeDB CLI (`spacetime identity`)
 - **Performance:** Sub-microsecond response times with WebAssembly backend
 - **Real-time:** Event sourcing and instant subscriptions
 - **Authority:** User supreme authority (priority 255)
 
-### Database Schema (6 Tables)
+### Database Schema (Unified Architecture)
 
-1. **users** - User management with authority levels
-2. **agents** - Agent registration and coordination
-3. **workflows** - Multi-agent workflow orchestration
-4. **user_overrides** - User supreme authority actions
-5. **system_events** - Real-time event tracking
-6. **user_notifications** - User notification system
+The agora-marketplace database provides a unified architecture with tables for:
+- Agent registration and capability tracking
+- Task assignment and progress monitoring  
+- Workflow orchestration and coordination
+- Real-time messaging and event streaming
+- System monitoring and health metrics
 
 ### MCP Tools Integration
 
-15 MCP Tools Available:
-- 5 User Authority Tools (priority 255)
-- 3 Agent Management Tools
-- 2 Workflow Tools 
-- 2 Communication Tools
-- 3 Resource Providers
+7 MCP Tools Available (Consumer Interface):
+1. **agora.messaging.send** - Inter-agent messaging with priority and threading
+2. **agora.task.assign** - Intelligent task assignment with capability matching  
+3. **agora.task.update** - Real-time progress tracking
+4. **agora.agent.register** - Dynamic capability registration (UUID-based)
+5. **agora.workflow.start** - Multi-agent workflow orchestration
+6. **agora.query.data** - Query agents, tasks, workflows, metrics
+7. **agora.system.status** - System health and performance monitoring
 
 ## Documentation System Overview
 
@@ -139,7 +149,7 @@ feedback:
 ### SpacetimeDB Agent Registration
 1. **Install SpacetimeDB CLI**: `curl -sSL https://spacetime.com/install | bash`
 2. **Create Identity**: `spacetime identity new`
-3. **Connect to Agent-Coordination-V2**: `spacetime subscribe agent-coordination-v2`
+3. **Connect to Agora-Marketplace**: `spacetime subscribe agora-marketplace`
 4. **Register Agent**: Use SpacetimeDB reducers for agent registration
 
 ### Creating Documentation
@@ -151,13 +161,13 @@ feedback:
 ### SpacetimeDB Operations (from project root)
 ```bash
 # Test SpacetimeDB connection
-spacetime logs agent-coordination-v2
+spacetime logs agora-marketplace
 
-# Register agent in agent-coordination-v2
-spacetime call agent-coordination-v2 register_agent YourAgentName documentation active
+# Register agent in agora-marketplace
+spacetime call agora-marketplace register_agent YourAgentName documentation active
 
 # Create workflow
-spacetime call agent-coordination-v2 create_workflow doc_review
+spacetime call agora-marketplace create_workflow doc_review
 
 # Standard validation
 ./agent-doc-system/framework/scripts/validate.sh
@@ -180,30 +190,30 @@ import subprocess
 import json
 from datetime import datetime
 
-# Connect to SpacetimeDB agent-coordination-v2
-def connect_to_agent_coordination_v2():
-    """Connect to SpacetimeDB agent-coordination-v2"""
+# Connect to SpacetimeDB agora-marketplace
+def connect_to_agora_marketplace():
+    """Connect to SpacetimeDB agora-marketplace"""
     result = subprocess.run([
         "spacetime", "list"
     ], capture_output=True, text=True)
     
-    if "agent-coordination-v2" in result.stdout:
-        print("✅ Connected to SpacetimeDB agent-coordination-v2")
+    if "agora-marketplace" in result.stdout:
+        print("✅ Connected to SpacetimeDB agora-marketplace")
         return True
     else:
-        print("❌ SpacetimeDB agent-coordination-v2 not accessible")
+        print("❌ SpacetimeDB agora-marketplace not accessible")
         return False
 
 # Register agent
 def register_agent(agent_name):
-    """Register agent in SpacetimeDB agent-coordination-v2"""
+    """Register agent in SpacetimeDB agora-marketplace"""
     result = subprocess.run([
-        "spacetime", "call", "agent-coordination-v2", "register_agent",
+        "spacetime", "call", "agora-marketplace", "register_agent",
         agent_name, "documentation", "active"
     ], capture_output=True, text=True)
     
     if result.returncode == 0:
-        print(f"✅ {agent_name} registered in agent-coordination-v2")
+        print(f"✅ {agent_name} registered in agora-marketplace")
         return True
     else:
         print(f"❌ Registration failed: {result.stderr}")
@@ -222,7 +232,7 @@ def send_event(agent_name, event_type, target_agent, data):
     }
     
     result = subprocess.run([
-        "spacetime", "call", "agent-coordination-v2", "create_system_event",
+        "spacetime", "call", "agora-marketplace", "create_system_event",
         json.dumps(event_data)
     ], capture_output=True, text=True)
     
@@ -251,11 +261,11 @@ curl -sSL https://spacetime.com/install | bash
 # Create SpacetimeDB identity
 spacetime identity new
 
-# Connect to agent-coordination-v2
-spacetime subscribe agent-coordination-v2
+# Connect to agora-marketplace
+spacetime subscribe agora-marketplace
 
 # Verify connection
-spacetime logs agent-coordination-v2
+spacetime logs agora-marketplace
 ```
 
 ### SpacetimeDB Agent Communication Tools
@@ -315,8 +325,8 @@ The framework provides comprehensive API documentation for integration:
 
 ## Best Practices
 
-1. **Always Connect to SpacetimeDB**: Verify agent-coordination-v2 connection before operations
-2. **Register Properly**: Use proper agent registration in agent-coordination-v2
+1. **Always Connect to SpacetimeDB**: Verify agora-marketplace connection before operations
+2. **Register Properly**: Use proper agent registration in agora-marketplace
 3. **Respect User Authority**: Users have supreme authority (priority 255)
 4. **Use Templates**: Start from templates for consistency
 5. **Track Improvements**: Use the self-improvement tracker
@@ -349,7 +359,7 @@ black framework/ tests/
 **SpacetimeDB Connection Issues**:
 - Check SpacetimeDB CLI installation: `spacetime --version`
 - Verify identity setup: `spacetime identity list`
-- Test connection: `spacetime logs agent-coordination-v2`
+- Test connection: `spacetime logs agora-marketplace`
 - Re-register agent if needed
 
 **Validation Failures**:
@@ -358,9 +368,9 @@ black framework/ tests/
 - Verify category values match schema
 
 **Database Connection**:
-- Verify SpacetimeDB agent-coordination-v2 is running and accessible
+- Verify SpacetimeDB agora-marketplace is running and accessible
 - Check authentication setup
-- Ensure agent is registered in agent-coordination-v2
+- Ensure agent is registered in agora-marketplace
 
 **Script Execution**:
 - Make scripts executable: `chmod +x framework/scripts/*.sh`
@@ -380,7 +390,7 @@ black framework/ tests/
 
 ### User Supreme Authority (Priority 255)
 
-Users have ultimate control in the SpacetimeDB agent-coordination-v2:
+Users have ultimate control in the SpacetimeDB agora-marketplace:
 
 - **Override Capability**: Users can override any agent action
 - **Emergency Halt**: System-wide emergency stop functionality
@@ -392,7 +402,7 @@ Users have ultimate control in the SpacetimeDB agent-coordination-v2:
 def user_override(user_id, target_id, action, reason):
     """Execute user override with supreme authority"""
     result = subprocess.run([
-        "spacetime", "call", "agent-coordination-v2", "user_override",
+        "spacetime", "call", "agora-marketplace", "user_override",
         user_id, target_id, action, reason, "255"  # Priority 255
     ], capture_output=True, text=True)
     
@@ -407,4 +417,4 @@ user_override(
 )
 ```
 
-This configuration ensures consistent, high-quality documentation with automated validation, real-time coordination, and continuous improvement tracking through the SpacetimeDB agent-coordination-v2 architecture.
+This configuration ensures consistent, high-quality documentation with automated validation, real-time coordination, and continuous improvement tracking through the SpacetimeDB agora-marketplace architecture.

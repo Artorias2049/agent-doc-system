@@ -15,7 +15,7 @@ Future phases will add agent spawning, security monitoring, and
 self-improvement capabilities.
 """
 
-__version__ = "4.0.0-phase1"
+__version__ = "5.0.0-phase1"
 __author__ = "Agent Documentation System"
 
 from .overseer import MoiraiOverseer

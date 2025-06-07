@@ -1,0 +1,119 @@
+{
+  "name": "agora-marketplace",
+  "version": "5.0.0",
+  "description": "Unified Agora Marketplace MCP Interface - THE PROTOCOL v5.0",
+  "author": "DocSystemAgent",
+  "tools": [
+    {
+      "name": "agora.messaging.send",
+      "description": "Send a message to another agent in the Agora marketplace",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "to_agent": {"type": "string", "description": "Target agent ID"},
+          "message_type": {"type": "string", "description": "Type of message"},
+          "payload": {"type": "object", "description": "Message content"},
+          "priority": {"type": "integer", "minimum": 1, "maximum": 5, "default": 1},
+          "thread_id": {"type": "string", "description": "Optional thread ID"}
+        },
+        "required": ["to_agent", "message_type", "payload"]
+      }
+    },
+    {
+      "name": "agora.task.assign",
+      "description": "Request task assignment through intelligent matching",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workflow_id": {"type": "string"},
+          "task_type": {"type": "string"},
+          "input_data": {"type": "object"},
+          "required_capabilities": {"type": "array", "items": {"type": "string"}}
+        },
+        "required": ["workflow_id", "task_type", "input_data"]
+      }
+    },
+    {
+      "name": "agora.task.update",
+      "description": "Update progress on an assigned task",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "assignment_id": {"type": "string"},
+          "progress": {"type": "number", "minimum": 0, "maximum": 1},
+          "status_update": {"type": "string"},
+          "intermediate_results": {"type": "object"}
+        },
+        "required": ["assignment_id", "progress", "status_update"]
+      }
+    },
+    {
+      "name": "agora.agent.register",
+      "description": "Register agent capabilities in the marketplace",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "capability": {"type": "string"},
+          "description": {"type": "string"},
+          "proficiency_level": {"type": "integer", "minimum": 1, "maximum": 100, "default": 80}
+        },
+        "required": ["capability", "description"]
+      }
+    },
+    {
+      "name": "agora.workflow.start",
+      "description": "Start a multi-agent workflow coordination",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "workflow_id": {"type": "string"},
+          "workflow_type": {"type": "string", "default": "collaborative"},
+          "participating_agents": {"type": "array", "items": {"type": "string"}},
+          "coordination_strategy": {"type": "string", "default": "adaptive"}
+        },
+        "required": ["workflow_id"]
+      }
+    },
+    {
+      "name": "agora.query.data",
+      "description": "Query coordination data from the marketplace",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query_type": {"type": "string", "enum": ["active_agents", "tasks", "workflows", "metrics"]},
+          "filters": {"type": "object", "default": {}}
+        },
+        "required": ["query_type"]
+      }
+    },
+    {
+      "name": "agora.system.status",
+      "description": "Get system health and performance status",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "include_metrics": {"type": "boolean", "default": true},
+          "include_active_tasks": {"type": "boolean", "default": true}
+        }
+      }
+    }
+  ],
+  "server": {
+    "command": "python",
+    "args": ["-m", "framework.mcp_integration.agora_mcp_server", "${AGENT_NAME}"],
+    "env": {
+      "SPACETIME_URI": "http://127.0.0.1:3000",
+      "LOG_LEVEL": "INFO"
+    }
+  },
+  "authentication": {
+    "type": "agent_identity",
+    "config_path": ".agent_config/agent_name.json"
+  },
+  "features": {
+    "real_time_events": true,
+    "uuid_generation": true,
+    "consumer_only": true,
+    "protocol_version": "5.0.0"
+  }
+}

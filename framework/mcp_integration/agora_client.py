@@ -1,5 +1,5 @@
 """
-Agora MCP Consumer Client
+Agora MCP Consumer Client v5.0.0
 
 This client provides a consumer-only interface to the Agora SpacetimeDB
 coordination system. It does NOT control or modify the database schema -
@@ -43,7 +43,7 @@ class AgoraClient:
             agent_id: Unique identifier for this agent. If None, uses AGENT_NAME env var.
         """
         self.agent_id = agent_id or os.getenv('AGENT_NAME', 'UnnamedAgent')
-        self.mcp_endpoint = "agent-coordination-v2"
+        self.mcp_endpoint = "agora-marketplace"
         self.connected = False
 
     async def connect(self) -> bool:
@@ -55,7 +55,7 @@ class AgoraClient:
         """
         try:
             result = subprocess.run([
-                "spacetime", "logs", "agent-coordination-v2"
+                "spacetime", "logs", self.mcp_endpoint
             ], capture_output=True, text=True, timeout=10)
 
             if result.returncode == 0:
@@ -95,12 +95,12 @@ class AgoraClient:
             # Add timestamp and version to metadata
             metadata.update({
                 "registered_at": datetime.now().isoformat(),
-                "framework_version": "4.0.0",
+                "framework_version": "5.0.0",
                 "consumer_only": True
             })
 
             result = subprocess.run([
-                "spacetime", "call", "agent-coordination-v2", "register_agent",
+                "spacetime", "call", self.mcp_endpoint, "register_agent_capability",
                 f'"{self.agent_id}"', f'"{agent_type}"', f'"{self.agent_id}"', 'null'
             ], capture_output=True, text=True)
 
@@ -137,7 +137,7 @@ class AgoraClient:
         """
         try:
             result = subprocess.run([
-                "spacetime", "call", "agent-coordination-v2", "register_agent_capability",
+                "spacetime", "call", self.mcp_endpoint, "register_agent_capability",
                 "--agent_id", self.agent_id,
                 "--capability_name", capability,
                 "--description", description,
@@ -180,7 +180,7 @@ class AgoraClient:
             correlation_id = thread_id or f"msg_{uuid.uuid4().hex[:8]}"
 
             result = subprocess.run([
-                "spacetime", "call", "agent-coordination-v2", "send_agent_message",
+                "spacetime", "call", self.mcp_endpoint, "send_agent_message",
                 "--from_agent", self.agent_id,
                 "--to_agent", to_agent,
                 "--message_type", message_type,
@@ -224,7 +224,7 @@ class AgoraClient:
             assignment_id = f"task_{uuid.uuid4().hex[:8]}"
 
             result = subprocess.run([
-                "spacetime", "call", "agent-coordination-v2", "assign_task",
+                "spacetime", "call", self.mcp_endpoint, "assign_task",
                 "--workflow_id", workflow_id,
                 "--task_type", task_type,
                 "--input_data", json.dumps(input_data),
@@ -264,7 +264,7 @@ class AgoraClient:
 
         try:
             result = subprocess.run([
-                "spacetime", "call", "agent-coordination-v2", "update_task_progress",
+                "spacetime", "call", self.mcp_endpoint, "update_task_progress",
                 "--assignment_id", assignment_id,
                 "--agent_id", self.agent_id,
                 "--progress", str(progress),
@@ -292,7 +292,7 @@ class AgoraClient:
         """
         try:
             result = subprocess.run([
-                "spacetime", "call", "agent-coordination-v2", "query_coordination_data",
+                "spacetime", "call", self.mcp_endpoint, "query_coordination_data",
                 "--query_type", "active_agents",
                 "--filters", "{}"
             ], capture_output=True, text=True)
@@ -318,7 +318,7 @@ class AgoraClient:
         """
         try:
             result = subprocess.run([
-                "spacetime", "call", "agent-coordination-v2", "coordination_system_status",
+                "spacetime", "call", self.mcp_endpoint, "coordination_system_status",
                 "--include_metrics", "true",
                 "--include_active_tasks", "true"
             ], capture_output=True, text=True)
@@ -355,7 +355,7 @@ class AgoraClient:
 
         try:
             result = subprocess.run([
-                "spacetime", "call", "agent-coordination-v2", "start_workflow_coordination",
+                "spacetime", "call", self.mcp_endpoint, "start_workflow_coordination",
                 "--workflow_id", workflow_id,
                 "--coordinator_agent", self.agent_id,
                 "--participating_agents", json.dumps(participating_agents),

@@ -104,7 +104,7 @@ The **spacetime_auth_integration.py** provides:
 
 #### **Real-Time Agent Registry**
 ```python
-# Verify agent exists in SpacetimeDB agent-coordination-v2
+# Verify agent exists in SpacetimeDB agora-marketplace
 verified, capabilities = spacetime_auth.verify_agent_in_spacetime(agent_name)
 
 if verified:

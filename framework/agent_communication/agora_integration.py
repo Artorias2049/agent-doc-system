@@ -1,11 +1,11 @@
 """
-Agora Integration for Agent Communication v4.0.0
+Agora Integration for Agent Communication v5.0.0
 
 This module integrates the existing agent communication system
-with the new Agora MCP consumer interface. It provides a bridge
+with the unified Agora MCP consumer interface. It provides a bridge
 between the current framework and the Agora marketplace.
 
-Connected to: agent-coordination-v2 SpacetimeDB for real-time coordination.
+Connected to: agora-marketplace SpacetimeDB for stable real-time coordination.
 """
 
 import os

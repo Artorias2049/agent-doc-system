@@ -2,11 +2,11 @@
 """
 SpacetimeDB Operations - Direct database interaction tool for agents.
 
-This script provides actual database operations for the agent-coordination-v2.
+This script provides actual database operations for the agora-marketplace.
 Designed to be used as a tool by AI agents for database interaction.
 
-Database: agent-coordination-v2
-Tables: 16 tables as defined in THE PROTOCOL v4.0
+Database: agora-marketplace
+Tables: Unified architecture as defined in THE PROTOCOL v5.0
 """
 
 import subprocess
@@ -18,10 +18,10 @@ from typing import Dict, List, Optional, Any
 
 
 class SpacetimeDB:
-    """Direct interface to SpacetimeDB agent-coordination-v2."""
+    """Direct interface to SpacetimeDB agora-marketplace."""
     
     def __init__(self):
-        self.database = "agent-coordination-v2"
+        self.database = "agora-marketplace"
         self.agent_name = self._get_agent_name()
         
     def _get_agent_name(self) -> str:
@@ -72,12 +72,12 @@ class SpacetimeDB:
     # ===== Connection Operations =====
     
     def verify_connection(self) -> bool:
-        """Verify connection to agent-coordination-v2."""
+        """Verify connection to agora-marketplace."""
         result = self._run_spacetime_cmd(["logs", self.database, "--num-lines", "1"])
         return result["success"]
     
     def get_logs(self, lines: int = 50) -> str:
-        """Get recent logs from agent-coordination-v2."""
+        """Get recent logs from agora-marketplace."""
         result = self._run_spacetime_cmd(["logs", self.database, "--num-lines", str(lines)])
         if result["success"]:
             return result["stdout"]
@@ -86,9 +86,9 @@ class SpacetimeDB:
     # ===== Agent Operations =====
     
     def register_agent(self, agent_type: str = "worker", capabilities: str = "") -> bool:
-        """Register this agent in agent-coordination-v2."""
+        """Register this agent in agora-marketplace."""
         args = [
-            "call", self.database, "register_agent",
+            "call", self.database, "register_agent_capability",
             f'"{self.agent_name}"', f'"{agent_type}"', f'"{self.agent_name}"', 'null'
         ]
         
